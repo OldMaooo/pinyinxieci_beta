@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icon.png" />
+    <link rel="apple-touch-icon" href="/icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>拼音听写 · 半自动版</title>
+    <style>
+      /* 核心：强制装载本地 STKaiti 字体 */
+      @font-face {
+        font-family: 'STKaitiLocal';
+        src: url('/fonts/stkaiti.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
+        font-display: block; /* 强制等待字体加载，防止闪烁 */
+      }
+      :root {
+        --font-kaiti: "STKaitiLocal", "STKaiti", "Kaiti SC", "楷体", serif;
+      }
+      .font-kaiti {
+        font-family: var(--font-kaiti) !important;
+      }
+      body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      .no-wrap-box {
+        white-space: nowrap !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+      }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Zhi+Mang+Xing&family=Noto+Serif+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/shared/audio-player.js"></script>
+    <script type="module" src="/shared/flashcardAudioBridge.js"></script>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

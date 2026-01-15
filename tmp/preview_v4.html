@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>拼音听写 · 完整流程预览版</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @font-face { font-family: 'Kaiti'; src: local('STKaiti'), local('KaiTi'), local('楷体'); }
+        body { background-color: #f1f5f9; margin: 0; font-family: sans-serif; overflow-x: hidden; }
+        
+        /* 核心 A4 画布 */
+        .a4-canvas {
+            width: 100vw;
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            min-height: 100vh;
+            box-shadow: 0 0 40px rgba(0,0,0,0.1);
+        }
+
+        /* 复刻线下版纯净方框样式 */
+        .tian-ge {
+            width: 2rem;
+            height: 2rem;
+            border: 1px solid #000;
+            background-color: white;
+            transition: all 0.15s;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 气泡弹窗动画 */
+        .popover-up { animation: pop-up 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes pop-up { 
+            0% { opacity: 0; transform: translateY(10px) scale(0.8); } 
+            100% { opacity: 1; transform: translateY(0) scale(1); } 
+        }
+
+        .kaiti { font-family: 'STKaiti', 'KaiTi', '楷体', serif; }
+        
+        /* Tailwind Utilities for Animation */
+        .animate-in { animation-duration: 0.5s; animation-fill-mode: both; }
+        .fade-in { animation-name: fadeIn; }
+        .zoom-in { animation-name: zoomIn; }
+        .slide-in-from-left-2 { --tw-enter-translate-x: 0.5rem; animation-name: enter; }
+        .slide-in-from-top-2 { --tw-enter-translate-y: 0.5rem; animation-name: enter; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        @keyframes enter { from { opacity: 0; transform: translate3d(var(--tw-enter-translate-x, 0), var(--tw-enter-translate-y, 0), 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect, useMemo } = React;
+        const { Timer, X, Check, ArrowRight, Settings, ChevronDown, ChevronRight, HelpCircle, GraduationCap, Layout, ChevronRightCircle, UserCheck } = lucide;
+
+        // --- MOCK DATA ---
+        const GENERATE_MOCK = () => {
+            const units = {};
+            for (let u = 1; u <= 8; u++) {
+                const unitKey = `单元${u}`;
+                units[unitKey] = [];
+                for (let w = 1; w <= 12; w++) {
+                    units[unitKey].push({
+                        id: `u${u}-w${w}`,
+                        word: `词组${u}-${w}`,
+                        pinyin: `cí zǔ ${u} ${w}`,
+                        unit: unitKey
+                    });
+                }
+            }
+            return units;
+        };
+
+        const MOCK_DATA_POOL = {
+            '三年级上册': GENERATE_MOCK(),
+            '一年级上册': { '单元1': [{ id: '101', word: '天地', pinyin: 'tiān dì', unit: '单元1' }] }
+        };
+
+        function App() {
+            // --- 1. 核心状态 ---
+            const [view, setView] = useState('SETUP'); // SETUP | RUNNING
+            const [currentStep, setCurrentStep] = useState(0); // 0:练习, 1:自测, 2:终测
+            
+            // 选题状态
+            const [selectedGrade, setSelectedGrade] = useState('三年级上册');
+            const [selectedUnitNames, setSelectedUnits] = useState(new Set(['单元1']));
+            const [expandedUnits, setExpandedUnits] = useState({'单元1': true});
+            const [onlyWrong, setOnlyWrong] = useState(false);
+
+            // 持久化数据
+            const [mastery, setMastery] = useState(() => {
+                try {
+                    return JSON.parse(localStorage.getItem('mastery_v2')) || {};
+                } catch { return {}; }
+            });
+
+            // 运行态数据
+            const [sessionWords, setSessionWords] = useState([]);
+            const [time, setTime] = useState(0);
+            const [timerActive, setTimerActive] = useState(false);
+            const [hintWordId, setHintWordId] = useState(null);
+
+            // --- 2. 辅助逻辑 ---
+            const units = MOCK_DATA_POOL[selectedGrade] || {};
+
+            // 获取掌握度状态: 'NEW' | 'WEAK' | 'MASTERED'
+            const getWordStatus = (id) => {
+                const record = mastery[id];
+                if (!record) return 'NEW';
+                const history = record.history || [];
+                const recent = history.slice(-3);
+                if (recent.includes('red') || record.lastStatus === 'red') return 'WEAK';
+                return 'MASTERED';
+            };
+
+            // 启动流程
+            const startFlow = () => {
+                let pool = [];
+                selectedUnitNames.forEach(name => {
+                    if (units[name]) pool = [...pool, ...units[name]];
+                });
+
+                if (onlyWrong) {
+                    pool = pool.filter(w => getWordStatus(w.id) === 'WEAK' || getWordStatus(w.id) === 'NEW');
+                }
+
+                if (pool.length === 0) return alert('没有符合条件的题目！');
+
+                setSessionWords(pool.map(w => ({
+                    ...w,
+                    markPractice: 'white',
+                    markSelf: 'white',
+                    markFinal: 'white',
+                })));
+
+                setCurrentStep(0);
+                setTime(0);
+                setTimerActive(true);
+                setView('RUNNING');
+            };
+
+            // 结束并存档
+            const finishSession = () => {
+                const newMastery = { ...mastery };
+                sessionWords.forEach(w => {
+                    if (w.markFinal !== 'white') {
+                        const record = newMastery[w.id] || { history: [] };
+                        const newHistory = [...(record.history || []), w.markFinal];
+                        newMastery[w.id] = {
+                            lastStatus: w.markFinal,
+                            history: newHistory,
+                            lastTime: Date.now()
+                        };
+                    }
+                });
+                setMastery(newMastery);
+                localStorage.setItem('mastery_v2', JSON.stringify(newMastery));
+                setTimerActive(false);
+                setView('SETUP');
+            };
+
+            useEffect(() => {
+                let timer;
+                if (timerActive) timer = setInterval(() => setTime(t => t + 1), 1000);
+                return () => clearInterval(timer);
+            }, [timerActive]);
+
+            const formatTime = (s) => `${Math.floor(s/60).toString().padStart(2,'0')}:${(s%60).toString().padStart(2,'0')}`;
+
+            // --- 3. 视图渲染 ---
+            if (view === 'SETUP') {
+                return (
+                    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-32">
+                        <header className="px-6 py-4 bg-white border-b border-slate-200 sticky top-0 z-20 flex justify-between items-center shadow-sm">
+                            <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                                    <GraduationCap size={24} />
+                                </div>
+                                <div>
+                                    <h1 className="text-lg font-black text-slate-800 leading-tight">拼音听写</h1>
+                                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Semi-Auto V2.0</p>
+                                </div>
+                            </div>
+                            
+                            <div className="flex items-center gap-4">
+                                <div className="relative">
+                                    <select 
+                                        value={selectedGrade} 
+                                        onChange={(e) => { setSelectedGrade(e.target.value); setSelectedUnits(new Set()); }}
+                                        className="appearance-none bg-slate-100 pl-4 pr-10 py-2 rounded-lg text-sm font-bold text-slate-700 outline-none border border-slate-200 focus:border-blue-500 transition-colors cursor-pointer"
+                                    >
+                                        {Object.keys(MOCK_DATA_POOL).map(g => <option key={g} value={g}>{g}</option>)}
+                                    </select>
+                                    <ChevronDown className="absolute right-3 top-2.5 text-slate-400 pointer-events-none" size={16} />
+                                </div>
+
+                                <button 
+                                    onClick={() => setOnlyWrong(!onlyWrong)}
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all border ${
+                                        onlyWrong ? 'bg-orange-50 border-orange-200 text-orange-600' : 'bg-white border-slate-200 text-slate-400 hover:bg-slate-50'
+                                    }`}
+                                >
+                                    <div className={`w-3 h-3 rounded-full ${onlyWrong ? 'bg-orange-500' : 'bg-slate-300'}`} />
+                                    <span className="text-xs font-bold">只练错题</span>
+                                </button>
+                            </div>
+                        </header>
+
+                        <main className="max-w-4xl mx-auto p-6 space-y-4">
+                            <div className="flex justify-between items-end px-2">
+                                <h2 className="text-xl font-bold text-slate-700">选择练习范围</h2>
+                                <span className="text-sm text-slate-400">已选 {Array.from(selectedUnitNames).reduce((acc, name) => acc + (units[name]?.length || 0), 0)} 个词</span>
+                            </div>
+
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                                {Object.entries(units).map(([uName, uWords]) => {
+                                    const isExpanded = expandedUnits[uName];
+                                    const isSelected = selectedUnitNames.has(uName);
+                                    
+                                    return (
+                                        <div key={uName} className="border-b last:border-0 border-slate-100">
+                                            <div className={`flex items-center p-4 hover:bg-slate-50 transition-colors cursor-pointer ${isSelected ? 'bg-blue-50/50' : ''}`}>
+                                                <button 
+                                                    onClick={() => setExpandedUnits(prev => ({...prev, [uName]: !prev[uName]}))}
+                                                    className="p-2 -ml-2 text-slate-400 hover:text-blue-500 transition-colors"
+                                                >
+                                                    <ChevronRight size={20} className={`transition-transform duration-300 ${isExpanded ? 'rotate-90' : ''}`} />
+                                                </button>
+                                                
+                                                <div 
+                                                    className="flex-1 flex items-center gap-3"
+                                                    onClick={() => setExpandedUnits(prev => ({...prev, [uName]: !prev[uName]}))}
+                                                >
+                                                    <span className="font-bold text-slate-700">{uName}</span>
+                                                    <span className="text-xs px-2 py-0.5 bg-slate-100 rounded text-slate-400 font-medium">{uWords.length}词</span>
+                                                </div>
+
+                                                <button 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        const next = new Set(selectedUnitNames);
+                                                        if (next.has(uName)) next.delete(uName); else next.add(uName);
+                                                        setSelectedUnits(next);
+                                                    }}
+                                                    className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all border ${
+                                                        isSelected 
+                                                            ? 'bg-blue-600 text-white border-blue-600 shadow-md shadow-blue-200' 
+                                                            : 'bg-white text-slate-400 border-slate-300 hover:border-blue-400 hover:text-blue-500'
+                                                    }`}
+                                                >
+                                                    {isSelected ? '已全选' : '选择'}
+                                                </button>
+                                            </div>
+
+                                            {isExpanded && (
+                                                <div className="p-6 bg-slate-50/50 grid grid-cols-4 sm:grid-cols-6 gap-3 animate-in slide-in-from-top-2 duration-200">
+                                                    {uWords.map(w => {
+                                                        const status = getWordStatus(w.id);
+                                                        return (
+                                                            <div key={w.id} className="flex flex-col items-center gap-1 group">
+                                                                <span className={`text-lg font-kaiti transition-colors duration-300 ${
+                                                                    status === 'WEAK' ? 'text-slate-900' :
+                                                                    status === 'MASTERED' ? 'text-emerald-600' : 'text-slate-400'
+                                                                }`}>
+                                                                    {w.word}
+                                                                </span>
+                                                                <div className={`h-1 rounded-full transition-all ${
+                                                                    status === 'WEAK' ? 'bg-red-500 w-full' :
+                                                                    status === 'MASTERED' ? 'bg-emerald-400 w-2 opacity-50' : 'bg-transparent w-0'
+                                                                }`} />
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </main>
+
+                        <div className="fixed bottom-0 left-0 right-0 p-6 bg-white/80 backdrop-blur-md border-t flex justify-center z-30">
+                            <button 
+                                onClick={startFlow}
+                                disabled={selectedUnitNames.size === 0}
+                                className="w-full max-w-md bg-slate-900 text-white h-14 rounded-2xl font-bold text-lg shadow-xl shadow-slate-200 active:scale-95 transition-all disabled:opacity-50 disabled:scale-100 flex items-center justify-center gap-2 hover:bg-slate-800"
+                            >
+                                开始完整练习 <ArrowRight size={20} />
+                            </button>
+                        </div>
+                    </div>
+                );
+            }
+
+            const steps = [
+                { title: '自由练习', color: 'bg-blue-500' },
+                { title: '模拟自测', color: 'bg-orange-500' },
+                { title: '家长终测', color: 'bg-emerald-600' }
+            ];
+
+            return (
+                <div className="flex flex-col h-screen bg-slate-100 overflow-hidden">
+                    <header className="bg-white border-b px-6 pt-4 pb-0 z-50 shrink-0 shadow-sm flex flex-col gap-4">
+                        <div className="flex justify-between items-center">
+                            <button onClick={() => setView('SETUP')} className="text-slate-400 hover:text-slate-700 transition-colors flex items-center gap-1 text-sm font-bold">
+                                <Layout size={16} /> 退出
+                            </button>
+                            
+                            <div className="flex items-center gap-2 font-mono text-xl font-black bg-slate-50 px-4 py-1 rounded-lg border border-slate-200">
+                                <Timer size={18} className="text-blue-500" />
+                                {formatTime(time)}
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-2 pb-4">
+                            {steps.map((s, idx) => (
+                                <div key={idx} className={`flex-1 h-12 rounded-xl flex items-center justify-center gap-2 transition-all duration-500 relative overflow-hidden ${
+                                    idx === currentStep ? `${s.color} text-white shadow-lg scale-105` : 
+                                    idx < currentStep ? 'bg-slate-200 text-slate-400' : 'bg-slate-100 text-slate-300'
+                                }`}>
+                                    <div className="text-sm font-black tracking-wider z-10">{idx + 1}. {s.title}</div>
+                                    {idx === currentStep && <div className="absolute inset-0 bg-white/10 animate-pulse" />}
+                                </div>
+                            ))}
+                        </div>
+                    </header>
+
+                    <main className="flex-1 overflow-y-auto p-4 lg:p-8 scroll-smooth">
+                        <div className="a4-canvas min-h-full p-8 lg:p-16 rounded-lg bg-white shadow-sm mx-auto">
+                            <div className="grid grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                                {sessionWords.map((item, index) => (
+                                    <div key={item.id} className="flex flex-col gap-4">
+                                        <div 
+                                            className={`relative select-none transition-all duration-300 ${currentStep === 0 ? 'cursor-pointer active:scale-95' : ''}`}
+                                            onPointerDown={() => {
+                                                if (currentStep === 0) {
+                                                    setHintWordId(item.id);
+                                                    setSessionWords(prev => prev.map(w => w.id === item.id ? { ...w, markPractice: 'red' } : w));
+                                                }
+                                            }}
+                                            onPointerUp={() => setHintWordId(null)}
+                                            onPointerLeave={() => setHintWordId(null)}
+                                        >
+                                            <div className="flex flex-col">
+                                                <span className="text-2xl lg:text-3xl font-bold font-kaiti tracking-widest text-slate-800 leading-none text-center">
+                                                    {item.pinyin}
+                                                </span>
+                                                
+                                                {(currentStep === 1 || currentStep === 2) && (
+                                                    <span className="text-xl font-kaiti text-blue-600 font-bold mt-2 text-center animate-in fade-in slide-in-from-top-2 duration-700">
+                                                        {item.word}
+                                                    </span>
+                                                )}
+                                            </div>
+
+                                            {hintWordId === item.id && currentStep === 0 && (
+                                                <div className="absolute -top-20 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-4xl px-6 py-3 rounded-2xl shadow-2xl z-50 font-kaiti font-bold ring-4 ring-white popover-up whitespace-nowrap">
+                                                    {item.word}
+                                                    <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-blue-600 rotate-45"></div>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-center justify-center gap-2">
+                                            <div className="text-[10px] font-mono font-bold text-slate-300 italic w-4 text-right">
+                                                {index + 1}.
+                                            </div>
+
+                                            <button 
+                                                disabled={currentStep !== 0}
+                                                onClick={() => setSessionWords(prev => prev.map(w => w.id === item.id ? { ...w, markPractice: w.markPractice === 'red' ? 'white' : 'red' } : w))}
+                                                className={`tian-ge transition-all ${
+                                                    item.markPractice === 'red' ? 'bg-red-500 border-red-600' : 'bg-white border-slate-300'
+                                                } ${currentStep !== 0 ? 'opacity-50' : 'hover:border-slate-400'}`}
+                                            />
+
+                                            {(currentStep >= 1) && (
+                                                <button 
+                                                    disabled={currentStep !== 1}
+                                                    onClick={() => setSessionWords(prev => prev.map(w => w.id === item.id ? { ...w, markSelf: w.markSelf === 'red' ? 'white' : 'red' } : w))}
+                                                    className={`tian-ge transition-all animate-in zoom-in duration-300 ${
+                                                        item.markSelf === 'red' ? 'bg-red-500 border-red-600' : 'bg-white border-black'
+                                                    } ${currentStep !== 1 ? 'opacity-50' : 'shadow-md scale-110'}`} 
+                                                />
+                                            )}
+
+                                            {(currentStep >= 2) && (
+                                                <>
+                                                    <div className="w-2" />
+                                                    <button 
+                                                        onClick={() => {
+                                                            const nextMap = { 'white': 'red', 'red': 'green', 'green': 'white' };
+                                                            setSessionWords(prev => prev.map(w => w.id === item.id ? { ...w, markFinal: nextMap[w.markFinal] } : w));
+                                                        }}
+                                                        className={`tian-ge transition-all animate-in slide-in-from-left-2 duration-300 flex items-center justify-center ${
+                                                            item.markFinal === 'green' ? 'bg-emerald-500 border-emerald-600' :
+                                                            item.markFinal === 'red' ? 'bg-red-500 border-red-600' :
+                                                            'bg-white border-slate-800 border-2'
+                                                        }`}
+                                                    >
+                                                        {item.markFinal === 'green' && <Check size={16} className="text-white" strokeWidth={4} />}
+                                                        {item.markFinal === 'red' && <X size={16} className="text-white" strokeWidth={4} />}
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </main>
+
+                    <div className="p-4 bg-white border-t flex justify-center z-50 shrink-0">
+                        <button 
+                            onClick={() => {
+                                if (currentStep < 2) setCurrentStep(prev => prev + 1);
+                                else finishSession();
+                            }}
+                            className={`w-full max-w-sm h-12 rounded-xl font-bold text-white shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2 ${
+                                currentStep === 0 ? 'bg-blue-600 hover:bg-blue-700' :
+                                currentStep === 1 ? 'bg-orange-500 hover:bg-orange-600' :
+                                'bg-emerald-600 hover:bg-emerald-700'
+                            }`}
+                        >
+                            {currentStep === 0 && <>进入自测阶段 <ChevronRightCircle size={20} /></>}
+                            {currentStep === 1 && <>自测完成，叫家长 <UserCheck size={20} /></>}
+                            {currentStep === 2 && <>存档并结束 <Check size={20} /></>}
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+        setTimeout(() => lucide.createIcons(), 100);
+    </script>
+</body>
+</html>

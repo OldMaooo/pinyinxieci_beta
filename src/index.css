@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-100 text-gray-900 min-h-screen;
+  }
+}
+
+/* 核心 A4 画布 */
+.a4-canvas {
+  width: 100vw;
+  max-width: 210mm;
+  margin: 0 auto;
+  background: white;
+  min-height: 100vh;
+  box-shadow: 0 0 40px rgba(0,0,0,0.1);
+}
+
+/* 复刻线下版纯净方框样式 */
+.tian-ge {
+  width: 2rem; /* 根据iPad手感调整，比线下版略大一点点 */
+  height: 2rem;
+  border: 1px solid #000;
+  @apply bg-white transition-all duration-150 relative;
+}
+
+/* 气泡弹窗动画 */
+.popover-up {
+  animation: pop-up 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pop-up {
+  0% { opacity: 0; transform: translateY(10px) scale(0.8); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.kaiti {
+  font-family: 'STKaiti', 'KaiTi', '楷体', serif;
+}
