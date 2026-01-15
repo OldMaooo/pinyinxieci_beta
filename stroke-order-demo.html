@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>汉字笔顺 Demo - Hanzi Writer</title>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background-color: #f0f4f8;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            text-align: center;
+        }
+        #target {
+            width: 300px;
+            height: 300px;
+            border: 1px solid #e2e8f0;
+            margin: 1rem 0;
+            background: #fff;
+        }
+        .controls {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        button {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            border: 1px solid #d1d5db;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        button:hover {
+            background: #f9fafb;
+        }
+        input {
+            padding: 0.5rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.375rem;
+            width: 3rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>汉字笔顺 Demo</h1>
+        <div style="margin-bottom: 1rem;">
+            <input type="text" id="char-input" value="我" maxlength="1">
+            <button id="update-btn">更新汉字</button>
+        </div>
+        <div id="target"></div>
+        <div class="controls">
+            <button id="animate-btn">播放动画</button>
+            <button id="quiz-btn">开始练习</button>
+            <button id="reset-btn">重置</button>
+        </div>
+        <p id="message" style="margin-top: 1rem; color: #64748b; min-height: 1.5em;"></p>
+    </div>
+
+    <script>
+        let writer;
+        const target = document.getElementById('target');
+        const input = document.getElementById('char-input');
+        const message = document.getElementById('message');
+
+        function initWriter(char) {
+            target.innerHTML = '';
+            writer = HanziWriter.create('target', char, {
+                width: 300,
+                height: 300,
+                padding: 5,
+                showOutline: true,
+                strokeAnimationSpeed: 1,
+                delayBetweenStrokes: 200,
+                onLoadCharDataError: function(err) {
+                    message.innerText = '加载数据失败: ' + err;
+                }
+            });
+        }
+
+        document.getElementById('update-btn').addEventListener('click', () => {
+            const char = input.value.trim();
+            if (char) {
+                initWriter(char);
+                message.innerText = '已切换为: ' + char;
+            }
+        });
+
+        document.getElementById('animate-btn').addEventListener('click', () => {
+            if (writer) {
+                writer.animateCharacter();
+            }
+        });
+
+        document.getElementById('quiz-btn').addEventListener('click', () => {
+            if (writer) {
+                message.innerText = '请在上方方框内书写...';
+                writer.quiz({
+                    onComplete: function(summaryData) {
+                        message.innerText = '太棒了！书写完成。';
+                    }
+                });
+            }
+        });
+
+        document.getElementById('reset-btn').addEventListener('click', () => {
+            const char = input.value.trim();
+            initWriter(char);
+            message.innerText = '已重置';
+        });
+
+        // Initialize with default
+        initWriter('我');
+    </script>
+</body>
+</html>
