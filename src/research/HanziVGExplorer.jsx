@@ -196,52 +196,15 @@ export default function HanziVGExplorer() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [hoveredElement, setHoveredElement] = useState(null);
-
-  // 加载 HanziVG 数据
-  useEffect(() => {
-    async function loadHanziVGData() {
-      if (!selectedChar) return;
-
-      setLoading(true);
-      setError(null);
-      setHanziData(null);
-
-      try {
-        // 将汉字转换为 Unicode 编码（16进制，5位，补零）
-        const hexCode = selectedChar.charCodeAt(0).toString(16).padStart(5, '0');
-        // 使用 GitHub Raw Content URL
-        const url = `https://raw.githubusercontent.com/Connum/hanzivg/master/hanzi/${hexCode}.svg`;
-
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const svgText = await response.text();
-        const parsed = parseHanziVG(svgText);
-
-        if (parsed.error) {
-          throw new Error(parsed.error);
-        }
-
-        setHanziData(parsed);
-      } catch (err) {
-        setError(`加载失败: ${err.message}`);
-        console.error('HanziVG 加载错误:', err);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadHanziVGData();
-  }, [selectedChar]);
+  const [customInput, setCustomInput] = useState('');
+  const [fontStyle, setFontStyle] = useState('system');
 
   return (
     <div style={{
       minHeight: '100vh',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
       padding: '2rem',
-      fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+      fontFamily: fontStyle === 'stkaiti' ? 'STKaiti, serif' : 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
     }}>
       <div style={{
         maxWidth: '1400px',
@@ -264,6 +227,45 @@ export default function HanziVGExplorer() {
           <p style={{ marginTop: '0.5rem', opacity: 0.9 }}>
             基于 SVG 语义元数据的汉字组件自动识别与着色
           </p>
+          <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
+            {/* 字体切换 */}
+            <button
+              onClick={() => setFontStyle(fontStyle === 'system' ? 'stkaiti' : 'system')}
+              style={{
+                padding: '6px 12px',
+                border: '1px solid rgba(255,255,255,0.3)',
+                borderRadius: '6px',
+                background: fontStyle === 'system' ? '#f0f3ff' : '#10b981',
+                color: 'white',
+                cursor: 'pointer',
+                fontSize: '0.9rem',
+                transition: 'all 0.2s'
+              }}
+            >
+              字体: {fontStyle === 'system' ? '默认' : '楷体'}
+            </button>
+
+            {/* 自定义输入框 */}
+            <input
+              type="text"
+              value={customInput}
+              onChange={(e) => setCustomInput(e.target.value)}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && customInput.trim()) {
+                  setSelectedChar(customInput.trim());
+                }
+              }}
+              placeholder="输入汉字（回车加载）"
+              style={{
+                padding: '8px 12px',
+                border: '2px solid #ddd',
+                borderRadius: '6px',
+                fontSize: '1rem',
+                minWidth: '200px',
+                fontFamily: fontStyle === 'stkaiti' ? 'STKaiti, serif' : 'system-ui, sans-serif'
+              }}
+            />
+          </div>
         </div>
 
         {/* 字符选择器 */}
