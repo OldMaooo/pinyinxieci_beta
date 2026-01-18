@@ -206,10 +206,12 @@ const FlashCardView = ({ words, onClose }) => {
 
   return (
     <div className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`} onClick={handleInteraction}>
+      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+        <div className={`font-mono font-bold text-lg px-4 py-2 rounded-full backdrop-blur-md ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-slate-300'}`}>{index + 1} / {words.length}</div>
+      </div>
       <div className="flex flex-col items-center justify-center h-full w-full pointer-events-none">
         <div className={`font-kaiti font-bold text-[4vh] mb-4 transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{currentWord.pinyin}</div>
         <div className={`font-kaiti font-black text-[25vw] leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
-        <div className={`mt-8 font-mono font-bold text-xl ${isDarkMode ? 'text-white/20' : 'text-slate-300'}`}>{index + 1} / {words.length}</div>
       </div>
       <div className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
       <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
@@ -222,9 +224,9 @@ const FlashCardView = ({ words, onClose }) => {
       <div className={`absolute inset-0 flex flex-col justify-end pointer-events-none transition-opacity duration-500 z-[2040] ${showControls ? 'opacity-100' : 'opacity-0'}`}>
         <div className="p-8 flex flex-col gap-6 items-center pointer-events-auto">
           {showThumbnails && (
-            <div className="w-full flex gap-2 overflow-x-auto pb-4 px-4 mask-fade-edges scrollbar-hide">
+            <div className="absolute bottom-28 left-0 w-full p-8 flex gap-2 overflow-x-auto pointer-events-auto z-[2060]">
               {words.map((w, i) => (
-                <button key={i} onClick={() => setIndex(i)} className={`shrink-0 w-16 h-16 rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-xl' : 'bg-black/5 text-black/40 text-xl')}`}>{w.word[0]}</button>
+                <button key={i} onClick={(e) => { e.stopPropagation(); setIndex(i); }} className={`shrink-0 w-24 h-24 rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-xl shadow-lg scale-110' : (isDarkMode ? 'bg-white/10 text-white/40 text-lg' : 'bg-black/5 text-black/40 text-lg')}`}>{w.word}</button>
               ))}
             </div>
           )}
@@ -324,6 +326,17 @@ function MainApp() {
       stopKeepAlive();
     }
     return () => stopKeepAlive();
+  }, [isVoiceActive]);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space' && isVoiceActive) {
+        e.preventDefault();
+        setIsPaused(prev => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isVoiceActive]);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
@@ -469,7 +482,7 @@ function MainApp() {
   };
 
 
-  const stopVoice = () => { window.speechSynthesis.cancel(); setIsVoiceActive(false); setIsPaused(false); setActiveVoiceIndex(-1); setProgress(0); if (timerRef.current) clearInterval(timerRef.current); };
+  const stopVoice = () => { window.speechSynthesis.cancel(); setIsVoiceActive(false); setIsPaused(false); setActiveVoiceIndex(-1); setProgress(0); if (timerRef.current) clearInterval(timerRef.current); setModalConfig({ isOpen: false }); };
 
   const handleTabChange = (idx) => {
     if (idx === 2 && step < 2) setModalConfig({ isOpen: true, type: 'TO_FINAL', title: "确认进入终测？", content: "确认进入终测吗？" });
@@ -628,12 +641,11 @@ function MainApp() {
           ) : (
             <>
               <label className="flex items-center gap-2 cursor-pointer select-none group" onClick={(e) => e.stopPropagation()}><div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all ${onlyWrong ? 'bg-black border-black shadow-md' : 'border-slate-300'}`}>{onlyWrong && <Check size={14} className="text-white" strokeWidth={4} />}</div><span className="text-sm font-black text-black">仅练错题</span><input type="checkbox" className="hidden" checked={onlyWrong} onChange={() => setOnlyWrong(!onlyWrong)} /></label>
-              <div className="flex flex-col items-end w-full max-w-sm">
-                {!isLoading && Object.keys(mastery).length > 0 && <span className="text-[10px] text-emerald-600 font-bold mb-1 flex items-center gap-1"><Cloud size={10}/> 云端就绪</span>}
-                <button onClick={start} disabled={selectedUnits.size === 0 || isLoading} className={`w-full text-white h-12 rounded-lg font-black text-xl shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 ${isDevMode ? 'bg-red-600' : 'bg-black'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                  {isLoading ? <><Loader2 className="animate-spin" size={20}/> 正在同步数据...</> : `开始练习 (${currentTotalCount})`}
-                </button>
-              </div>
+               <div className="flex flex-col items-end w-full max-w-sm">
+                 <button onClick={start} disabled={selectedUnits.size === 0 || isLoading} className={`w-full text-white h-12 rounded-lg font-black text-xl shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 ${isDevMode ? 'bg-red-600' : 'bg-black'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                   {isLoading ? <><Loader2 className="animate-spin" size={20}/> 正在同步数据...</> : `开始练习 (${currentTotalCount})`}
+                 </button>
+               </div>
             </>
           )}
         </div>
