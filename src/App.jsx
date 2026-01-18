@@ -204,14 +204,37 @@ const FlashCardView = ({ words, onClose }) => {
   const next = (e) => { e.stopPropagation(); setIndex((index + 1) % words.length); handleInteraction(); };
   const prev = (e) => { e.stopPropagation(); setIndex((index - 1 + words.length) % words.length); handleInteraction(); };
 
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        setIsPlaying(prev => !prev);
+      } else if (e.key === 'Escape') {
+        e.preventDefault();
+        onClose();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setIndex((index - 1 + words.length) % words.length);
+        handleInteraction();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setIndex((index + 1) % words.length);
+        handleInteraction();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [index, isPlaying, onClose, handleInteraction, words.length]);
+
   return (
     <div className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`} onClick={handleInteraction}>
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
         <div className={`font-mono font-bold text-lg px-4 py-2 rounded-full backdrop-blur-md ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-slate-300'}`}>{index + 1} / {words.length}</div>
       </div>
-      <div className="flex flex-col items-center justify-center h-full w-full pointer-events-none">
-        <div className={`font-kaiti font-bold text-[4vh] mb-4 transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{currentWord.pinyin}</div>
-        <div className={`font-kaiti font-black text-[25vw] leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
+      <div className="flex flex-col items-center justify-center h-full w-full pointer-events-none pb-28">
+        <div className={`font-kaiti font-bold text-[3.5vh] mb-4 transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{currentWord.pinyin}</div>
+        <div className={`font-kaiti font-black text-[20vw] leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
       </div>
       <div className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
       <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
@@ -226,7 +249,7 @@ const FlashCardView = ({ words, onClose }) => {
           {showThumbnails && (
             <div className="absolute bottom-28 left-0 w-full p-8 flex gap-2 overflow-x-auto pointer-events-auto z-[2060]">
               {words.map((w, i) => (
-                <button key={i} onClick={(e) => { e.stopPropagation(); setIndex(i); }} className={`shrink-0 w-24 h-24 rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-xl shadow-lg scale-110' : (isDarkMode ? 'bg-white/10 text-white/40 text-lg' : 'bg-black/5 text-black/40 text-lg')}`}>{w.word}</button>
+                <button key={i} onClick={(e) => { e.stopPropagation(); setIndex(i); }} className={`shrink-0 h-20 w-auto px-4 rounded-xl font-kaiti flex items-center justify-center transition-all text-lg ${index === i ? 'bg-white text-black font-black shadow-lg scale-110' : (isDarkMode ? 'bg-white/10 text-white/40' : 'bg-black/5 text-black/40')}`}>{w.word}</button>
               ))}
             </div>
           )}
@@ -406,7 +429,7 @@ function MainApp() {
         if (!onlyWrong || mastery[w.id]?.history?.includes('red')) targetWords.push(wordData);
     });
     if (targetWords.length === 0) return alert('没有符合条件的词语');
-    setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING');
+    setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING'); setModalConfig({ isOpen: false });
   };
 
   const save = async (isTemporary = false) => {
