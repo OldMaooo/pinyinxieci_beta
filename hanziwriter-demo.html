@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HanziWriter 笔顺演示</title>
+    <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@3.5/dist/hanzi-writer.min.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 1200px;
+            width: 100%;
+        }
+        h1 {
+            margin: 0 0 1rem 0;
+            color: #333;
+            text-align: center;
+        }
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        @media (max-width: 900px) {
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .input-section {
+            width: 100%;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+        #char-input {
+            padding: 0.75rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.5rem;
+            font-size: 1.2rem;
+            width: 4rem;
+            text-align: center;
+        }
+        #char-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .button-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            max-width: 400px;
+        }
+        button {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.5rem;
+            background: white;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        button:hover {
+            background: #f8f9fa;
+            transform: translateY(-1px);
+        }
+        button.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        #character-target {
+            width: 400px;
+            height: 400px;
+            border: 3px solid #333;
+            border-radius: 1rem;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .control-group {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid #e0e0e0;
+        }
+        .control-group h3 {
+            margin: 0 0 1rem 0;
+            color: #333;
+            font-size: 1rem;
+        }
+        .toggle-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+        .toggle-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .toggle-group input[type="checkbox"] {
+            width: 1.2rem;
+            height: 1.2rem;
+            cursor: pointer;
+        }
+        .color-presets {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        .color-preset {
+            padding: 0.5rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.5rem;
+            background: white;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .color-preset:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+        .color-preset .swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.2);
+        }
+        .status-bar {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #e0e0e0;
+            margin-top: 1rem;
+            min-height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        .preset-chars {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .preset-char {
+            padding: 0.5rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 0.5rem;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1.2rem;
+            transition: all 0.2s;
+        }
+        .preset-char:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖌️ HanziWriter 笔顺演示</h1>
+        
+        <div class="demo-grid">
+            <div class="left-panel">
+                <div class="input-section">
+                    <input type="text" id="char-input" value="我" maxlength="1" placeholder="字">
+                    <button id="load-btn">加载</button>
+                </div>
+                
+                <div class="button-grid">
+                    <button id="animate-btn">▶️ 播放笔顺</button>
+                    <button id="animate-once-btn">单笔播放</button>
+                    <button id="quiz-btn">✍️ 开始练习</button>
+                    <button id="reset-btn">🔄 重置</button>
+                </div>
+                
+                <div id="character-target"></div>
+                
+                <div class="status-bar" id="status-bar">
+                    选择一个汉字开始
+                </div>
+                
+                <div style="margin-top: 1.5rem;">
+                    <h3 style="margin: 0 0 0.5rem 0; color: #333;">快速选择常用字：</h3>
+                    <div class="preset-chars" id="preset-chars">
+                        <!-- 常用字将在这里生成 -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="control-group">
+                    <h3>显示选项</h3>
+                    <div class="toggle-group">
+                        <label>
+                            <input type="checkbox" id="show-outline">
+                            显示轮廓
+                        </label>
+                        <label>
+                            <input type="checkbox" id="show-radical">
+                            显示部首
+                        </label>
+                        <label>
+                            <input type="checkbox" id="show-stroke-animation">
+                            笔画动画
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h3>动画设置</h3>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.9rem; color: #555;">
+                        <label>
+                            笔画速度: <span id="stroke-speed-val">1.0</span>x
+                            <input type="range" id="stroke-speed" min="0.5" max="3" step="0.1" value="1" style="width: 100%;">
+                        </label>
+                        <label>
+                            笔画间隔: <span id="stroke-delay-val">200</span>ms
+                            <input type="range" id="stroke-delay" min="50" max="1000" step="50" value="200" style="width: 100%;">
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <h3>笔画颜色方案</h3>
+                    <div class="color-presets">
+                        <div class="color-preset" data-preset="default">
+                            <div class="swatch" style="background: #333;"></div>
+                            默认黑色
+                        </div>
+                        <div class="color-preset" data-preset="radical">
+                            <div class="swatch" style="background: linear-gradient(135deg, #333 50%, #DC2626 50%);"></div>
+                            部首红色
+                        </div>
+                        <div class="color-preset" data-preset="rainbow">
+                            <div class="swatch" style="background: linear-gradient(90deg, #EF4444, #F59E0B, #10B981, #3B82F6, #8B5CF6);"></div>
+                            彩虹渐变
+                        </div>
+                        <div class="color-preset" data-preset="by-position">
+                            <div class="swatch" style="background: linear-gradient(135deg, #EF4444 33%, #3B82F6 66%, #10B981 100%);"></div>
+                            按位置区分
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let writer = null;
+        const charInput = document.getElementById('char-input');
+        const target = document.getElementById('character-target');
+        const statusBar = document.getElementById('status-bar');
+        const loadBtn = document.getElementById('load-btn');
+        const animateBtn = document.getElementById('animate-btn');
+        const animateOnceBtn = document.getElementById('animate-once-btn');
+        const quizBtn = document.getElementById('quiz-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const presetCharsDiv = document.getElementById('preset-chars');
+        
+        // 常用汉字
+        const COMMON_CHARS = '我你他她们好是的着了这上下有来去地大子小多也天人都在时候会可以要那哪呢意思些别这么样什么呀吧';
+        
+        // 显示选项
+        const showOutline = document.getElementById('show-outline');
+        const showRadical = document.getElementById('show-radical');
+        const showStrokeAnimation = document.getElementById('show-stroke-animation');
+        
+        // 动画设置
+        const strokeSpeed = document.getElementById('stroke-speed');
+        const strokeDelay = document.getElementById('stroke-delay');
+        const strokeSpeedVal = document.getElementById('stroke-speed-val');
+        const strokeDelayVal = document.getElementById('stroke-delay-val');
+        
+        // 初始化预设字符按钮
+        COMMON_CHARS.split('').forEach(char => {
+            const btn = document.createElement('div');
+            btn.className = 'preset-char';
+            btn.textContent = char;
+            btn.onclick = () => {
+                charInput.value = char;
+                loadCharacter();
+            };
+            presetCharsDiv.appendChild(btn);
+        });
+        
+        // 初始化 HanziWriter
+        function initWriter(char) {
+            target.innerHTML = '';
+            updateStatus(`正在加载 "${char}" 的笔顺数据...`);
+            
+                try {
+                    writer = HanziWriter.create('character-target', char, {
+                        width: 350,
+                        height: 350,
+                        padding: 10,
+                        showOutline: showOutline.checked,
+                        showCharacter: false,
+                        strokeAnimationSpeed: parseFloat(strokeSpeed.value),
+                        delayBetweenStrokes: parseInt(strokeDelay.value),
+                        strokeColor: '#333',
+                        radicalColor: '#333',
+                        outlineColor: '#DDD',
+                        strokeHighlightSpeed: 20,
+                        outlineAnimationSpeed: 1000,
+                        onLoadCharDataError: function(reason) {
+                            const errorMsg = reason || '未知错误';
+                            updateStatus(`加载失败: ${errorMsg}`, true);
+                            writer = null;
+                        },
+                        onLoadCharDataSuccess: function() {
+                            // 简单显示成功状态
+                            updateStatus(`"${char}" 加载成功！`, false);
+                        }
+                    });
+                } catch (err) {
+                    updateStatus(`初始化失败: ${err.message}`, true);
+                    writer = null;
+                }
+                                } catch (e) {
+                                    updateStatus(`"${char}" 加载成功，但读取数据失败: ${e.message}`, false);
+                                }
+                            }, 100);
+                        }
+                                    } else if (writer.character) {
+                                        // 直接遍历字符对象寻找数组
+                                        for (let key in writer.character) {
+                                            if (Array.isArray(writer.character[key])) {
+                                                strokeCount = writer.character[key].length;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    }
+                                    updateStatus(`"${char}" 加载成功！笔画数: ${strokeCount}`, false);
+                                } catch (e) {
+                                    updateStatus(`"${char}" 加载成功，但读取笔画数失败: ${e.message}`, false);
+                                }
+                            }, 100);
+                        }
+                    });
+                } catch (err) {
+                    updateStatus(`初始化失败: ${err.message}`, true);
+                    writer = null;
+                }
+        }
+        
+        // 更新 Writer 选项（不包括颜色方案）
+        function updateWriterOptions() {
+            if (!writer) return;
+
+            writer.option('showOutline', showOutline.checked);
+            writer.option('showCharacter', showRadical.checked);
+            writer.option('strokeAnimationSpeed', parseFloat(strokeSpeed.value));
+            writer.option('delayBetweenStrokes', parseInt(strokeDelay.value));
+        }
+        
+        // 应用颜色方案
+        function applyColorScheme(preset) {
+            if (!writer || !writer.character || !writer.character.strokes) return;
+
+            const strokes = writer.character.strokes;
+
+            if (preset === 'default') {
+                writer.option('strokeColor', '#333');
+                writer.option('radicalColor', '#333');
+                writer.setCharacter();
+            } else if (preset === 'radical') {
+                // 简单假设前两笔是部首（实际情况需要更复杂的逻辑）
+                writer.option('strokeColor', '#333');
+                writer.option('radicalColor', '#DC2626');
+                writer.setCharacter();
+            } else if (preset === 'rainbow') {
+                // 彩虹色
+                const colors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6'];
+                const strokeRanges = {};
+                const segmentSize = Math.ceil(strokes.length / colors.length);
+                for (let i = 0; i < strokes.length; i++) {
+                    const colorIndex = Math.floor(i / segmentSize);
+                    strokeRanges[i] = { color: colors[colorIndex] };
+                }
+                writer.setCharacter({ strokeData: strokeRanges });
+            } else if (preset === 'by-position') {
+                // 按位置区分（简化版：前1/3左，后2/3右）
+                const strokeRanges = {};
+                const leftColor = '#EF4444';
+                const rightColor = '#3B82F6';
+                for (let i = 0; i < strokes.length; i++) {
+                    strokeRanges[i] = {
+                        color: i < strokes.length / 3 ? leftColor : rightColor
+                    };
+                }
+                writer.setCharacter({ strokeData: strokeRanges });
+            }
+        }
+        
+        // 加载字符
+        function loadCharacter() {
+            const char = charInput.value.trim();
+            if (!char) {
+                updateStatus('请输入一个汉字', true);
+                return;
+            }
+            initWriter(char);
+        }
+        
+        // 更新状态显示
+        function updateStatus(message, isError = false) {
+            statusBar.textContent = message;
+            statusBar.style.color = isError ? '#DC2626' : '#555';
+            statusBar.style.background = isError ? '#FEE2E2' : '#F8F9FA';
+        }
+        
+        // 事件绑定
+        loadBtn.onclick = loadCharacter;
+        
+        animateBtn.onclick = () => {
+            if (writer) {
+                updateStatus('正在播放笔顺...');
+                writer.animateCharacter(() => {
+                    updateStatus('笔顺播放完成');
+                });
+            }
+        };
+        
+        animateOnceBtn.onclick = () => {
+            if (writer) {
+                updateStatus('正在播放下一笔...');
+                writer.animateStroke(() => {
+                    updateStatus('单笔播放完成');
+                });
+            }
+        };
+        
+        quizBtn.onclick = () => {
+            if (writer) {
+                updateStatus('请在方框内书写该汉字...', false);
+                writer.quiz({
+                    onMistake: function(strokeNum, stroke) {
+                        updateStatus(`第 ${strokeNum + 1} 笔写错了，请重试`, true);
+                    },
+                    onCorrectStroke: function(strokeNum, stroke) {
+                        updateStatus(`第 ${strokeNum + 1} 笔正确！`);
+                    },
+                    onComplete: function(summaryData) {
+                        const percentage = Math.round(summaryData.totalMistakes / summaryData.totalStrokes * 100);
+                        let message = '太棒了！书写完成';
+                        if (summaryData.totalMistakes > 0) {
+                            message = `书写完成！错误 ${summaryData.totalMistakes} 次`;
+                        }
+                        updateStatus(message);
+                        writer.showOutline();
+                    }
+                });
+            }
+        };
+        
+        resetBtn.onclick = () => {
+            if (writer) {
+                const char = charInput.value.trim();
+                initWriter(char);
+                updateStatus('已重置');
+            }
+        };
+        
+        // 显示选项变化
+        showOutline.onchange = updateWriterOptions;
+        showRadical.onchange = updateWriterOptions;
+        showStrokeAnimation.onchange = updateWriterOptions;
+        
+        // 动画设置变化
+        strokeSpeed.oninput = function() {
+            strokeSpeedVal.textContent = this.value;
+            updateWriterOptions();
+        };
+        strokeDelay.oninput = function() {
+            strokeDelayVal.textContent = this.value;
+            updateWriterOptions();
+        };
+        
+        // 颜色方案切换
+        document.querySelectorAll('.color-preset').forEach(preset => {
+            preset.onclick = function() {
+                document.querySelectorAll('.color-preset').forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
+                applyColorScheme(this.dataset.preset);
+                updateStatus(`已应用颜色方案: ${this.textContent.trim().split('\n')[0]}`);
+            };
+        });
+
+        // 不设置默认颜色方案，等用户点击时才应用
+        
+        // 回车键加载
+        charInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                loadCharacter();
+            }
+        });
+        
+        // 初始化默认字符
+        initWriter('我');
+    </script>
+</body>
+</html>

@@ -7,13 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>拼音听写 · 半自动版</title>
     <style>
-      /* 核心：强制装载本地 STKaiti 字体 */
       @font-face {
         font-family: 'STKaitiLocal';
         src: url('/fonts/stkaiti.ttf') format('truetype');
         font-weight: normal;
         font-style: normal;
-        font-display: block; /* 强制等待字体加载，防止闪烁 */
+        font-display: block;
       }
       :root {
         --font-kaiti: "STKaitiLocal", "STKaiti", "Kaiti SC", "楷体", serif;
@@ -38,7 +37,6 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/shared/audio-player.js"></script>
     <script type="module" src="/shared/flashcardAudioBridge.js"></script>
     <script type="module" src="/src/main.jsx"></script>
   </body>

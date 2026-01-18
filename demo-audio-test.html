@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音测试 Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f0f9ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #0369a1;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+        }
+        .unlock-section {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .unlock-section h2 {
+            color: #92400e;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        .unlock-section p {
+            color: #b45309;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        .unlock-btn {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .unlock-btn:hover {
+            background: #d97706;
+            transform: translateY(-2px);
+        }
+        .unlock-btn:active {
+            transform: translateY(0);
+        }
+        .unlock-btn.unlocked {
+            background: #10b981;
+            cursor: default;
+        }
+        .characters {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .char-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.2s;
+        }
+        .char-card:hover {
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            transform: translateY(-2px);
+        }
+        .char-card.speaking {
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        .char-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        .chinese-char {
+            font-size: 3em;
+            font-family: 'STKaiti', 'KaiTi', '楷体', serif;
+            color: #1e40af;
+            min-width: 80px;
+            text-align: center;
+        }
+        .char-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .char-pinyin {
+            font-size: 1.1em;
+            color: #64748b;
+        }
+        .char-english {
+            font-size: 0.9em;
+            color: #94a3b8;
+        }
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .play-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        .play-btn.playing {
+            background: linear-gradient(135deg, #64748b, #475569);
+            cursor: default;
+        }
+        .status-bar {
+            margin-top: 10px;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .status-bar.visible {
+            opacity: 1;
+        }
+        .status-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            transition: width 0.1s linear;
+            width: 0%;
+        }
+        .debug-console {
+            margin-top: 30px;
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            color: #94a3b8;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85em;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .debug-console h3 {
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .debug-console h3::before {
+            content: '🔧';
+        }
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+        .log-time {
+            color: #64748b;
+            margin-right: 8px;
+        }
+        .log-info { color: #60a5fa; }
+        .log-success { color: #4ade80; }
+        .log-error { color: #f87171; }
+        .log-warning { color: #fbbf24; }
+        .browser-info {
+            background: #dbeafe;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .browser-info h3 {
+            color: #1e40af;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+        .browser-info p {
+            color: #3b82f6;
+            font-size: 0.85em;
+            margin: 4px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎙️ 语音合成测试</h1>
+    <p class="subtitle">极简版 - 只测试浏览器原生 TTS</p>
+
+    <div class="container">
+        <div class="browser-info">
+            <h3>浏览器环境信息</h3>
+            <p id="browserUA">检测中...</p>
+            <p id="speechSupport">检测中...</p>
+            <p id="speechState">语音引擎状态: 检测中...</p>
+        </div>
+
+        <div class="unlock-section">
+            <h2>⚠️ 首先需要解锁音频</h2>
+            <p>浏览器限制：必须先点击按钮才能播放声音</p>
+            <button class="unlock-btn" id="unlockBtn" onclick="unlockAudio()">
+                🔓 解锁音频
+            </button>
+            <button class="unlock-btn" id="resetBtn" onclick="resetSpeechEngine()" style="margin-left: 10px; background: #64748b;">
+                🔄 强制重置
+            </button>
+            <button class="unlock-btn" id="testSystemAudio" onclick="testSystemAudio()" style="margin-left: 10px; background: #8b5cf6;">
+                🔊 测试系统音
+            </button>
+        </div>
+
+        <div class="characters" id="characterList">
+        </div>
+
+        <div class="debug-console">
+            <h3>调试日志</h3>
+            <div id="logContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test data - 3 simple Chinese characters
+        const testCharacters = [
+            { char: '你', pinyin: 'nǐ', english: 'you' },
+            { char: '好', pinyin: 'hǎo', english: 'good' },
+            { char: '吗', pinyin: 'ma', english: 'question particle' }
+        ];
+
+        let isAudioUnlocked = false;
+        let currentSpeaking = null;
+        let speechSynth = window.speechSynthesis;
+        let voices = [];
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            log('info', '页面加载完成');
+
+            // Check browser support
+            const ua = navigator.userAgent;
+            document.getElementById('browserUA').textContent = `User Agent: ${ua}`;
+
+            if ('speechSynthesis' in window) {
+                document.getElementById('speechSupport').textContent = '✅ 支持 Web Speech API (speechSynthesis)';
+                log('success', '浏览器支持 speechSynthesis');
+
+                // Load voices
+                loadVoices();
+                speechSynth.onvoiceschanged = loadVoices;
+            } else {
+                document.getElementById('speechSupport').textContent = '❌ 不支持 Web Speech API';
+                log('error', '浏览器不支持 speechSynthesis');
+            }
+
+            // Render character cards
+            renderCharacters();
+
+            // Start monitoring speech state
+            setInterval(updateSpeechState, 1000);
+
+            log('info', '初始化完成，等待解锁音频');
+        });
+
+        function updateSpeechState() {
+            if (!speechSynth) return;
+
+            const speaking = speechSynth.speaking;
+            const pending = speechSynth.pending;
+            const paused = speechSynth.paused;
+
+            const statusText = `语音引擎状态: ${speaking ? '🔊 播放中' : '⏸️ 空闲'} | 队列: ${pending ? '⏳ 有等待' : '✅ 无'} | 暂停: ${paused ? '⏯️ 是' : '❌ 否'}`;
+            document.getElementById('speechState').textContent = statusText;
+        }
+
+        function loadVoices() {
+            voices = speechSynth.getVoices();
+            const chineseVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('CN'));
+            log('info', `检测到 ${voices.length} 个语音，其中 ${chineseVoices.length} 个中文语音`);
+
+            if (chineseVoices.length > 0) {
+                log('success', '中文语音示例: ' + chineseVoices.slice(0, 2).map(v => v.name).join(', '));
+            }
+        }
+
+        function renderCharacters() {
+            const container = document.getElementById('characterList');
+
+            testCharacters.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'char-card';
+                card.id = `card-${index}`;
+
+                card.innerHTML = `
+                    <div class="char-display">
+                        <div class="chinese-char">${item.char}</div>
+                        <div class="char-info">
+                            <div class="char-pinyin">${item.pinyin}</div>
+                            <div class="char-english">${item.english}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="play-btn" id="play-${index}" onclick="speak(${index})">
+                            ▶️
+                        </button>
+                        <div class="status-bar" id="status-${index}">
+                            <div class="status-progress" id="progress-${index}"></div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function unlockAudio() {
+            log('info', '尝试解锁音频...');
+            const btn = document.getElementById('unlockBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ 解锁中...';
+
+            try {
+                // Cancel any ongoing speech
+                speechSynth.cancel();
+                log('info', 'Step 1: 取消当前语音');
+
+                // Strategy 1: Multiple attempts with short delays
+                let attempts = 0;
+                const maxAttempts = 5;
+                const testPhrase = '你好';
+
+                const tryUnlock = () => {
+                    attempts++;
+                    log('info', `Step 2: 尝试 ${attempts}/${maxAttempts} - 播放测试语音 "${testPhrase}"`);
+
+                    const utterance = new SpeechSynthesisUtterance(testPhrase);
+                    utterance.rate = 1.0;
+                    utterance.volume = 0.1; // Low volume for testing
+
+                    // Find Chinese voice
+                    const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN'));
+                    if (zhVoice) {
+                        utterance.voice = zhVoice;
+                        utterance.lang = zhVoice.lang;
+                    }
+
+                    utterance.onstart = () => {
+                        log('success', `✅ 尝试 ${attempts} 成功！语音引擎已激活`);
+                        isAudioUnlocked = true;
+                        btn.textContent = '✅ 已解锁';
+                        btn.classList.add('unlocked');
+                    };
+
+                    utterance.onend = () => {
+                        if (isAudioUnlocked) {
+                            log('success', '音频完全解锁');
+                        } else if (attempts < maxAttempts) {
+                            log('warning', `尝试 ${attempts} 失败，重试中...`);
+                            setTimeout(tryUnlock, 300);
+                        } else {
+                            log('error', `所有 ${maxAttempts} 次尝试都失败了`);
+                            btn.disabled = false;
+                            btn.textContent = '🔄 重试解锁';
+                        }
+                    };
+
+                    utterance.onerror = (event) => {
+                        if (!isAudioUnlocked && attempts < maxAttempts) {
+                            log('warning', `尝试 ${attempts} 错误: ${event.error}, 重试中...`);
+                            setTimeout(tryUnlock, 300);
+                        } else if (!isAudioUnlocked) {
+                            log('error', `所有 ${maxAttempts} 次尝试都失败了，错误: ${event.error}`);
+                            btn.disabled = false;
+                            btn.textContent = '🔄 重试解锁';
+                        }
+                    };
+
+                    const result = speechSynth.speak(utterance);
+                    log('info', `speechSynthesis.speak() 返回: ${result}`);
+
+                    if (result === false) {
+                        log('error', 'speechSynthesis.speak() 返回 false');
+                    }
+                };
+
+                // Wait a bit for voices to load
+                setTimeout(() => {
+                    log('info', 'Step 2: 开始解锁尝试');
+                    tryUnlock();
+                }, 200);
+
+            } catch (error) {
+                log('error', '解锁失败: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = '🔄 重试解锁';
+            }
+        }
+
+        function speak(index) {
+            if (!isAudioUnlocked) {
+                log('warning', '请先点击"解锁音频"按钮');
+                alert('请先点击"解锁音频"按钮');
+                return;
+            }
+
+            // Stop any current speech
+            if (currentSpeaking !== null) {
+                stopSpeaking();
+            }
+
+            const item = testCharacters[index];
+            const card = document.getElementById(`card-${index}`);
+            const btn = document.getElementById(`play-${index}`);
+            const statusBar = document.getElementById(`status-${index}`);
+            const progressBar = document.getElementById(`progress-${index}`);
+
+            log('info', `准备朗读: "${item.char}" (${item.pinyin})`);
+
+            // Find Chinese voice
+            const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN'));
+
+            // Create utterance
+            const utterance = new SpeechSynthesisUtterance(item.char);
+
+            if (zhVoice) {
+                utterance.voice = zhVoice;
+                utterance.lang = zhVoice.lang;
+                log('info', `使用语音: ${zhVoice.name} (lang: ${zhVoice.lang})`);
+            } else {
+                log('warning', '未找到中文语音，使用默认语音');
+            }
+
+            utterance.rate = 0.9;
+            utterance.pitch = 1;
+            utterance.volume = 1.0;
+
+            // Additional diagnostics
+            log('info', `语音参数: rate=${utterance.rate}, pitch=${utterance.pitch}, volume=${utterance.volume}`);
+            log('info', `当前语音队列长度: ${speechSynth.pending ? '有' : '无'}`);
+
+            // Update UI on start
+            utterance.onstart = () => {
+                currentSpeaking = index;
+                card.classList.add('speaking');
+                btn.textContent = '🔊';
+                btn.classList.add('playing');
+                statusBar.classList.add('visible');
+                log('success', `✅ 开始朗读: "${item.char}"`);
+            };
+
+            // Update progress
+            utterance.onboundary = (event) => {
+                if (event.name === 'word') {
+                    log('info', `语音边界: ${event.charIndex}`);
+                }
+            };
+
+            // Reset UI on end
+            utterance.onend = () => {
+                log('success', `✅ 朗读完成: "${item.char}"`);
+                resetCard(index);
+            };
+
+            // Handle errors
+            utterance.onerror = (event) => {
+                log('error', `❌ 朗读错误: ${event.error}`);
+                log('error', `错误详情: ${event.error}, ${event.message}`);
+                resetCard(index);
+            };
+
+            // Simulate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                if (currentSpeaking !== index) {
+                    clearInterval(progressInterval);
+                    return;
+                }
+                progress += 2;
+                if (progress > 100) progress = 100;
+                progressBar.style.width = progress + '%';
+            }, 50);
+
+            // Speak with multiple fallback attempts
+            let speakAttempts = 0;
+            const maxSpeakAttempts = 3;
+
+            const trySpeak = () => {
+                speakAttempts++;
+                log('info', `播放尝试 ${speakAttempts}/${maxSpeakAttempts}`);
+
+                try {
+                    const result = speechSynth.speak(utterance);
+                    log('info', `speechSynthesis.speak() 返回: ${result}`);
+
+                    if (result === false && speakAttempts < maxSpeakAttempts) {
+                        log('warning', `返回 false，重试中...`);
+                        setTimeout(trySpeak, 200);
+                    } else if (result === false) {
+                        log('error', '所有播放尝试都返回 false');
+                    } else {
+                        log('success', '语音已提交到队列');
+                    }
+                } catch (error) {
+                    log('error', `播放异常: ${error.message}`);
+                    if (speakAttempts < maxSpeakAttempts) {
+                        setTimeout(trySpeak, 200);
+                    }
+                }
+            };
+
+            // Start first attempt
+            setTimeout(trySpeak, 100);
+        }
+
+        function stopSpeaking() {
+            if (currentSpeaking !== null) {
+                resetCard(currentSpeaking);
+            }
+            speechSynth.cancel();
+            log('info', '停止所有播放');
+        }
+
+        function resetCard(index) {
+            const card = document.getElementById(`card-${index}`);
+            const btn = document.getElementById(`play-${index}`);
+            const statusBar = document.getElementById(`status-${index}`);
+            const progressBar = document.getElementById(`progress-${index}`);
+
+            card.classList.remove('speaking');
+            btn.textContent = '▶️';
+            btn.classList.remove('playing');
+            statusBar.classList.remove('visible');
+            progressBar.style.width = '0%';
+            currentSpeaking = null;
+        }
+
+        function resetSpeechEngine() {
+            log('info', '强制重置语音引擎...');
+
+            // Cancel all speech
+            speechSynth.cancel();
+            log('info', '已取消所有语音');
+
+            // Reset audio unlock state
+            isAudioUnlocked = false;
+
+            // Reset button
+            const btn = document.getElementById('unlockBtn');
+            btn.disabled = false;
+            btn.textContent = '🔓 解锁音频';
+            btn.classList.remove('unlocked');
+
+            // Reset all cards
+            for (let i = 0; i < testCharacters.length; i++) {
+                resetCard(i);
+            }
+
+            log('success', '语音引擎已重置，请重新解锁');
+        }
+
+        function testSystemAudio() {
+            log('info', '测试系统音频 (Web Audio API)...');
+
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+
+                // Create oscillator
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime); // A4 note
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.2);
+
+                log('success', '✅ 系统音频播放成功！如果你听到了 beep 声，说明系统音频正常');
+            } catch (error) {
+                log('error', '❌ 系统音频测试失败: ' + error.message);
+            }
+        }
+
+        function log(type, message) {
+            const container = document.getElementById('logContainer');
+            const time = new Date().toLocaleTimeString();
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span><span class="log-${type}">${message}</span>`;
+
+            container.insertBefore(entry, container.firstChild);
+
+            // Keep only last 50 logs
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
+            }
+
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+    </script>
+</body>
+</html>

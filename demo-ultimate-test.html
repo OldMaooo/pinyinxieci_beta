@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>语音终极测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f0f9ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+        h1 {
+            color: #0369a1;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 40px;
+        }
+        .container {
+            max-width: 700px;
+            width: 100%;
+        }
+        .test-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .test-section h2 {
+            color: #1e40af;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .btn-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        button {
+            padding: 14px 20px;
+            border-radius: 8px;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            color: white;
+        }
+        .status {
+            padding: 12px;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .status-info {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status-success {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .voice-selector {
+            margin-bottom: 15px;
+        }
+        .voice-selector label {
+            display: block;
+            margin-bottom: 8px;
+            color: #374151;
+            font-weight: 600;
+        }
+        .voice-selector select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 2px solid #e5e7eb;
+            font-size: 1em;
+            max-height: 200px;
+        }
+        .debug-console {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 20px;
+            color: #94a3b8;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85em;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .debug-console h3 {
+            color: #e2e8f0;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+        .log-entry {
+            padding: 4px 0;
+            border-bottom: 1px solid #334155;
+        }
+        .log-time {
+            color: #64748b;
+            margin-right: 8px;
+        }
+        .log-info { color: #60a5fa; }
+        .log-success { color: #4ade80; }
+        .log-error { color: #f87171; }
+        .log-warning { color: #fbbf24; }
+    </style>
+</head>
+<body>
+    <h1>🔬 TTS 终极诊断工具</h1>
+    <p class="subtitle">解决 Chrome/macOS speechSynthesis 不播放问题</p>
+
+    <div class="container">
+        <!-- Test 1: Voice Selection -->
+        <div class="test-section">
+            <h2>1️⃣ 选择语音引擎</h2>
+            <div class="voice-selector">
+                <label for="voiceSelect">中文语音列表:</label>
+                <select id="voiceSelect" onchange="updateSelectedVoice()"></select>
+            </div>
+            <div class="status status-info" id="voiceStatus">
+                加载中...
+            </div>
+        </div>
+
+        <!-- Test 2: Keep Alive -->
+        <div class="test-section">
+            <h2>2️⃣ 方法A: Keep-Alive 机制</h2>
+            <p style="margin-bottom: 15px; color: #64748b;">
+                Chrome 有 bug：15秒后 speechSynthesis 会停止工作。这个方法每隔14秒播放一个无声音频来保持引擎活跃。
+            </p>
+            <div class="btn-grid">
+                <button class="btn-success" id="startKeepAlive" onclick="startKeepAlive()">▶️ 启动 Keep-Alive</button>
+                <button class="btn-danger" id="stopKeepAlive" onclick="stopKeepAlive()" disabled>⏹️ 停止 Keep-Alive</button>
+                <button class="btn-primary" onclick="testKeepAlive()">🔊 测试播放（需要先启动）</button>
+            </div>
+            <div class="status status-info" id="keepAliveStatus">
+                未启动
+            </div>
+        </div>
+
+        <!-- Test 3: Full Reset + Simple Utterance -->
+        <div class="test-section">
+            <h2>3️⃣ 方法B: 完全重置 + 简单短语</h2>
+            <p style="margin-bottom: 15px; color: #64748b;">
+                取消所有语音，然后播放最简单的短语，不设置任何额外参数。
+            </p>
+            <div class="btn-grid">
+                <button class="btn-warning" onclick="fullResetAndSpeak()">🔄 完全重置并播放</button>
+                <button class="btn-primary" onclick="simpleSpeak()">🎤 简单播放（中文）</button>
+                <button class="btn-purple" onclick="simpleSpeakEnglish()">🎤 简单播放（英文）</button>
+            </div>
+            <div class="status status-info" id="simpleStatus">
+                未测试
+            </div>
+        </div>
+
+        <!-- Test 4: Alternative Approaches -->
+        <div class="test-section">
+            <h2>4️⃣ 方法C: 备用方案</h2>
+            <p style="margin-bottom: 15px; color: #64748b;">
+                如果以上方法都不行，尝试这些备用方案。
+            </p>
+            <div class="btn-grid">
+                <button class="btn-primary" onclick="testWithDelay()">⏱️ 延迟播放（500ms）</button>
+                <button class="btn-primary" onclick="testWithCancel()">🚫 取消后播放</button>
+                <button class="btn-primary" onclick="testMultiple()">📝 播放多个短语</button>
+            </div>
+            <div class="status status-info" id="altStatus">
+                未测试
+            </div>
+        </div>
+
+        <!-- System Audio Test -->
+        <div class="test-section">
+            <h2>5️⃣ 系统音频测试</h2>
+            <div class="btn-grid">
+                <button class="btn-purple" onclick="testSystemAudio()">🔊 测试 Beep 音</button>
+                <button class="btn-purple" onclick="testSpeechEngineState()">🔍 检查引擎状态</button>
+            </div>
+            <div class="status status-info" id="systemStatus">
+                未测试
+            </div>
+        </div>
+
+        <!-- Debug Console -->
+        <div class="debug-console">
+            <h3>📋 调试日志</h3>
+            <div id="logContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        let voices = [];
+        let selectedVoice = null;
+        let keepAliveInterval = null;
+        let speechSynth = window.speechSynthesis;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            log('info', '页面加载完成');
+            loadVoices();
+            speechSynth.onvoiceschanged = loadVoices;
+
+            log('info', '浏览器: ' + navigator.userAgent.split(' ')[0]);
+        });
+
+        function loadVoices() {
+            voices = speechSynth.getVoices();
+            const select = document.getElementById('voiceSelect');
+            const status = document.getElementById('voiceStatus');
+
+            const zhVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('CN'));
+
+            if (zhVoices.length > 0) {
+                select.innerHTML = zhVoices.map((v, i) =>
+                    `<option value="${i}">${v.name} (${v.lang})</option>`
+                ).join('');
+                selectedVoice = zhVoices[0];
+                status.textContent = `✅ 加载了 ${voices.length} 个语音，其中 ${zhVoices.length} 个中文语音`;
+                status.className = 'status status-success';
+                log('success', `语音加载成功: ${zhVoices.length} 个中文语音`);
+                log('info', `默认选择: ${selectedVoice.name}`);
+            } else {
+                status.textContent = '⚠️ 未找到中文语音';
+                status.className = 'status status-error';
+                log('warning', '未找到中文语音');
+            }
+        }
+
+        function updateSelectedVoice() {
+            const select = document.getElementById('voiceSelect');
+            const zhVoices = voices.filter(v => v.lang.includes('zh') || v.lang.includes('CN'));
+            selectedVoice = zhVoices[parseInt(select.value)];
+            log('info', `切换语音: ${selectedVoice.name}`);
+        }
+
+        // Method A: Keep-Alive
+        function startKeepAlive() {
+            log('info', '启动 Keep-Alive 机制...');
+
+            if (keepAliveInterval) {
+                log('warning', 'Keep-Alive 已经在运行');
+                return;
+            }
+
+            // Initial silent utterance
+            const silentUtterance = new SpeechSynthesisUtterance('');
+            silentUtterance.volume = 0;
+            speechSynth.speak(silentUtterance);
+            log('info', '播放静音激活引擎');
+
+            // Keep alive every 14 seconds
+            keepAliveInterval = setInterval(() => {
+                const utterance = new SpeechSynthesisUtterance('');
+                utterance.volume = 0;
+                speechSynth.speak(utterance);
+                log('info', 'Keep-Alive: 播放静音保持引擎活跃');
+            }, 14000);
+
+            document.getElementById('startKeepAlive').disabled = true;
+            document.getElementById('stopKeepAlive').disabled = false;
+            document.getElementById('keepAliveStatus').textContent = '✅ 运行中（每14秒刷新）';
+            document.getElementById('keepAliveStatus').className = 'status status-success';
+
+            log('success', 'Keep-Alive 已启动');
+        }
+
+        function stopKeepAlive() {
+            if (keepAliveInterval) {
+                clearInterval(keepAliveInterval);
+                keepAliveInterval = null;
+            }
+
+            speechSynth.cancel();
+
+            document.getElementById('startKeepAlive').disabled = false;
+            document.getElementById('stopKeepAlive').disabled = true;
+            document.getElementById('keepAliveStatus').textContent = '已停止';
+            document.getElementById('keepAliveStatus').className = 'status status-info';
+
+            log('info', 'Keep-Alive 已停止');
+        }
+
+        function testKeepAlive() {
+            if (!keepAliveInterval) {
+                log('warning', '请先启动 Keep-Alive');
+                return;
+            }
+
+            log('info', '测试播放 (Keep-Alive 模式)...');
+            speakWithTracking('你好', selectedVoice);
+        }
+
+        // Method B: Full Reset
+        function fullResetAndSpeak() {
+            log('info', '完全重置语音引擎...');
+
+            // Cancel all
+            speechSynth.cancel();
+            log('info', '已取消所有语音');
+
+            // Wait a bit
+            setTimeout(() => {
+                log('info', '播放测试语音...');
+                const utterance = new SpeechSynthesisUtterance('你好');
+
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                    utterance.lang = selectedVoice.lang;
+                }
+
+                setupUtteranceHandlers(utterance, '你好');
+
+                speechSynth.speak(utterance);
+                log('info', 'speak() 调用完成');
+            }, 300);
+        }
+
+        function simpleSpeak() {
+            log('info', '简单播放测试（中文）...');
+            const utterance = new SpeechSynthesisUtterance('你好');
+
+            if (selectedVoice) {
+                utterance.voice = selectedVoice;
+                utterance.lang = selectedVoice.lang;
+            }
+
+            setupUtteranceHandlers(utterance, '你好');
+
+            const result = speechSynth.speak(utterance);
+            log('info', `speak() 返回: ${result}`);
+        }
+
+        function simpleSpeakEnglish() {
+            log('info', '简单播放测试（英文）...');
+            const utterance = new SpeechSynthesisUtterance('Hello');
+
+            setupUtteranceHandlers(utterance, 'Hello');
+
+            const result = speechSynth.speak(utterance);
+            log('info', `speak() 返回: ${result}`);
+        }
+
+        // Method C: Alternative approaches
+        function testWithDelay() {
+            log('info', '延迟播放测试（500ms）...');
+
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance('你好');
+
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+
+                setupUtteranceHandlers(utterance, '你好（延迟）');
+
+                speechSynth.speak(utterance);
+            }, 500);
+        }
+
+        function testWithCancel() {
+            log('info', '取消后播放测试...');
+
+            speechSynth.cancel();
+            log('info', '已取消');
+
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance('你好');
+
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+
+                setupUtteranceHandlers(utterance, '你好（取消后）');
+
+                speechSynth.speak(utterance);
+            }, 100);
+        }
+
+        function testMultiple() {
+            log('info', '播放多个短语测试...');
+
+            const phrases = ['你好', '世界', '测试'];
+            let index = 0;
+
+            const speakNext = () => {
+                if (index >= phrases.length) {
+                    log('success', '所有短语播放完成');
+                    document.getElementById('altStatus').textContent = '✅ 完成';
+                    document.getElementById('altStatus').className = 'status status-success';
+                    return;
+                }
+
+                const phrase = phrases[index];
+                log('info', `播放 ${index + 1}/${phrases.length}: ${phrase}`);
+
+                const utterance = new SpeechSynthesisUtterance(phrase);
+
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+
+                utterance.onend = () => {
+                    log('success', `完成: ${phrase}`);
+                    index++;
+                    setTimeout(speakNext, 500);
+                };
+
+                utterance.onerror = (e) => {
+                    log('error', `错误: ${e.error}`);
+                    index++;
+                    setTimeout(speakNext, 500);
+                };
+
+                speechSynth.speak(utterance);
+            };
+
+            speakNext();
+        }
+
+        // System tests
+        function testSystemAudio() {
+            log('info', '测试系统音频 (Web Audio API)...');
+
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                const audioCtx = new AudioContext();
+
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(440, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+
+                oscillator.start();
+                oscillator.stop(audioCtx.currentTime + 0.3);
+
+                log('success', '✅ 系统音频成功！能听到 beep 声吗？');
+                document.getElementById('systemStatus').textContent = '✅ 系统音频正常';
+                document.getElementById('systemStatus').className = 'status status-success';
+            } catch (error) {
+                log('error', '❌ 系统音频失败: ' + error.message);
+                document.getElementById('systemStatus').textContent = '❌ 系统音频失败';
+                document.getElementById('systemStatus').className = 'status status-error';
+            }
+        }
+
+        function testSpeechEngineState() {
+            const speaking = speechSynth.speaking;
+            const pending = speechSynth.pending;
+            const paused = speechSynth.paused;
+
+            const state = `speaking=${speaking}, pending=${pending}, paused=${paused}`;
+            log('info', `引擎状态: ${state}`);
+            document.getElementById('systemStatus').textContent = state;
+            document.getElementById('systemStatus').className = 'status status-info';
+        }
+
+        // Helpers
+        function speakWithTracking(text, voice) {
+            const utterance = new SpeechSynthesisUtterance(text);
+
+            if (voice) {
+                utterance.voice = voice;
+                utterance.lang = voice.lang;
+            }
+
+            setupUtteranceHandlers(utterance, text);
+            speechSynth.speak(utterance);
+        }
+
+        function setupUtteranceHandlers(utterance, label) {
+            utterance.onstart = () => {
+                log('success', `✅ 开始播放: ${label}`);
+                if (label.includes('你好')) {
+                    document.getElementById('simpleStatus').textContent = '✅ 播放中...';
+                    document.getElementById('simpleStatus').className = 'status status-success';
+                }
+            };
+
+            utterance.onend = () => {
+                log('success', `✅ 播放完成: ${label}`);
+                if (label.includes('你好') && !label.includes('延迟')) {
+                    document.getElementById('simpleStatus').textContent = '✅ 播放成功';
+                    document.getElementById('simpleStatus').className = 'status status-success';
+                }
+            };
+
+            utterance.onerror = (e) => {
+                log('error', `❌ 错误: ${label} - ${e.error}`);
+                document.getElementById('simpleStatus').textContent = '❌ 错误: ' + e.error;
+                document.getElementById('simpleStatus').className = 'status status-error';
+            };
+        }
+
+        function log(type, message) {
+            const container = document.getElementById('logContainer');
+            const time = new Date().toLocaleTimeString();
+
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `<span class="log-time">[${time}]</span><span class="log-${type}">${message}</span>`;
+
+            container.insertBefore(entry, container.firstChild);
+
+            while (container.children.length > 50) {
+                container.removeChild(container.lastChild);
+            }
+
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+    </script>
+</body>
+</html>

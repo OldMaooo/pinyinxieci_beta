@@ -1,486 +1,274 @@
 import { useState, useEffect } from 'react';
 
-// 颜色映射基于 kvg:position 属性
 const POSITION_COLORS = {
-  left: '#EF4444',    // 红色
-  right: '#3B82F6',   // 蓝色
-  top: '#10B981',     // 绿色
-  bottom: '#F59E0B',  // 橙色
-  middle: '#8B5CF6',  // 紫色
-  inner: '#EC4899',   // 粉色
-  outer: '#06B6D4',   // 青色
-  default: '#333333'  // 默认灰色
+  left: '#EF4444',
+  right: '#3B82F6',
+  top: '#10B981',
+  bottom: '#F59E0B',
+  middle: '#8B5CF6',
+  inner: '#EC4899',
+  outer: '#06B6D4',
+  default: '#333333'
 };
 
-// 测试汉字（使用 HanziVG 数据集中存在的字符）
 const TEST_CHARACTERS = [
-  // 基础笔画
-  { char: '一', structure: '独体字', desc: '横' },
-  { char: '三', structure: '独体字', desc: '三横' },
-  { char: '上', structure: '独体字', desc: '指事字' },
-  { char: '下', structure: '独体字', desc: '指事字' },
-  { char: '中', structure: '独体字', desc: '对称字' },
-
-  // 简单合体字
-  { char: '万', structure: '独体字', desc: '万字' },
-  { char: '不', structure: '独体字', desc: '否定词' },
-  { char: '与', structure: '独体字', desc: '连词' },
-  { char: '为', structure: '独体字', desc: '动词' },
-  { char: '两', structure: '左右', desc: '数字' },
-
-  // 较复杂字符
-  { char: '雨', structure: '象形字', desc: '雨字头' },
-  { char: '雪', structure: '上下', desc: '雨 + 彐' },
-  { char: '门', structure: '部首', desc: '门部首' },
-  { char: '问', structure: '半包围', desc: '门 + 口' },
-  { char: '间', structure: '半包围', desc: '门 + 日' },
-
-  // 复杂字符
-  { char: '高', structure: '上下', desc: '京 + 冋' },
-  { char: '黑', structure: '上下', desc: '复杂字形' },
-  { char: '长', structure: '独体字', desc: '基本字' },
-  { char: '铅', structure: '左右', desc: '金 + 公' },
-  { char: '错', structure: '左右', desc: '金 + 昔' },
-
-  // 非常复杂字符
-  { char: '骑', structure: '左右', desc: '马 + 奇' },
-  { char: '饭', structure: '左右', desc: '饣 + 反' },
-  { char: '飞', structure: '独体字', desc: '动态字' },
-  { char: '非', structure: '独体字', desc: '复杂独体字' },
-  { char: '面', structure: '独体字', desc: '面部' }
+  { char: '明', structure: '左右', desc: '日 + 月' },
+  { char: '林', structure: '左右', desc: '木 + 木' },
+  { char: '想', structure: '上下', desc: '相 + 心' },
+  { char: '思', structure: '上下', desc: '田 + 心' },
+  { char: '国', structure: '全包围', desc: '口 + 玉' },
+  { char: '品', structure: '品字', desc: '口 + 口 + 口' }
 ];
 
-/**
- * 解析 HanziVG SVG 字符串
- * 提取语义信息和构建可渲染的 React 组件
- */
 function parseHanziVG(svgContent) {
   const parser = new DOMParser();
   const doc = parser.parseFromString(svgContent, 'image/svg+xml');
   const svgElement = doc.querySelector('svg');
 
-  if (!svgElement) {
-    return { error: '无法解析 SVG' };
-  }
+  if (!svgElement) return { error: '无法解析 SVG' };
 
-  // 提取基本信息
-  const char = svgElement.getAttribute('kvg:element');
-  const unicode = svgElement.getAttribute('kvg:original');
-  const radical = svgElement.getAttribute('kvg:radical');
+  const allGroups = Array.from(doc.getElementsByTagName('g'));
+  const startNode = allGroups.find(g => {
+    for (let i = 0; i < g.attributes.length; i++) {
+      if (g.attributes[i].name.toLowerCase().includes('element')) return true;
+    }
+    return false;
+  }) || allGroups[0];
 
-  // 递归解析组件树
+  if (!startNode) return { error: 'SVG 中未找到组件数据' };
+
   function parseNode(node, depth = 0) {
-    const position = node.getAttribute('kvg:position');
-    const element = node.getAttribute('kvg:element');
-    const radical = node.getAttribute('kvg:radical');
-    const type = node.getAttribute('kvg:type');
+    let element = '';
+    let position = '';
+    let radical = '';
 
-    const color = position ? POSITION_COLORS[position] || POSITION_COLORS.default : POSITION_COLORS.default;
+    for (let i = 0; i < node.attributes.length; i++) {
+      const attr = node.attributes[i];
+      const name = attr.name.toLowerCase();
+      if (name.includes('element')) element = attr.value;
+      if (name.includes('position')) position = attr.value;
+      if (name.includes('radical')) radical = attr.value;
+    }
+
+    const color = POSITION_COLORS[position] || POSITION_COLORS.default;
 
     const result = {
-      element: element || '未知',
-      position: position || 'root',
-      type: type || '',
-      radical: radical || '',
+      element: element || (depth === 0 ? '根' : '部件'),
+      position: position,
+      radical: radical,
       color: color,
       depth: depth,
       children: [],
       svgElement: null
     };
 
-    // 处理子节点
     const children = Array.from(node.children);
-    children.forEach(child => {
-      if (child.tagName === 'g') {
-        const childData = parseNode(child, depth + 1);
-        result.children.push(childData);
-      }
-    });
-
-    // 处理路径元素（实际的笔画）
-    const paths = node.querySelectorAll('path');
+    const paths = children.filter(n => n.tagName.toLowerCase() === 'path');
     if (paths.length > 0) {
-      const pathElements = Array.from(paths).map((path, index) => ({
-        type: 'path',
+      result.svgElement = paths.map((path, index) => ({
         d: path.getAttribute('d'),
         color: color,
-        id: `${element || 'root'}_${depth}_${index}`
+        id: `p_${depth}_${index}_${Math.random().toString(36).substr(2, 5)}`
       }));
-      result.svgElement = pathElements;
     }
+
+    const subGroups = children.filter(n => n.tagName.toLowerCase() === 'g');
+    subGroups.forEach(g => {
+      result.children.push(parseNode(g, depth + 1));
+    });
 
     return result;
   }
 
-  // 从根节点开始解析
-  const rootNode = parseNode(svgElement);
+  const structure = parseNode(startNode);
+  
+  const hasPaths = (node) => {
+    if (node.svgElement && node.svgElement.length > 0) return true;
+    return node.children.some(hasPaths);
+  };
+
+  if (!hasPaths(structure)) {
+      const allPaths = Array.from(doc.getElementsByTagName('path'));
+      structure.svgElement = allPaths.map((p, i) => ({
+          d: p.getAttribute('d'),
+          color: POSITION_COLORS.default,
+          id: `fallback_${i}`
+      }));
+  }
 
   return {
-    char: char || unicode,
-    unicode: unicode,
-    radical: radical || '',
-    structure: rootNode,
+    char: elementAttr(startNode, 'element') || '?',
+    structure: structure,
     svgWidth: svgElement.getAttribute('viewBox')?.split(' ')[2] || '109',
     svgHeight: svgElement.getAttribute('viewBox')?.split(' ')[3] || '109'
   };
 }
 
-/**
- * 递归渲染组件树（可视化）
- */
-function renderComponentTree(node, activePath, onHover, onLeave) {
-  const hasChildren = node.children.length > 0;
-  const isActive = activePath.includes(node.element);
-
-  return (
-    <div
-      key={node.element + '_' + node.depth}
-      className="tree-node"
-      style={{
-        marginLeft: node.depth * 16,
-        padding: '4px 8px',
-        borderLeft: `3px solid ${node.color}`,
-        backgroundColor: isActive ? `${node.color}20` : 'transparent',
-        borderRadius: '4px',
-        cursor: 'pointer',
-        transition: 'all 0.2s'
-      }}
-      onMouseEnter={() => onHover(node.element)}
-      onMouseLeave={() => onLeave()}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-        {hasChildren && (
-          <span style={{ fontSize: '12px', color: '#666' }}>
-            {isActive ? '▼' : '▶'}
-          </span>
-        )}
-        <span
-          style={{
-            fontWeight: node.depth === 0 ? 'bold' : 'normal',
-            color: node.color
-          }}
-        >
-          {node.element}
-        </span>
-        {node.position && node.position !== 'root' && (
-          <span style={{ fontSize: '11px', color: '#666', padding: '2px 6px', background: '#f0f0f0', borderRadius: '3px' }}>
-            {node.position}
-          </span>
-        )}
-        {node.type && (
-          <span style={{ fontSize: '11px', color: '#999' }}>
-            ({node.type})
-          </span>
-        )}
-        {node.radical && (
-          <span style={{ fontSize: '11px', color: '#DC2626', fontWeight: 'bold' }}>
-            [部首]
-          </span>
-        )}
-      </div>
-      {isActive && hasChildren && (
-        <div style={{ marginTop: '4px' }}>
-          {node.children.map(child => renderComponentTree(child, activePath, onHover, onLeave))}
-        </div>
-      )}
-    </div>
-  );
+function elementAttr(node, partialName) {
+    for (let i = 0; i < node.attributes.length; i++) {
+        if (node.attributes[i].name.toLowerCase().includes(partialName)) return node.attributes[i].value;
+    }
+    return '';
 }
 
-/**
- * 主 HanziVG 研究组件
- */
-export default function HanziVGExplorer() {
-  const [selectedChar, setSelectedChar] = useState(TEST_CHARACTERS[0].char);
-  const [hanziData, setHanziData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [hoveredElement, setHoveredElement] = useState(null);
-  const [customInput, setCustomInput] = useState('');
-  const [fontStyle, setFontStyle] = useState('system');
-
-  return (
-    <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '2rem',
-      fontFamily: fontStyle === 'stkaiti' ? 'STKaiti, serif' : 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
-    }}>
-      <div style={{
-        maxWidth: '1400px',
-        margin: '0 auto',
-        background: 'white',
-        borderRadius: '16px',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
-        overflow: 'hidden'
-      }}>
-        {/* 标题栏 */}
-        <div style={{
-          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
-          padding: '2rem',
-          textAlign: 'center'
-        }}>
-          <h1 style={{ margin: 0, fontSize: '2rem', fontWeight: 'bold' }}>
-            HanziVG 语义结构研究
-          </h1>
-          <p style={{ marginTop: '0.5rem', opacity: 0.9 }}>
-            基于 SVG 语义元数据的汉字组件自动识别与着色
-          </p>
-          <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap' }}>
-            {/* 字体切换 */}
-            <button
-              onClick={() => setFontStyle(fontStyle === 'system' ? 'stkaiti' : 'system')}
-              style={{
-                padding: '6px 12px',
-                border: '1px solid rgba(255,255,255,0.3)',
-                borderRadius: '6px',
-                background: fontStyle === 'system' ? '#f0f3ff' : '#10b981',
-                color: 'white',
-                cursor: 'pointer',
-                fontSize: '0.9rem',
-                transition: 'all 0.2s'
-              }}
-            >
-              字体: {fontStyle === 'system' ? '默认' : '楷体'}
-            </button>
-
-            {/* 自定义输入框 */}
-            <input
-              type="text"
-              value={customInput}
-              onChange={(e) => setCustomInput(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === 'Enter' && customInput.trim()) {
-                  setSelectedChar(customInput.trim());
-                }
-              }}
-              placeholder="输入汉字（回车加载）"
-              style={{
-                padding: '8px 12px',
-                border: '2px solid #ddd',
-                borderRadius: '6px',
-                fontSize: '1rem',
-                minWidth: '200px',
-                fontFamily: fontStyle === 'stkaiti' ? 'STKaiti, serif' : 'system-ui, sans-serif'
-              }}
-            />
-          </div>
-        </div>
-
-        {/* 字符选择器 */}
-        <div style={{
-          padding: '1.5rem',
-          borderBottom: '2px solid #e0e0e0',
-          background: '#f8f9fa'
-        }}>
-          <div style={{ marginBottom: '1rem', fontSize: '1.1rem', fontWeight: 'bold', color: '#333' }}>
-            选择测试汉字：
-          </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
-            gap: '12px'
-          }}>
-            {TEST_CHARACTERS.map(item => (
-              <button
-                key={item.char}
-                onClick={() => setSelectedChar(item.char)}
-                style={{
-                  padding: '12px',
-                  border: '2px solid ' + (selectedChar === item.char ? '#667eea' : '#e0e0e0'),
-                  borderRadius: '8px',
-                  background: selectedChar === item.char ? '#f0f3ff' : 'white',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s',
-                  textAlign: 'center',
-                  fontWeight: 'bold'
-                }}
-                onMouseEnter={(e) => e.target.style.transform = 'scale(1.02)'}
-                onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-              >
-                <div style={{ fontSize: '1.8rem', marginBottom: '4px' }}>{item.char}</div>
-                <div style={{ fontSize: '0.85rem', color: '#666' }}>{item.structure}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* 主内容区 */}
-        <div style={{ display: 'flex', minHeight: '600px' }}>
-          {/* 左侧：SVG 显示区 */}
-          <div style={{
-            flex: 1,
-            padding: '2rem',
-            borderRight: '2px solid #e0e0e0',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center'
-          }}>
-            <h2 style={{ marginBottom: '1.5rem', color: '#333' }}>
-              SVG 语义着色显示
-              {hanziData && (
-                <span style={{ fontSize: '0.9rem', marginLeft: '1rem', color: '#666' }}>
-                  Unicode: {hanziData.unicode}
-                </span>
-              )}
-            </h2>
-
-            {loading && (
-              <div style={{
-                padding: '3rem',
-                fontSize: '1.2rem',
-                color: '#666'
-              }}>
-                加载中...
-              </div>
-            )}
-
-            {error && (
-              <div style={{
-                padding: '2rem',
-                background: '#fee',
-                border: '2px solid #f88',
-                borderRadius: '8px',
-                color: '#c33'
-              }}>
-                {error}
-              </div>
-            )}
-
-            {hanziData && !loading && !error && (
-              <>
-                {/* 渲染 SVG */}
-                <div style={{
-                  width: '400px',
-                  height: '400px',
-                  border: '3px solid #333',
-                  borderRadius: '12px',
-                  background: 'white',
-                  marginBottom: '1.5rem',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden'
-                }}>
-                  <svg
-                    viewBox={`0 0 ${hanziData.svgWidth} ${hanziData.svgHeight}`}
-                    width="360"
-                    height="360"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* 递归渲染所有路径 */}
-                    {renderPathsRecursive(hanziData.structure)}
-                  </svg>
-                </div>
-
-                {/* 颜色图例 */}
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(2, 1fr)',
-                  gap: '8px',
-                  width: '100%',
-                  maxWidth: '500px',
-                  marginTop: '1rem',
-                  padding: '1rem',
-                  background: '#f8f9fa',
-                  borderRadius: '8px'
-                }}>
-                  {Object.entries(POSITION_COLORS).map(([pos, color]) => (
-                    <div key={pos} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                      <div
-                        style={{
-                          width: '20px',
-                          height: '20px',
-                          background: color,
-                          borderRadius: '4px',
-                          border: '2px solid rgba(0,0,0,0.2)'
-                        }}
-                      />
-                      <span style={{ fontSize: '0.9rem', color: '#555' }}>
-                        {pos === 'default' ? '默认' : pos}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* 右侧：结构树 */}
-          <div style={{
-            flex: 1,
-            padding: '2rem',
-            background: '#fafafa',
-            maxHeight: '800px',
-            overflowY: 'auto'
-          }}>
-            <h2 style={{ marginBottom: '1.5rem', color: '#333' }}>
-              组件结构树
-              {hanziData?.radical && (
-                <span style={{ fontSize: '0.9rem', marginLeft: '1rem', color: '#DC2626' }}>
-                  部首: {hanziData.radical}
-                </span>
-              )}
-            </h2>
-
-            {hanziData && (
-              <div style={{
-                background: 'white',
-                padding: '1.5rem',
-                borderRadius: '8px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                border: '1px solid #e0e0e0'
-              }}>
-                {renderComponentTree(
-                  hanziData.structure,
-                  hoveredElement ? [hoveredElement] : [],
-                  setHoveredElement,
-                  () => setHoveredElement(null)
-                )}
-              </div>
-            )}
-
-            {!hanziData && !loading && !error && (
-              <div style={{
-                padding: '3rem',
-                textAlign: 'center',
-                color: '#999',
-                fontSize: '1.1rem'
-              }}>
-                选择一个汉字以查看其结构
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/**
- * 递归渲染 SVG 路径
- */
 function renderPathsRecursive(node, paths = []) {
-  // 添加当前节点的路径
   if (node.svgElement) {
     paths.push(...node.svgElement.map(path => (
-      <path
-        key={path.id}
-        d={path.d}
-        fill="none"
-        stroke={path.color}
-        strokeWidth="3"
+      <path 
+        key={path.id} 
+        d={path.d} 
+        fill="none" 
+        stroke={path.color} 
+        strokeWidth="3.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-        style={{ transition: 'all 0.2s' }}
+        style={{ transition: 'all 0.3s ease' }}
       />
     )));
   }
-
-  // 递归处理子节点
-  node.children.forEach(child => renderPathsRecursive(child, paths));
-
+  if (node.children) {
+    node.children.forEach(child => renderPathsRecursive(child, paths));
+  }
   return paths;
+}
+
+function renderTree(node, hovered, onHover, onLeave) {
+  const isHovered = hovered === node.element;
+  return (
+    <div 
+      key={`${node.element}_${node.depth}_${node.position}_${node.radical}_${Math.random()}`}
+      style={{ 
+        marginLeft: 15, padding: '4px 8px', borderLeft: `2px solid ${node.color}`,
+        background: isHovered ? `${node.color}15` : 'transparent', borderRadius: 4,
+        marginBottom: 2, cursor: 'pointer'
+      }}
+      onMouseEnter={() => onHover(node.element)}
+      onMouseLeave={onLeave}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+        <span style={{ fontWeight: 'bold', color: node.color }}>{node.element}</span>
+        {node.position && <span style={{ fontSize: 10, color: '#888', background: '#eee', padding: '1px 3px', borderRadius: 2 }}>{node.position}</span>}
+        {node.radical && <span style={{ fontSize: 10, color: 'red', fontWeight: 'bold' }}>[部]</span>}
+      </div>
+      {node.children && node.children.map(c => renderTree(c, hovered, onHover, onLeave))}
+    </div>
+  );
+}
+
+export default function HanziVGExplorer() {
+  const [char, setChar] = useState(TEST_CHARACTERS[0].char);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [hovered, setHovered] = useState(null);
+  const [font, setFont] = useState('system');
+  const [debugInfo, setDebugInfo] = useState('');
+
+  useEffect(() => {
+    async function load() {
+      if (!char) return;
+      setLoading(true);
+      setError(null);
+      setData(null);
+      setDebugInfo(`开始加载: ${char}\n`);
+      
+      try {
+        const hex = char.charCodeAt(0).toString(16).padStart(5, '0');
+        const url = `https://raw.githubusercontent.com/Connum/hanzivg/master/hanzi/${hex}.svg`;
+        setDebugInfo(prev => prev + `请求 URL: ${url}\n`);
+        
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}: 无法获取 SVG 数据`);
+        
+        const text = await resp.text();
+        const parsed = parseHanziVG(text);
+        if (parsed.error) throw new Error(`解析错误: ${parsed.error}`);
+        
+        setDebugInfo(prev => prev + `解析成功! 包含 ${parsed.structure.children?.length || 0} 个子组件\n`);
+        setData(parsed);
+      } catch (e) {
+        console.error('Demo Error:', e);
+        setError(e.message);
+        setDebugInfo(prev => prev + `错误: ${e.message}\n`);
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, [char]);
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#f8f9fa', padding: 20, fontFamily: font === 'stkaiti' ? 'STKaiti, "Kaiti SC", serif' : 'system-ui, sans-serif' }}>
+      <div style={{ maxWidth: 1100, margin: '0 auto', background: 'white', borderRadius: 12, overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+        <div style={{ padding: '30px 20px', background: '#2c3e50', color: 'white', textAlign: 'center' }}>
+          <h1 style={{ margin: '0 0 20px 0', fontSize: 28 }}>汉字部件拆解 & 着色研究</h1>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: 15 }}>
+            <button 
+              onClick={() => setFont(f => f === 'system' ? 'stkaiti' : 'system')}
+              style={{ padding: '8px 20px', borderRadius: 6, border: 'none', background: '#34495e', color: 'white', cursor: 'pointer', fontWeight: 'bold' }}
+            >
+              切换字体: {font === 'system' ? '系统' : '楷体'}
+            </button>
+            <input 
+              type="text"
+              placeholder="输入单字..." 
+              maxLength={1} 
+              style={{ width: 100, padding: '8px 12px', borderRadius: 6, border: '1px solid #ddd' }}
+              onKeyDown={e => { if (e.key === 'Enter' && e.target.value.trim()) setChar(e.target.value.trim()); }}
+            />
+          </div>
+        </div>
+        
+        <div style={{ padding: 20, display: 'flex', flexWrap: 'wrap', gap: 10, background: '#fdfdfd', borderBottom: '1px solid #eee' }}>
+          {TEST_CHARACTERS.map(t => (
+            <button 
+              key={t.char} 
+              onClick={() => setChar(t.char)} 
+              style={{ 
+                width: 50, height: 50, fontSize: 24, border: '1px solid #ddd', 
+                background: char === t.char ? '#3498db' : 'white',
+                color: char === t.char ? 'white' : '#333',
+                borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s',
+                fontWeight: 'bold'
+              }}
+            >{t.char}</button>
+          ))}
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 0.8fr', gap: 30, padding: 30 }}>
+          <div style={{ textAlign: 'center' }}>
+            <h3 style={{ marginBottom: 20, color: '#2c3e50' }}>SVG 语义着色显示</h3>
+            <div style={{ 
+              width: 340, height: 340, margin: '0 auto', border: '2px solid #eee', 
+              borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center',
+              background: '#fff', boxShadow: 'inset 0 2px 10px rgba(0,0,0,0.02)'
+            }}>
+              {loading ? <p style={{ color: '#999' }}>加载中...</p> : error ? <p style={{ color: '#e74c3c' }}>{error}</p> : data && (
+                <svg viewBox={`0 0 ${data.svgWidth} ${data.svgHeight}`} width="300" height="300">
+                  {renderPathsRecursive(data.structure)}
+                </svg>
+              )}
+            </div>
+            
+            {/* 标准字体对比 */}
+            <div style={{ marginTop: 20, padding: 15, border: '1px dashed #ccc', borderRadius: 8 }}>
+                <p style={{ fontSize: 13, color: '#666', marginBottom: 10 }}>当前字体下的标准显示:</p>
+                <div style={{ fontSize: 80, lineHeight: 1 }}>{char}</div>
+            </div>
+
+            <div style={{ marginTop: 15, textAlign: 'left', fontSize: 11, color: '#666', background: '#f0f0f0', padding: 10, borderRadius: 4 }}>
+                <strong>调试信息:</strong>
+                <pre style={{ margin: '5px 0 0 0', whiteSpace: 'pre-wrap' }}>{debugInfo}</pre>
+            </div>
+          </div>
+          <div>
+            <h3 style={{ marginBottom: 20, color: '#2c3e50' }}>组件结构树</h3>
+            <div style={{ background: '#f9f9f9', padding: 20, borderRadius: 12, minHeight: 340, border: '1px solid #eee', overflowY: 'auto', maxHeight: 500 }}>
+              {data ? renderTree(data.structure, hovered, setHovered, () => setHovered(null)) : <p style={{ color: '#999' }}>等待数据加载...</p>}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }

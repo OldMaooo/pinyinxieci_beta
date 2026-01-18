@@ -1,0 +1,768 @@
+
+> pinyin-write-online@0.1.0 dev
+> vite --host 0.0.0.0 --port 5173
+
+Port 5173 is in use, trying another one...
+
+  VITE v5.4.21  ready in 323 ms
+
+  ➜  Local:   http://localhost:5174/
+  ➜  Network: http://10.0.0.202:5174/
+  ➜  Network: http://198.18.0.1:5174/
+12:25:20 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:25:20 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:25:20 PM [vite] Pre-transform error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+12:26:28 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementList12:35:17 PM [vite] hmr update /src/App.jsx, /src/index.css
+12:53:49 PM [vite] hmr update /src/App.jsx, /src/index.css
+12:53:57 PM [vite] hmr update /src/App.jsx, /src/index.css
+12:57:09 PM [vite] hmr update /src/App.jsx, /src/index.css
+12:57:51 PM [vite] hmr update /src/App.jsx, /src/index.css
+1:05:00 PM [vite] hmr update /src/App.jsx, /src/index.css
+1:05:21 PM [vite] hmr update /src/App.jsx, /src/index.css
+nyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:30:46 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:30:51 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:34:29 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:35:17 PM [vite] page reload shared/flashcardAudioBridge.js
+12:35:17 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:35:17 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:52:34 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:53:49 PM [vite] page reload shared/flashcardAudioBridge.js
+12:53:50 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:53:50 PM [vite] Internal server error: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx: Unexpected token (179:11)
+
+  177 |     const u = new SpeechSynthesisUtterance(' ');
+  178 |     u.volume = 0;
+> 179 |     window..speechSynthesis.speak(u)
+      |            ^
+  180 |
+  181 |     const testUtterance = new SpeechSynthesisUtterance('你好');
+  182 |     testUtterance.volume = 0.1;
+  Plugin: vite:react-babel
+  File: /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/src/App.jsx:179:11
+  177|      const u = new SpeechSynthesisUtterance(' ');
+  178|      u.volume = 0;
+  179|      window..speechSynthesis.speak(u)
+     |             ^
+  180|  
+  181|      const testUtterance = new SpeechSynthesisUtterance('你好');
+      at constructor (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:367:19)
+      at JSXParserMixin.raise (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6624:19)
+      at JSXParserMixin.unexpected (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:6644:16)
+      at JSXParserMixin.parseIdentifierName (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12277:12)
+      at JSXParserMixin.parseIdentifier (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12255:23)
+      at JSXParserMixin.parseMember (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11212:28)
+      at JSXParserMixin.parseSubscript (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11188:21)
+      at JSXParserMixin.parseSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11158:19)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11149:17)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at JSXParserMixin.parseExpressionBase (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10848:23)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10844:17)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12971:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+      at JSXParserMixin.parseParenAndDistinguishExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11759:12)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11395:23)
+      at JSXParserMixin.parseExprAtom (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:4793:20)
+      at JSXParserMixin.parseExprSubscripts (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11145:23)
+      at JSXParserMixin.parseUpdate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11130:21)
+      at JSXParserMixin.parseMaybeUnary (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:11110:23)
+      at JSXParserMixin.parseMaybeUnaryOrPrivate (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10963:61)
+      at JSXParserMixin.parseExprOps (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10968:23)
+      at JSXParserMixin.parseMaybeConditional (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10945:23)
+      at JSXParserMixin.parseMaybeAssign (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10895:21)
+      at /Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:39
+      at JSXParserMixin.allowInAnd (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12495:16)
+      at JSXParserMixin.parseMaybeAssignAllowIn (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:10864:17)
+      at JSXParserMixin.parseVar (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13460:91)
+      at JSXParserMixin.parseVarStatement (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13306:10)
+      at JSXParserMixin.parseStatementContent (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12927:23)
+      at JSXParserMixin.parseStatementLike (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12843:17)
+      at JSXParserMixin.parseStatementListItem (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12823:17)
+      at JSXParserMixin.parseBlockOrModuleBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13392:61)
+      at JSXParserMixin.parseBlockBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13385:10)
+      at JSXParserMixin.parseBlock (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:13373:10)
+      at JSXParserMixin.parseFunctionBody (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12174:24)
+      at JSXParserMixin.parseArrowExpression (/Users/mao/Documents/Coding/Development/Projects/Web/kanpinyinxieci_semiauto/node_modules/@babel/parser/lib/index.js:12149:10)
+12:57:09 PM [vite] hmr update /src/App.jsx, /src/index.css
+12:57:51 PM [vite] hmr update /src/App.jsx, /src/index.css
+1:05:00 PM [vite] hmr update /src/App.jsx, /src/index.css
+1:05:21 PM [vite] hmr update /src/App.jsx, /src/index.css
