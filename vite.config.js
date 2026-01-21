@@ -9,26 +9,20 @@ export default defineConfig({
     {
       name: 'local-storage-api',
       configureServer(server) {
+        // 增加一个简单的 API 接口来读写本地文件
         server.middlewares.use((req, res, next) => {
-          // 处理保存修正请求
-          if (req.url === '/api/save-correction' && req.method === 'POST') {
+          // 处理保存请求
+          if (req.url === '/api/save-mastery' && req.method === 'POST') {
             let body = '';
             req.on('data', chunk => { body += chunk.toString(); });
             req.on('end', () => {
               try {
-                const { char, colors } = JSON.parse(body);
+                // 确保存储目录存在
                 const dir = path.resolve(__dirname, 'storage');
                 if (!fs.existsSync(dir)) fs.mkdirSync(dir);
                 
-                const filePath = path.join(dir, 'corrections.json');
-                let allCorrections = {};
-                if (fs.existsSync(filePath)) {
-                    allCorrections = JSON.parse(fs.readFileSync(filePath, 'utf8'));
-                }
-                
-                allCorrections[char] = colors;
-                fs.writeFileSync(filePath, JSON.stringify(allCorrections, null, 2));
-                
+                // 将数据写入 storage/mastery.json
+                fs.writeFileSync(path.join(dir, 'mastery.json'), body);
                 res.statusCode = 200;
                 res.end(JSON.stringify({ status: 'success' }));
               } catch (err) {
@@ -39,9 +33,9 @@ export default defineConfig({
             return;
           }
 
-          // 处理读取修正请求
-          if (req.url === '/api/load-corrections' && req.method === 'GET') {
-            const filePath = path.resolve(__dirname, 'storage', 'corrections.json');
+          // 处理读取请求
+          if (req.url === '/api/load-mastery' && req.method === 'GET') {
+            const filePath = path.resolve(__dirname, 'storage', 'mastery.json');
             if (fs.existsSync(filePath)) {
               const data = fs.readFileSync(filePath);
               res.setHeader('Content-Type', 'application/json');
@@ -58,20 +52,8 @@ export default defineConfig({
     }
   ],
   server: {
-    host: '0.0.0.0',
+    host: '127.0.0.1',
     port: 5173,
-    strictPort: false,
-    proxy: {
-      '/api/baidu': {
-        target: 'https://aip.baidubce.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/baidu/, '')
-      },
-      '/api/baidu-tts': {
-        target: 'https://tsn.baidu.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/baidu-tts/, '')
-      }
-    }
+    strictPort: true,
   }
 })

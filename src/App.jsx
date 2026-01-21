@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3 } from 'lucide-react';
 import { pinyin } from 'pinyin-pro';
 import { createClient } from '@supabase/supabase-js';
-import { playFlashcardAudio, stopFlashcardAudio } from '../shared/flashcardAudioBridge.js';
 
 const SUPABASE_URL = 'https://ynasoxvdalcmrrsxxmjr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
@@ -78,42 +77,22 @@ const StrokeOrderPlayer = ({ word, onClose }) => {
   const chars = word.split('');
   const [writerInstance, setWriterInstance] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const isMountedRef = useRef(true);
-  const initRef = useRef(0);
 
   useEffect(() => {
-    isMountedRef.current = true;
-
     if (!window.HanziWriter) {
-        const t = setTimeout(() => { if (!window.HanziWriter && isMountedRef.current) setIsLoading(false); }, 3000);
+        const t = setTimeout(() => { if (!window.HanziWriter) setIsLoading(false); }, 3000);
         return () => clearTimeout(t);
     }
     if (!containerRef.current) return;
-
     setIsLoading(false);
-    const thisInit = ++initRef.current;
-
+    containerRef.current.innerHTML = ''; 
     try {
-        const container = containerRef.current;
-        while (container.firstChild) {
-          container.removeChild(container.firstChild);
-        }
-
-        const writer = window.HanziWriter.create(container, chars[currentIndex], {
+        const writer = window.HanziWriter.create(containerRef.current, chars[currentIndex], {
           width: 200, height: 200, padding: 5, strokeAnimationSpeed: 1, delayBetweenStrokes: 200, showOutline: true, strokeColor: '#000000', outlineColor: '#e2e8f0'
         });
-
-        if (isMountedRef.current && thisInit === initRef.current) {
-          writer.animateCharacter();
-          setWriterInstance(writer);
-        }
-    } catch (e) {
-      if (isMountedRef.current) console.error(e);
-    }
-
-    return () => {
-      isMountedRef.current = false;
-    };
+        writer.animateCharacter();
+        setWriterInstance(writer);
+    } catch (e) { console.error(e); }
   }, [currentIndex, word]);
 
   return (
@@ -139,106 +118,48 @@ const FlashCardView = ({ words, onClose }) => {
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('pinyin_flash_dark') === 'true');
   const timerRef = useRef(null);
   const fadeRef = useRef(null);
-  const hasUnlocked = useRef(false);
 
   const currentWord = words[index];
   useEffect(() => { localStorage.setItem('pinyin_flash_dark', isDarkMode); }, [isDarkMode]);
 
-  const speak = async (text) => {
-    if (!soundOn || !text) return;
-
-    try {
-      console.log('[FlashCard] Speaking:', text);
-      await playFlashcardAudio(text, {
-        isTTS: true,
-        ttsOptions: {
-          volume: 15
-        }
-      });
-    } catch (e) {
-      console.error('[FlashCard] Error:', e);
-    }
+  const speak = (text) => {
+    if (!soundOn || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    setTimeout(() => {
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'zh-CN'; u.rate = 0.8;
+        const premiumVoice = window.speechSynthesis.getVoices().find(v => v.name.includes('Yue') || v.name.includes('月'));
+        if (premiumVoice) u.voice = premiumVoice;
+        window.speechSynthesis.speak(u);
+    }, 10);
   };
 
   useEffect(() => {
     const loadVoices = () => { window.speechSynthesis.getVoices(); };
     window.speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
-
-    return () => {
-      window.speechSynthesis.onvoiceschanged = null;
-      stopFlashcardAudio();
-    };
+    return () => { window.speechSynthesis.onvoiceschanged = null; };
   }, []);
-
-  const unlockAudioOnce = () => {
-    window.speechSynthesis.cancel();
-
-    const u = new SpeechSynthesisUtterance(' ');
-    u.volume = 0;
-    window.speechSynthesis.speak(u)
-
-    const testUtterance = new SpeechSynthesisUtterance('你好');
-    testUtterance.volume = 0.1;
-
-    setTimeout(() => {
-      window.speechSynthesis.speak(testUtterance);
-    }, 100);
-  };
-
-  const handleInteraction = () => {
-    setShowControls(true);
-    if (fadeRef.current) clearTimeout(fadeRef.current);
-    fadeRef.current = setTimeout(() => setShowControls(false), 6000);
-
-    if (!hasUnlocked.current) {
-      hasUnlocked.current = true;
-      unlockAudioOnce();
-    }
-  };
 
   useEffect(() => { speak(currentWord.word); }, [index]);
   useEffect(() => { if (isPlaying) { timerRef.current = setInterval(() => { setIndex(prev => (prev + 1) % words.length); }, speed); } return () => clearInterval(timerRef.current); }, [isPlaying, speed, words.length]);
+
+  const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); fadeRef.current = setTimeout(() => setShowControls(false), 6000); };
   useEffect(() => { handleInteraction(); }, []);
 
   const next = (e) => { e.stopPropagation(); setIndex((index + 1) % words.length); handleInteraction(); };
   const prev = (e) => { e.stopPropagation(); setIndex((index - 1 + words.length) % words.length); handleInteraction(); };
 
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.code === 'Space') {
-        e.preventDefault();
-        setIsPlaying(prev => !prev);
-      } else if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose();
-      } else if (e.key === 'ArrowLeft') {
-        e.preventDefault();
-        setIndex((index - 1 + words.length) % words.length);
-        handleInteraction();
-      } else if (e.key === 'ArrowRight') {
-        e.preventDefault();
-        setIndex((index + 1) % words.length);
-        handleInteraction();
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [index, isPlaying, onClose, handleInteraction, words.length]);
-
   return (
     <div className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`} onClick={handleInteraction}>
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-        <div className={`font-mono font-bold text-lg px-4 py-2 rounded-full backdrop-blur-md ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-slate-300'}`}>{index + 1} / {words.length}</div>
-      </div>
-      <div className="flex flex-col items-center justify-center h-full w-full pointer-events-none pb-28">
-        <div className={`font-kaiti font-bold text-[3.5vh] mb-4 transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{currentWord.pinyin}</div>
-        <div className={`font-kaiti font-black text-[20vw] leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
+      <div className="flex flex-col items-center justify-center h-full w-full pointer-events-none">
+        <div className={`font-kaiti font-bold text-[4vh] mb-4 transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{currentWord.pinyin}</div>
+        <div className={`font-kaiti font-black text-[25vw] leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
+        <div className={`mt-8 font-mono font-bold text-xl ${isDarkMode ? 'text-white/20' : 'text-slate-300'}`}>{index + 1} / {words.length}</div>
       </div>
       <div className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
       <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
-
+      
       <div className={`absolute top-0 left-0 w-full p-8 flex justify-between items-start pointer-events-auto z-[2050] transition-opacity duration-500 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
         <button onClick={onClose} className={`p-4 rounded-full backdrop-blur shadow-xl ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}><LogOut size={32}/></button>
         <button onClick={(e) => { e.stopPropagation(); setIsDarkMode(!isDarkMode); }} className={`p-4 rounded-full backdrop-blur shadow-xl ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}>{isDarkMode ? <Sun size={32}/> : <Moon size={32}/>}</button>
@@ -247,9 +168,9 @@ const FlashCardView = ({ words, onClose }) => {
       <div className={`absolute inset-0 flex flex-col justify-end pointer-events-none transition-opacity duration-500 z-[2040] ${showControls ? 'opacity-100' : 'opacity-0'}`}>
         <div className="p-8 flex flex-col gap-6 items-center pointer-events-auto">
           {showThumbnails && (
-            <div className="absolute bottom-28 left-0 w-full p-8 flex gap-2 overflow-x-auto pointer-events-auto z-[2060]">
+            <div className="w-full flex gap-2 overflow-x-auto pb-4 px-4 mask-fade-edges scrollbar-hide">
               {words.map((w, i) => (
-                <button key={i} onClick={(e) => { e.stopPropagation(); setIndex(i); }} className={`shrink-0 h-20 w-auto px-4 rounded-xl font-kaiti flex items-center justify-center transition-all text-lg ${index === i ? 'bg-white text-black font-black shadow-lg scale-110' : (isDarkMode ? 'bg-white/10 text-white/40' : 'bg-black/5 text-black/40')}`}>{w.word}</button>
+                <button key={i} onClick={() => setIndex(i)} className={`shrink-0 w-16 h-16 rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-xl' : 'bg-black/5 text-black/40 text-xl')}`}>{w.word[0]}</button>
               ))}
             </div>
           )}
@@ -319,10 +240,8 @@ function MainApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState('idle');
   const [isShuffling, setIsShuffling] = useState(false);
-  const [isFlashCardMode, setIsFlashCardMode] = useState(false);
-
-  const addLog = () => {};
-
+  const [isFlashCardMode, setIsFlashCardMode] = useState(false); 
+  
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminClickCount, setAdminClickCount] = useState(0);
   const adminTimerRef = useRef(null);
@@ -330,37 +249,9 @@ function MainApp() {
 
   const timerRef = useRef(null);
   const progressRef = useRef(0);
-  const keepAliveRef = useRef(null);
 
   useEffect(() => { localStorage.setItem('pinyin_selected_units', JSON.stringify(Array.from(selectedUnits))); }, [selectedUnits]);
   useEffect(() => { async function loadCloud() { setIsLoading(true); try { const { data, error } = await supabase.from('mastery_records').select('*').range(0, 9999); if (data) { const m = {}; data.forEach(r => { m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date }; }); setMastery(m); } } catch (e) {} finally { setIsLoading(false); } } loadCloud(); }, []);
-
-  useEffect(() => {
-    const loadVoices = () => { window.speechSynthesis.getVoices(); };
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-    loadVoices();
-    return () => { window.speechSynthesis.onvoiceschanged = null; };
-  }, []);
-
-  useEffect(() => {
-    if (isVoiceActive) {
-      startKeepAlive();
-    } else {
-      stopKeepAlive();
-    }
-    return () => stopKeepAlive();
-  }, [isVoiceActive]);
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.code === 'Space' && isVoiceActive) {
-        e.preventDefault();
-        setIsPaused(prev => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isVoiceActive]);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
   const toggleMode = () => { window.location.href = isDevMode ? window.location.origin : window.location.origin + '?dev=1'; };
@@ -429,7 +320,7 @@ function MainApp() {
         if (!onlyWrong || mastery[w.id]?.history?.includes('red')) targetWords.push(wordData);
     });
     if (targetWords.length === 0) return alert('没有符合条件的词语');
-    setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING'); setModalConfig({ isOpen: false });
+    setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING');
   };
 
   const save = async (isTemporary = false) => {
@@ -465,47 +356,17 @@ function MainApp() {
   };
 
   const speak = (index) => {
-    if (!words || !words[index]) {
-      if (step === 2) stopVoice();
-      else { setIsVoiceActive(true); setActiveVoiceIndex(index); }
-      return;
-    }
-
-    const wordToSpeak = words[index].word;
-    console.log('[App] speak() called:', wordToSpeak, 'index:', index);
-    setActiveVoiceIndex(index);
-    setIsPaused(false);
-    setProgress(0);
-    progressRef.current = 0;
-
-    playFlashcardAudio(wordToSpeak, {
-      isTTS: true,
-      ttsOptions: { volume: 15 }
-    }).then(() => {
-      console.log('[App] AudioBridge resolved');
-    }).catch(e => {
-      console.error('[App] AudioBridge error:', e);
-    });
+    if (index >= words.length || index < 0) { if (step === 2) stopVoice(); else { setIsVoiceActive(true); setActiveVoiceIndex(index); } return; }
+    setActiveVoiceIndex(index); setIsPaused(false); setProgress(0); progressRef.current = 0;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(words[index].word);
+    u.lang = 'zh-CN'; u.rate = 0.6;
+    const premiumVoice = window.speechSynthesis.getVoices().find(v => v.name.includes('Yue') || v.name.includes('月'));
+    if (premiumVoice) u.voice = premiumVoice;
+    window.speechSynthesis.speak(u);
   };
 
-  const nativeTest = () => {
-    addLog("Running Native Test...");
-    try {
-      window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance("测试语音");
-      u.lang = 'zh-CN';
-      u.onstart = () => addLog("Native Start Event!");
-      u.onend = () => addLog("Native End Event!");
-      u.onerror = (e) => addLog(`Native Error Event: ${e.error}`);
-      window.speechSynthesis.speak(u)
-      if (window.window.speechSynthesis.paused) window.speechSynthesis.resume();
-    } catch(e) {
-      addLog(`Native Exception: ${e.message}`);
-    }
-  };
-
-
-  const stopVoice = () => { window.speechSynthesis.cancel(); setIsVoiceActive(false); setIsPaused(false); setActiveVoiceIndex(-1); setProgress(0); if (timerRef.current) clearInterval(timerRef.current); setModalConfig({ isOpen: false }); };
+  const stopVoice = () => { window.speechSynthesis.cancel(); setIsVoiceActive(false); setIsPaused(false); setActiveVoiceIndex(-1); setProgress(0); if (timerRef.current) clearInterval(timerRef.current); };
 
   const handleTabChange = (idx) => {
     if (idx === 2 && step < 2) setModalConfig({ isOpen: true, type: 'TO_FINAL', title: "确认进入终测？", content: "确认进入终测吗？" });
@@ -532,49 +393,7 @@ function MainApp() {
     if (targetWords.length === 0) { alert("无错题"); setFilterWrong(false); } else { setWords(targetWords); setActiveVoiceIndex(-1); }
   };
 
-  const unlockAudio = () => {
-    window.speechSynthesis.cancel();
-
-    const u = new SpeechSynthesisUtterance(' ');
-    u.volume = 0;
-    window.speechSynthesis.speak(u)
-
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    if (ctx.state === 'suspended') ctx.resume();
-
-    if (window.window.speechSynthesis.paused) window.speechSynthesis.resume();
-
-    const testUtterance = new SpeechSynthesisUtterance('你好');
-    testUtterance.volume = 0.1;
-    testUtterance.lang = 'zh-CN';
-    testUtterance.rate = 0.6;
-
-    setTimeout(() => {
-      window.speechSynthesis.speak(testUtterance);
-    }, 100);
-  };
-
-  const startKeepAlive = () => {
-    if (keepAliveRef.current) {
-      clearInterval(keepAliveRef.current);
-    }
-
-    keepAliveRef.current = setInterval(() => {
-      const utterance = new SpeechSynthesisUtterance('');
-      utterance.volume = 0;
-      window.speechSynthesis.speak(utterance);
-    }, 14000);
-  };
-
-  const stopKeepAlive = () => {
-    if (keepAliveRef.current) {
-      clearInterval(keepAliveRef.current);
-      keepAliveRef.current = null;
-    }
-  };
-
   const restartWrong = () => {
-    unlockAudio();
     updateWordsWithFilter(true);
     setIsVoiceActive(true);
     setActiveVoiceIndex(-1);
@@ -612,38 +431,6 @@ function MainApp() {
 
   const isDictationFinished = isVoiceActive && activeVoiceIndex >= words.length;
 
-  useEffect(() => {
-    if (!isVoiceActive || isPaused || activeVoiceIndex < 0) {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      return;
-    }
-
-    const intervalMs = voiceInterval * 1000;
-    const updateFrequency = 100;
-    const progressStep = (updateFrequency / intervalMs) * 100;
-
-    timerRef.current = setInterval(() => {
-      progressRef.current += progressStep;
-      if (progressRef.current >= 100) {
-        progressRef.current = 0;
-        setProgress(0);
-        speak(activeVoiceIndex + 1);
-      } else {
-        setProgress(progressRef.current);
-      }
-    }, updateFrequency);
-
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-    };
-  }, [isVoiceActive, isPaused, activeVoiceIndex, voiceInterval, speak]);
-
   if (view === 'SETUP') {
     return (
       <div className="h-screen flex flex-col bg-white font-sans text-black overflow-hidden relative">
@@ -664,11 +451,12 @@ function MainApp() {
           ) : (
             <>
               <label className="flex items-center gap-2 cursor-pointer select-none group" onClick={(e) => e.stopPropagation()}><div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all ${onlyWrong ? 'bg-black border-black shadow-md' : 'border-slate-300'}`}>{onlyWrong && <Check size={14} className="text-white" strokeWidth={4} />}</div><span className="text-sm font-black text-black">仅练错题</span><input type="checkbox" className="hidden" checked={onlyWrong} onChange={() => setOnlyWrong(!onlyWrong)} /></label>
-               <div className="flex flex-col items-end w-full max-w-sm">
-                 <button onClick={start} disabled={selectedUnits.size === 0 || isLoading} className={`w-full text-white h-12 rounded-lg font-black text-xl shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 ${isDevMode ? 'bg-red-600' : 'bg-black'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                   {isLoading ? <><Loader2 className="animate-spin" size={20}/> 正在同步数据...</> : `开始练习 (${currentTotalCount})`}
-                 </button>
-               </div>
+              <div className="flex flex-col items-end w-full max-w-sm">
+                {!isLoading && Object.keys(mastery).length > 0 && <span className="text-[10px] text-emerald-600 font-bold mb-1 flex items-center gap-1"><Cloud size={10}/> 云端就绪</span>}
+                <button onClick={start} disabled={selectedUnits.size === 0 || isLoading} className={`w-full text-white h-12 rounded-lg font-black text-xl shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 ${isDevMode ? 'bg-red-600' : 'bg-black'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                  {isLoading ? <><Loader2 className="animate-spin" size={20}/> 正在同步数据...</> : `开始练习 (${currentTotalCount})`}
+                </button>
+              </div>
             </>
           )}
         </div>
@@ -681,79 +469,13 @@ function MainApp() {
       {isFlashCardMode && <FlashCardView words={words} onClose={() => setIsFlashCardMode(false)} />}
       {strokeTarget && <StrokeOrderPlayer word={strokeTarget} onClose={() => setStrokeTarget(null)} />}
       {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 z-[2000]" />}
-      <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]">
-        <div className="flex justify-between items-center px-8 h-[54px]">
-          <button onClick={() => setView('SETUP')} className="text-slate-400 font-bold text-xs flex items-center gap-1 hover:text-black transition-colors uppercase">
-            <LogOut size={14}/> 退出
-          </button>
-          <div className="flex items-center gap-2">
-            {step === 0 && <button onClick={() => { stopVoice(); setIsVoiceActive(false); setIsFlashCardMode(true); }} className={`p-2 rounded-lg transition-all ${isFlashCardMode ? 'bg-purple-50 text-purple-600' : 'bg-slate-50 text-slate-400 hover:text-slate-600'}`}><Monitor size={18}/></button>}
-            <button onClick={() => { stopVoice(); setIsShuffling(true); setTimeout(() => { setWords(prev => [...prev].sort(() => Math.random() - 0.5)); setIsShuffling(false); }, 300); }} className={`p-2 rounded-lg transition-all ${isShuffling ? 'bg-amber-50 text-amber-600' : 'bg-slate-50 text-slate-400 hover:text-slate-600'}`}><RefreshCw size={18}/></button>
-            <button onClick={() => setShowAnswers(!showAnswers)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${showAnswers ? 'bg-blue-50 text-blue-600' : 'bg-slate-50 text-slate-400 hover:text-slate-600'}`}>
-              {showAnswers ? <EyeOff size={18}/> : <Eye size={18}/>} 看答案
-            </button>
-            <button onClick={() => setShowStrokeOrder(!showStrokeOrder)} className={`p-2 rounded-lg transition-all ${showStrokeOrder ? 'bg-emerald-50 text-emerald-600' : 'bg-slate-50 text-slate-400 hover:text-slate-600'}`}><Edit3 size={18}/></button>
-            <div className="w-4" />
-            <button onClick={() => updateWordsWithFilter(!filterWrong)} className={`flex items-center gap-2 px-4 h-[36px] rounded-lg text-xs font-black border transition-all ${filterWrong ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-50 text-slate-500 border-slate-100'}`}>
-              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${filterWrong ? 'bg-red-500 border-red-500' : 'bg-white border-slate-300'}`}>
-                {filterWrong && <Check size={12} className="text-white" strokeWidth={4} />}
-              </div>
-              仅错题
-            </button>
-            <div className="flex items-center gap-3 px-4 h-[36px] bg-slate-50 rounded-lg border border-slate-100 font-mono text-base font-black text-black">
-              {Math.floor(time/60).toString().padStart(2,'0')}:{(time%60).toString().padStart(2,'0')} <AnalogClock />
-            </div>
-          </div>
-        </div>
-        <div className="px-6 pb-2">
-          <div className="flex gap-2">
-            {[{ label: '自由练习', bg: 'bg-blue-600' }, { label: '模拟自测', bg: 'bg-orange-500' }, { label: '家长终测', bg: 'bg-emerald-600' }].map((s, idx) => (
-              <button key={idx} onClick={() => handleTabChange(idx)} className={`flex-1 py-2 rounded-lg text-[10px] font-black transition-all ${step === idx ? (isDevMode ? 'bg-red-600 text-white shadow-md' : `${s.bg} text-white shadow-md`) : (isDevMode ? 'bg-red-600/10 text-black' : 'bg-slate-50 text-black opacity-80')}`}>
-                {idx + 1}. {s.label}
-              </button>
-            ))}
-          </div>
-        </div>
-        </header>
+      <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]"><div className="flex justify-between items-center px-8 h-[54px]"><button onClick={() => setView('SETUP')} className="text-slate-400 font-bold text-xs flex items-center gap-1 hover:text-black transition-colors uppercase"><LogOut size={14}/> 退出</button><div className="flex items-center gap-2">{step === 0 && <button onClick={() => setIsFlashCardMode(true)} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><Monitor size={18}/></button>}<button onClick={() => { stopVoice(); setIsShuffling(true); setTimeout(() => { setWords(prev => [...prev].sort(() => Math.random() - 0.5)); setIsShuffling(false); }, 300); }} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><RefreshCw size={18}/></button><button onClick={() => setShowAnswers(!showAnswers)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${showAnswers ? 'bg-slate-50 text-black' : 'text-slate-400 hover:text-black'}`}>{showAnswers ? <EyeOff size={18}/> : <Eye size={18}/>} 看答案</button><button onClick={() => setShowStrokeOrder(!showStrokeOrder)} className={`p-2 rounded-lg transition-all ${showStrokeOrder ? 'bg-emerald-50 text-emerald-600' : 'text-slate-400 hover:text-black'}`}><Edit3 size={18}/></button></div><div className="flex gap-2 items-center"><button onClick={() => updateWordsWithFilter(!filterWrong)} className={`flex items-center gap-2 px-4 h-[36px] rounded-lg text-xs font-black border transition-all ${filterWrong ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-50 text-slate-500 border-slate-100'}`}><div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${filterWrong ? 'bg-red-500 border-red-500' : 'bg-white border-slate-300'}`}>{filterWrong && <Check size={12} className="text-white" strokeWidth={4} />}</div>仅错题</button><div className="flex items-center gap-3 px-4 h-[36px] bg-slate-50 rounded-lg border border-slate-100 font-mono text-base font-black text-black"> {Math.floor(time/60).toString().padStart(2,'0')}:{(time%60).toString().padStart(2,'0')} <AnalogClock /> </div></div></div></div><div className="px-6 pb-2"><div className="flex gap-2">{[{ label: '自由练习', bg: 'bg-blue-600' }, { label: '模拟自测', bg: 'bg-orange-500' }, { label: '家长终测', bg: 'bg-emerald-600' }].map((s, idx) => (<button key={idx} onClick={() => handleTabChange(idx)} className={`flex-1 py-2 rounded-lg text-[10px] font-black transition-all ${step === idx ? (isDevMode ? 'bg-red-600 text-white shadow-md' : `${s.bg} text-white shadow-md`) : (isDevMode ? 'bg-red-600/10 text-black' : 'bg-slate-50 text-black opacity-80')}`}> {idx + 1}. {s.label} </button>))}</div></div></header>
       {!isVoiceActive && <button onClick={() => { setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className={`fixed bottom-8 left-8 z-[200] w-12 h-12 rounded-full flex items-center justify-center shadow-xl transition-all ${isDevMode ? 'bg-red-600' : 'bg-blue-600'} text-white`}><Volume2 size={24} /></button>}
       {isVoiceActive && (
         <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t px-6 py-4 flex items-center justify-between z-[200] shadow-2xl animate-in slide-in-from-bottom-full">
-          {isDictationFinished ? (
-            <div className="w-full flex items-center justify-center gap-4 relative">
-              <button onClick={() => { setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center"><MousePointerClick size={20}/></button>
-              {step !== 2 && <>
-                <button onClick={restartWrong} className="px-6 h-10 rounded-lg bg-red-50 text-red-600 font-bold text-xs border border-red-100">重听错题</button>
-                <button onClick={() => handleTabChange(step + 1)} className="px-6 h-10 rounded-lg bg-black text-white font-bold text-xs shadow-lg">进入{step === 0 ? '自测' : '家长终测'}</button>
-              </>}
-              <button onClick={stopVoice} className="absolute right-0 px-6 h-10 rounded-lg border border-slate-200 text-slate-400 font-bold text-xs">退出听写</button>
-            </div>
-          ) : (
-            <>
-              <div className="flex items-center gap-3 w-[20%]">
-                <span className="text-[10px] font-bold text-black">间隔</span>
-                <div className="flex items-center gap-1 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100">
-                  <button onClick={() => setVoiceInterval(Math.max(5, voiceInterval-5))}><Minus size={14}/></button>
-                  <span className="text-sm font-mono font-bold w-10 text-center">{voiceInterval}s</span>
-                  <button onClick={() => setVoiceInterval(Math.min(60, voiceInterval+5))}><Plus size={14}/></button>
-                </div>
-              </div>
-              <div className="flex items-center gap-2 flex-1 justify-center">
-                <button onClick={() => { stopVoice(); setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 mr-2"><MousePointerClick size={20}/></button>
-                <button onClick={() => setIsPaused(!isPaused)} className="w-[80px] h-10 rounded-lg bg-slate-100 text-black flex items-center justify-center border border-slate-200">{isPaused ? <Play size={20} fill="black"/> : <Pause size={20} fill="black"/>}</button>
-                <button onClick={() => speak(activeVoiceIndex - 1)} className="w-[80px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs uppercase">上一题</button>
-                <button onClick={() => speak(activeVoiceIndex + 1)} className="w-[150px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold active:scale-95 transition-all text-xs uppercase">下一题</button>
-                <div className="w-4" />
-                <button onClick={() => markAs('red')} className="w-[80px] h-10 rounded-lg border-2 border-red-500 text-red-500 flex items-center justify-center font-bold text-xs">不会</button>
-                {step === 2 && <button onClick={() => markAs('green')} className="w-[80px] h-10 rounded-lg border-2 border-emerald-500 text-emerald-500 flex items-center justify-center font-bold text-xs ml-2">掌握</button>}
-              </div>
-              <div className="w-[20%] flex justify-end">
-                <button onClick={stopVoice} className="px-6 py-2 bg-slate-100 text-slate-400 rounded-lg font-bold text-[10px] uppercase">退出听写</button>
-              </div>
-            </>
-          )}
+          {isDictationFinished ? (<div className="w-full flex items-center justify-center gap-4 relative"><button onClick={() => { setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center"><MousePointerClick size={20}/></button>{step !== 2 && <><button onClick={restartWrong} className="px-6 h-10 rounded-lg bg-red-50 text-red-600 font-bold text-xs border border-red-100">重听错题</button><button onClick={() => handleTabChange(step + 1)} className="px-6 h-10 rounded-lg bg-black text-white font-bold text-xs shadow-lg">进入{step === 0 ? '自测' : '家长终测'}</button></>}<button onClick={stopVoice} className="absolute right-0 px-6 h-10 rounded-lg border border-slate-200 text-slate-400 font-bold text-xs">退出听写</button></div>) : (<><div className="flex items-center gap-3 w-[20%]"><span className="text-[10px] font-bold text-black">间隔</span><div className="flex items-center gap-1 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100"><button onClick={() => setVoiceInterval(Math.max(5, voiceInterval-5))}><Minus size={14}/></button><span className="text-sm font-mono font-bold w-10 text-center">{voiceInterval}s</span><button onClick={() => setVoiceInterval(Math.min(60, voiceInterval+5))}><Plus size={14}/></button></div></div><div className="flex items-center gap-2 flex-1 justify-center"><button onClick={() => { stopVoice(); setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 mr-2"><MousePointerClick size={20}/></button><button onClick={() => setIsPaused(!isPaused)} className="w-[80px] h-10 rounded-lg bg-slate-100 text-black flex items-center justify-center border border-slate-200">{isPaused ? <Play size={20} fill="black"/> : <Pause size={20} fill="black"/>}</button><button onClick={() => speak(activeVoiceIndex - 1)} className="w-[80px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs uppercase">上一题</button><button onClick={() => speak(activeVoiceIndex + 1)} className="w-[150px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold active:scale-95 transition-all text-xs uppercase">下一题</button><div className="w-4" /><button onClick={() => markAs('red')} className="w-[80px] h-10 rounded-lg border-2 border-red-500 text-red-500 flex items-center justify-center font-bold text-xs">不会</button>{step === 2 && <button onClick={() => markAs('green')} className="w-[80px] h-10 rounded-lg border-2 border-emerald-500 text-emerald-500 flex items-center justify-center font-bold text-xs ml-2">掌握</button>}</div><div className="w-[20%] flex justify-end"><button onClick={stopVoice} className="px-6 py-2 bg-slate-100 text-slate-400 rounded-lg font-bold text-[10px] uppercase">退出听写</button></div></>)}
         </div>
       )}
-
       <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
       {step === 2 && (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_STATS', title: "本次练习统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>)}
       <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} onConfirm={() => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { save(); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{words.length}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{calculateStats().wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{calculateStats().mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div></div>) : modalConfig.content} />

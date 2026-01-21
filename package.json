@@ -6,12 +6,10 @@
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5173",
     "build": "vite build",
-    "preview": "vite preview",
-    "research": "vite --port 5178 --host 0.0.0.0"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.90.1",
-    "hanzi-writer": "^3.7.3",
     "lucide-react": "^0.446.0",
     "pinyin-pro": "^3.26.0",
     "react": "^18.3.1",
