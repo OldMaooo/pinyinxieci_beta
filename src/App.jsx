@@ -108,16 +108,39 @@ const StrokeOrderPlayer = ({ word, onClose }) => {
   );
 };
 
+const AnswerCard = ({ word, onClose }) => {
+  if (!word) return null;
+  return (
+    <div
+      className="fixed inset-0 z-[5000] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white p-12 px-20 rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-95"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <span className="text-[10rem] font-black font-kaiti text-black leading-none">
+          {word.word}
+        </span>
+      </div>
+    </div>
+  );
+};
+
 const FlashCardView = ({ words, onClose }) => {
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [speed, setSpeed] = useState(3000);
+  const [speed, setSpeed] = useState(5000);
   const [soundOn, setSoundOn] = useState(true);
+  const [volume, setVolume] = useState(1.0);
   const [showControls, setShowControls] = useState(true);
   const [showThumbnails, setShowThumbnails] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('pinyin_flash_dark') === 'true');
   const timerRef = useRef(null);
   const fadeRef = useRef(null);
+  const wordElementRef = useRef(null);
+  const wordStartTimeRef = useRef(null);
+  const [wordProgress, setWordProgress] = useState(0);
 
   const currentWord = words[index];
   useEffect(() => { localStorage.setItem('pinyin_flash_dark', isDarkMode); }, [isDarkMode]);
@@ -127,11 +150,17 @@ const FlashCardView = ({ words, onClose }) => {
     window.speechSynthesis.cancel();
     setTimeout(() => {
         const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'zh-CN'; u.rate = 0.8;
+        u.lang = 'zh-CN'; u.rate = 0.8; u.volume = volume;
         const premiumVoice = window.speechSynthesis.getVoices().find(v => v.name.includes('Yue') || v.name.includes('月'));
         if (premiumVoice) u.voice = premiumVoice;
         window.speechSynthesis.speak(u);
     }, 10);
+  };
+
+  const calculateFontSize = (containerWidth, textLength) => {
+    const baseSize = containerWidth * 0.8;
+    const adjustedSize = baseSize / Math.max(1, textLength * 0.3);
+    return Math.min(Math.max(adjustedSize, 24), 300);
   };
 
   useEffect(() => {
@@ -144,18 +173,63 @@ const FlashCardView = ({ words, onClose }) => {
   useEffect(() => { speak(currentWord.word); }, [index]);
   useEffect(() => { if (isPlaying) { timerRef.current = setInterval(() => { setIndex(prev => (prev + 1) % words.length); }, speed); } return () => clearInterval(timerRef.current); }, [isPlaying, speed, words.length]);
 
+  useEffect(() => {
+    setWordProgress(0);
+    wordStartTimeRef.current = Date.now();
+    const progressInterval = setInterval(() => {
+      if (wordStartTimeRef.current && isPlaying) {
+        const elapsed = Date.now() - wordStartTimeRef.current;
+        const progress = Math.min((elapsed / speed) * 100, 100);
+        setWordProgress(progress);
+      }
+    }, 50);
+    return () => clearInterval(progressInterval);
+  }, [index, speed, isPlaying]);
+
   const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); fadeRef.current = setTimeout(() => setShowControls(false), 6000); };
   useEffect(() => { handleInteraction(); }, []);
+
+  useEffect(() => {
+    if (!wordElementRef.current) return;
+
+    const updateFontSize = () => {
+      const parent = wordElementRef.current.parentElement;
+      if (!parent) return;
+      const containerWidth = parent.offsetWidth;
+      const textLength = currentWord.word.length;
+      const newSize = calculateFontSize(containerWidth, textLength);
+      wordElementRef.current.style.fontSize = `${newSize}px`;
+    };
+
+    updateFontSize();
+
+    const resizeObserver = new ResizeObserver(() => {
+      updateFontSize();
+    });
+    resizeObserver.observe(wordElementRef.current.parentElement);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [currentWord.word, isDarkMode]);
 
   const next = (e) => { e.stopPropagation(); setIndex((index + 1) % words.length); handleInteraction(); };
   const prev = (e) => { e.stopPropagation(); setIndex((index - 1 + words.length) % words.length); handleInteraction(); };
 
   return (
-    <div className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`} onClick={handleInteraction}>
-      <div className="flex flex-col items-center justify-center h-full w-full pointer-events-none">
-        <div className={`font-kaiti font-bold text-[4vh] mb-4 transition-colors ${isDarkMode ? 'text-white/40' : 'text-slate-400'}`}>{currentWord.pinyin}</div>
-        <div className={`font-kaiti font-black text-[25vw] leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
-        <div className={`mt-8 font-mono font-bold text-xl ${isDarkMode ? 'text-white/20' : 'text-slate-300'}`}>{index + 1} / {words.length}</div>
+    <div
+      className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`}
+      onClick={handleInteraction}
+      onDoubleClick={() => setIsPlaying(!isPlaying)}
+    >
+      <div className="absolute top-0 left-0 w-full p-4 flex flex-col items-center gap-1 z-[3000]">
+        <div className={`font-mono font-black text-xl ${isDarkMode ? 'text-white/80' : 'text-slate-600'}`}>{index + 1} / {words.length}</div>
+        <div className={`h-[4px] w-[200px] rounded-full overflow-hidden ${isDarkMode ? 'bg-white/30' : 'bg-slate-300'}`}>
+          <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${wordProgress}%` }} />
+        </div>
+      </div>
+      <div className="flex flex-col items-center justify-center flex-1 w-full pointer-events-none px-4">
+        <div ref={wordElementRef} className={`font-kaiti font-black leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
       </div>
       <div className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
       <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
@@ -170,13 +244,13 @@ const FlashCardView = ({ words, onClose }) => {
           {showThumbnails && (
             <div className="w-full flex gap-2 overflow-x-auto pb-4 px-4 mask-fade-edges scrollbar-hide">
               {words.map((w, i) => (
-                <button key={i} onClick={() => setIndex(i)} className={`shrink-0 w-16 h-16 rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-xl' : 'bg-black/5 text-black/40 text-xl')}`}>{w.word[0]}</button>
+                <button key={i} onClick={() => setIndex(i)} className={`shrink-0 w-16 h-[100px] rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-xl' : 'bg-black/5 text-black/40 text-xl')}`}>{w.word[0]}</button>
               ))}
             </div>
           )}
           <div className="flex items-center gap-8 px-10 py-6">
             <div className="flex items-center gap-4 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full">
-              <input type="range" min="1000" max="10000" step="500" value={speed} onChange={e => setSpeed(Number(e.target.value))} className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white" />
+              <input type="range" min="3000" max="20000" step="500" value={speed} onChange={e => setSpeed(Number(e.target.value))} className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white" />
               <span className="text-white font-mono font-black text-sm w-8 text-right">{speed/1000}s</span>
             </div>
             <button onClick={() => setIsPlaying(!isPlaying)} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-2xl active:scale-95 transition-transform">{isPlaying ? <Pause size={40} fill="black"/> : <Play size={40} fill="black" className="ml-1"/>}</button>
@@ -189,8 +263,17 @@ const FlashCardView = ({ words, onClose }) => {
   );
 };
 
-const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoiceActive, activeIndex, onStartVoice, progress, isShuffling, onShowStroke }) => {
-  const handleBoxClick = (e, type) => { e.stopPropagation(); if ((step === 0 && type !== 'markPractice') || (step === 1 && type !== 'markSelf') || (step === 2 && type !== 'markFinal')) return; let next = item[type] === 'white' ? 'red' : (type === 'markFinal' && item[type] === 'red' ? 'green' : 'white'); onUpdate(item.id, type, next); };
+const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoiceActive, activeIndex, onStartVoice, progress, isShuffling, onShowStroke, onShowAnswer }) => {
+  const handleBoxClick = (e, type) => {
+    e.stopPropagation();
+    if (step === 0 && type === 'markPractice' && item[type] === 'red') {
+      onShowAnswer && onShowAnswer(item);
+      return;
+    }
+    if ((step === 0 && type !== 'markPractice') || (step === 1 && type !== 'markSelf') || (step === 2 && type !== 'markFinal')) return;
+    let next = item[type] === 'white' ? 'red' : (type === 'markFinal' && item[type] === 'red' ? 'green' : 'white');
+    onUpdate(item.id, type, next);
+  };
   const focusOnAnswer = (step === 0 && showAnswer) || (step === 2);
   if (!item || !item.pinyin) return <div className="h-24" />;
   const isActive = isVoiceActive && activeIndex === index;
@@ -240,8 +323,16 @@ function MainApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState('idle');
   const [isShuffling, setIsShuffling] = useState(false);
-  const [isFlashCardMode, setIsFlashCardMode] = useState(false); 
-  
+  const [isFlashCardMode, setIsFlashCardMode] = useState(false);
+
+  const [answerCardVisible, setAnswerCardVisible] = useState(false);
+  const [answerCardWord, setAnswerCardWord] = useState(null);
+
+  const handleShowAnswer = (word) => {
+    setAnswerCardWord(word);
+    setAnswerCardVisible(true);
+  };
+
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminClickCount, setAdminClickCount] = useState(0);
   const adminTimerRef = useRef(null);
@@ -469,15 +560,54 @@ function MainApp() {
       {isFlashCardMode && <FlashCardView words={words} onClose={() => setIsFlashCardMode(false)} />}
       {strokeTarget && <StrokeOrderPlayer word={strokeTarget} onClose={() => setStrokeTarget(null)} />}
       {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 z-[2000]" />}
-      <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]"><div className="flex justify-between items-center px-8 h-[54px]"><button onClick={() => setView('SETUP')} className="text-slate-400 font-bold text-xs flex items-center gap-1 hover:text-black transition-colors uppercase"><LogOut size={14}/> 退出</button><div className="flex items-center gap-2">{step === 0 && <button onClick={() => setIsFlashCardMode(true)} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><Monitor size={18}/></button>}<button onClick={() => { stopVoice(); setIsShuffling(true); setTimeout(() => { setWords(prev => [...prev].sort(() => Math.random() - 0.5)); setIsShuffling(false); }, 300); }} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><RefreshCw size={18}/></button><button onClick={() => setShowAnswers(!showAnswers)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${showAnswers ? 'bg-slate-50 text-black' : 'text-slate-400 hover:text-black'}`}>{showAnswers ? <EyeOff size={18}/> : <Eye size={18}/>} 看答案</button><button onClick={() => setShowStrokeOrder(!showStrokeOrder)} className={`p-2 rounded-lg transition-all ${showStrokeOrder ? 'bg-emerald-50 text-emerald-600' : 'text-slate-400 hover:text-black'}`}><Edit3 size={18}/></button></div><div className="flex gap-2 items-center"><button onClick={() => updateWordsWithFilter(!filterWrong)} className={`flex items-center gap-2 px-4 h-[36px] rounded-lg text-xs font-black border transition-all ${filterWrong ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-50 text-slate-500 border-slate-100'}`}><div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${filterWrong ? 'bg-red-500 border-red-500' : 'bg-white border-slate-300'}`}>{filterWrong && <Check size={12} className="text-white" strokeWidth={4} />}</div>仅错题</button><div className="flex items-center gap-3 px-4 h-[36px] bg-slate-50 rounded-lg border border-slate-100 font-mono text-base font-black text-black"> {Math.floor(time/60).toString().padStart(2,'0')}:{(time%60).toString().padStart(2,'0')} <AnalogClock /> </div></div></div></div><div className="px-6 pb-2"><div className="flex gap-2">{[{ label: '自由练习', bg: 'bg-blue-600' }, { label: '模拟自测', bg: 'bg-orange-500' }, { label: '家长终测', bg: 'bg-emerald-600' }].map((s, idx) => (<button key={idx} onClick={() => handleTabChange(idx)} className={`flex-1 py-2 rounded-lg text-[10px] font-black transition-all ${step === idx ? (isDevMode ? 'bg-red-600 text-white shadow-md' : `${s.bg} text-white shadow-md`) : (isDevMode ? 'bg-red-600/10 text-black' : 'bg-slate-50 text-black opacity-80')}`}> {idx + 1}. {s.label} </button>))}</div></div></header>
+      <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]">
+        <div className="flex justify-between items-center px-8 h-[54px]">
+          <button onClick={() => setView('SETUP')} className="text-slate-400 font-bold text-xs flex items-center gap-1 hover:text-black transition-colors uppercase">
+            <LogOut size={14}/> 退出
+          </button>
+          <div className="flex items-center gap-2">
+            {step === 0 && <button onClick={() => setIsFlashCardMode(true)} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><Monitor size={18}/></button>}
+            <button onClick={() => { stopVoice(); setIsShuffling(true); setTimeout(() => { setWords(prev => [...prev].sort(() => Math.random() - 0.5)); setIsShuffling(false); }, 300); }} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><RefreshCw size={18}/></button>
+            <button onClick={() => setShowAnswers(!showAnswers)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${showAnswers ? 'bg-slate-50 text-black' : 'text-slate-400 hover:text-black'}`}>
+              {showAnswers ? <EyeOff size={18}/> : <Eye size={18}/>} 看答案
+            </button>
+            <button onClick={() => setShowStrokeOrder(!showStrokeOrder)} className={`p-2 rounded-lg transition-all ${showStrokeOrder ? 'bg-emerald-50 text-emerald-600' : 'text-slate-400 hover:text-black'}`}><Edit3 size={18}/></button>
+          </div>
+          <div className="flex gap-2 items-center">
+            <button onClick={() => updateWordsWithFilter(!filterWrong)} className={`flex items-center gap-2 px-4 h-[36px] rounded-lg text-xs font-black border transition-all ${filterWrong ? 'bg-red-50 text-red-600 border-red-200' : 'bg-slate-50 text-slate-500 border-slate-100'}`}>
+              <div className={`w-4 h-4 rounded border flex items-center justify-center transition-colors ${filterWrong ? 'bg-red-500 border-red-500' : 'bg-white border-slate-300'}`}>
+                {filterWrong && <Check size={12} className="text-white" strokeWidth={4} />}
+              </div>
+              仅错题
+            </button>
+            <div className="flex items-center gap-3 px-4 h-[36px] bg-slate-50 rounded-lg border border-slate-100 font-mono text-base font-black text-black">
+              {Math.floor(time/60).toString().padStart(2,'0')}:{(time%60).toString().padStart(2,'0')} <AnalogClock />
+            </div>
+          </div>
+        </div>
+        <div className="px-6 pb-2">
+          <div className="flex gap-2">
+            {[
+              { label: '自由练习', bg: 'bg-blue-600' },
+              { label: '模拟自测', bg: 'bg-orange-500' },
+              { label: '家长终测', bg: 'bg-emerald-600' }
+            ].map((s, idx) => (
+              <button key={idx} onClick={() => handleTabChange(idx)} className={`flex-1 py-2 rounded-lg text-[10px] font-black transition-all ${step === idx ? (isDevMode ? 'bg-red-600 text-white shadow-md' : `${s.bg} text-white shadow-md`) : (isDevMode ? 'bg-red-600/10 text-black' : 'bg-slate-50 text-black opacity-80')}`}>
+                {idx + 1}. {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </header>
       {!isVoiceActive && <button onClick={() => { setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className={`fixed bottom-8 left-8 z-[200] w-12 h-12 rounded-full flex items-center justify-center shadow-xl transition-all ${isDevMode ? 'bg-red-600' : 'bg-blue-600'} text-white`}><Volume2 size={24} /></button>}
       {isVoiceActive && (
         <div className="fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-xl border-t px-6 py-4 flex items-center justify-between z-[200] shadow-2xl animate-in slide-in-from-bottom-full">
           {isDictationFinished ? (<div className="w-full flex items-center justify-center gap-4 relative"><button onClick={() => { setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center"><MousePointerClick size={20}/></button>{step !== 2 && <><button onClick={restartWrong} className="px-6 h-10 rounded-lg bg-red-50 text-red-600 font-bold text-xs border border-red-100">重听错题</button><button onClick={() => handleTabChange(step + 1)} className="px-6 h-10 rounded-lg bg-black text-white font-bold text-xs shadow-lg">进入{step === 0 ? '自测' : '家长终测'}</button></>}<button onClick={stopVoice} className="absolute right-0 px-6 h-10 rounded-lg border border-slate-200 text-slate-400 font-bold text-xs">退出听写</button></div>) : (<><div className="flex items-center gap-3 w-[20%]"><span className="text-[10px] font-bold text-black">间隔</span><div className="flex items-center gap-1 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100"><button onClick={() => setVoiceInterval(Math.max(5, voiceInterval-5))}><Minus size={14}/></button><span className="text-sm font-mono font-bold w-10 text-center">{voiceInterval}s</span><button onClick={() => setVoiceInterval(Math.min(60, voiceInterval+5))}><Plus size={14}/></button></div></div><div className="flex items-center gap-2 flex-1 justify-center"><button onClick={() => { stopVoice(); setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 mr-2"><MousePointerClick size={20}/></button><button onClick={() => setIsPaused(!isPaused)} className="w-[80px] h-10 rounded-lg bg-slate-100 text-black flex items-center justify-center border border-slate-200">{isPaused ? <Play size={20} fill="black"/> : <Pause size={20} fill="black"/>}</button><button onClick={() => speak(activeVoiceIndex - 1)} className="w-[80px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs uppercase">上一题</button><button onClick={() => speak(activeVoiceIndex + 1)} className="w-[150px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold active:scale-95 transition-all text-xs uppercase">下一题</button><div className="w-4" /><button onClick={() => markAs('red')} className="w-[80px] h-10 rounded-lg border-2 border-red-500 text-red-500 flex items-center justify-center font-bold text-xs">不会</button>{step === 2 && <button onClick={() => markAs('green')} className="w-[80px] h-10 rounded-lg border-2 border-emerald-500 text-emerald-500 flex items-center justify-center font-bold text-xs ml-2">掌握</button>}</div><div className="w-[20%] flex justify-end"><button onClick={stopVoice} className="px-6 py-2 bg-slate-100 text-slate-400 rounded-lg font-bold text-[10px] uppercase">退出听写</button></div></>)}
         </div>
       )}
-      <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
+      <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} onShowAnswer={handleShowAnswer} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
       {step === 2 && (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_STATS', title: "本次练习统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>)}
+      {answerCardVisible && <AnswerCard word={answerCardWord} onClose={() => setAnswerCardVisible(false)} />}
       <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} onConfirm={() => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { save(); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{words.length}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{calculateStats().wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{calculateStats().mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div></div>) : modalConfig.content} />
     </div>
   );
