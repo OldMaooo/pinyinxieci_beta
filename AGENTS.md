@@ -6,13 +6,13 @@ Agentic coding guidelines for this repository.
 
 ```bash
 # Development
-npm run dev          # Start Vite dev server on 0.0.0.0:5173
+npm run dev          # Start Vite dev server on 0.0.0.0:5175
 
 # Testing Individual Features (no test framework configured)
 # Approach 1: Manual testing in browser
 # 1. Start dev server
 npm run dev
-# 2. Open http://localhost:5173
+# 2. Open http://localhost:5175
 # 3. Test specific feature by navigating through UI
 # 4. Check console for errors (F12)
 #
@@ -25,11 +25,11 @@ npm run dev
 npm run build       # Build for production (Vite)
 npm run preview     # Preview production build locally
 
-# Alternative dev port (if port 5173 occupied)
-npm run dev -- --host 0.0.0.0 --port 5174
+# Alternative dev port (if port 5175 occupied)
+npm run dev -- --host 0.0.0.0 --port 5176
 
 # Clean port before starting (if needed)
-lsof -ti:5173 | xargs kill -9 2>/dev/null
+lsof -ti:5175 | xargs kill -9 2>/dev/null
 npm run dev
 ```
 

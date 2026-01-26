@@ -520,6 +520,25 @@ function MainApp() {
 
   useEffect(() => { const t = setInterval(() => view === 'RUNNING' && setTime(s => s + 1), 1000); return () => clearInterval(t); }, [view]);
 
+  useEffect(() => {
+    if (!isVoiceActive || activeVoiceIndex < 0 || isPaused) {
+      return;
+    }
+    setProgress(0);
+    progressRef.current = 0;
+    const intervalTime = 50;
+    const increment = 100 / (voiceInterval * 1000 / intervalTime);
+    const progressInterval = setInterval(() => {
+      progressRef.current += increment;
+      if (progressRef.current >= 100) {
+        setProgress(100);
+      } else {
+        setProgress(progressRef.current);
+      }
+    }, intervalTime);
+    return () => clearInterval(progressInterval);
+  }, [activeVoiceIndex, voiceInterval, isVoiceActive, isPaused]);
+
   const isDictationFinished = isVoiceActive && activeVoiceIndex >= words.length;
 
   if (view === 'SETUP') {
