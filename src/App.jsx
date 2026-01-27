@@ -108,12 +108,16 @@ const StrokeOrderPlayer = ({ word, onClose }) => {
   );
 };
 
-const AnswerCard = ({ word, onClose }) => {
+const AnswerCard = ({ word, onClose, onAutoNext }) => {
   if (!word) return null;
+  const handleClose = () => {
+    onClose();
+    onAutoNext && onAutoNext();
+  };
   return (
     <div
       className="fixed inset-0 z-[5000] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in"
-      onClick={onClose}
+      onClick={handleClose}
     >
       <div
         className="bg-white p-12 px-20 rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-95"
@@ -266,13 +270,12 @@ const FlashCardView = ({ words, onClose }) => {
 const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoiceActive, activeIndex, onStartVoice, progress, isShuffling, onShowStroke, onShowAnswer }) => {
   const handleBoxClick = (e, type) => {
     e.stopPropagation();
-    if (step === 0 && type === 'markPractice' && item[type] === 'red') {
-      onShowAnswer && onShowAnswer(item);
-      return;
-    }
     if ((step === 0 && type !== 'markPractice') || (step === 1 && type !== 'markSelf') || (step === 2 && type !== 'markFinal')) return;
     let next = item[type] === 'white' ? 'red' : (type === 'markFinal' && item[type] === 'red' ? 'green' : 'white');
     onUpdate(item.id, type, next);
+    if (step === 0 && type === 'markPractice' && next === 'red') {
+      onShowAnswer && onShowAnswer(item);
+    }
   };
   const focusOnAnswer = (step === 0 && showAnswer) || (step === 2);
   if (!item || !item.pinyin) return <div className="h-24" />;
@@ -327,10 +330,28 @@ function MainApp() {
 
   const [answerCardVisible, setAnswerCardVisible] = useState(false);
   const [answerCardWord, setAnswerCardWord] = useState(null);
+  const [answerCardWordIndex, setAnswerCardWordIndex] = useState(null);
 
   const handleShowAnswer = (word) => {
     setAnswerCardWord(word);
     setAnswerCardVisible(true);
+    const wordIndex = words.findIndex(w => w.id === word.id);
+    setAnswerCardWordIndex(wordIndex);
+  };
+
+  const handleAnswerCardClose = () => {
+    setAnswerCardVisible(false);
+    setAnswerCardWord(null);
+  };
+
+  const handleAnswerCardAutoNext = () => {
+    if (answerCardWordIndex !== null) {
+      const nextIndex = answerCardWordIndex + 1;
+      setAnswerCardWordIndex(null);
+      if (nextIndex < words.length) {
+        speak(nextIndex);
+      }
+    }
   };
 
   const [isAdminMode, setIsAdminMode] = useState(false);
@@ -626,7 +647,7 @@ function MainApp() {
       )}
       <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} onShowAnswer={handleShowAnswer} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
       {step === 2 && (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_STATS', title: "本次练习统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>)}
-      {answerCardVisible && <AnswerCard word={answerCardWord} onClose={() => setAnswerCardVisible(false)} />}
+      {answerCardVisible && <AnswerCard word={answerCardWord} onClose={handleAnswerCardClose} onAutoNext={handleAnswerCardAutoNext} />}
       <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} onConfirm={() => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { save(); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{words.length}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{calculateStats().wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{calculateStats().mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div></div>) : modalConfig.content} />
     </div>
   );
