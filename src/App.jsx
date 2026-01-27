@@ -420,7 +420,7 @@ function MainApp() {
   }, [selectedUnits, processedUnits, onlyWrong, mastery]);
 
   const start = () => {
-    if (isLoading) return; 
+    if (isLoading) return;
     let pool = []; processedUnits.forEach(u => { if (selectedUnits.has(u.name)) pool = [...pool, ...u.words]; });
     let targetWords = [];
     pool.forEach(w => {
@@ -429,7 +429,7 @@ function MainApp() {
         if (!onlyWrong || mastery[w.id]?.history?.includes('red')) targetWords.push(wordData);
     });
     if (targetWords.length === 0) return alert('没有符合条件的词语');
-    setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING');
+    setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING'); setModalConfig({ isOpen: false });
   };
 
   const save = async (isTemporary = false) => {
