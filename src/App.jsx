@@ -273,9 +273,6 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
     if ((step === 0 && type !== 'markPractice') || (step === 1 && type !== 'markSelf') || (step === 2 && type !== 'markFinal')) return;
     let next = item[type] === 'white' ? 'red' : (type === 'markFinal' && item[type] === 'red' ? 'green' : 'white');
     onUpdate(item.id, type, next);
-    if (step === 0 && type === 'markPractice' && next === 'red') {
-      onShowAnswer && onShowAnswer(item);
-    }
   };
   const focusOnAnswer = (step === 0 && showAnswer) || (step === 2);
   if (!item || !item.pinyin) return <div className="h-24" />;
@@ -463,7 +460,11 @@ function MainApp() {
         supabase.from('mastery_records').upsert({ id: cur.id, history: mastery[cur.id]?.history || [], temp_state: { practice: cur.markPractice, self: cur.markSelf, final: cur.markFinal }, updated_at: new Date().toISOString() });
         return nextWords;
       });
-      speak(activeVoiceIndex + 1);
+      if (status === 'red') {
+        handleShowAnswer(words[activeVoiceIndex]);
+      } else {
+        speak(activeVoiceIndex + 1);
+      }
     }
   };
 
