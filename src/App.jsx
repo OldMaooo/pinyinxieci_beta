@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3 } from 'lucide-react';
+import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3, Type } from 'lucide-react';
 import { pinyin } from 'pinyin-pro';
 import { createClient } from '@supabase/supabase-js';
 
@@ -145,6 +145,9 @@ const FlashCardView = ({ words, onClose }) => {
   const wordElementRef = useRef(null);
   const wordStartTimeRef = useRef(null);
   const [wordProgress, setWordProgress] = useState(0);
+  const [isPinyinMode, setIsPinyinMode] = useState(false);
+  const [markedWrong, setMarkedWrong] = useState(new Set());
+  const [showChinese, setShowChinese] = useState(false);
 
   const currentWord = words[index];
   useEffect(() => { localStorage.setItem('pinyin_flash_dark', isDarkMode); }, [isDarkMode]);
@@ -163,8 +166,8 @@ const FlashCardView = ({ words, onClose }) => {
 
   const calculateFontSize = (containerWidth, textLength) => {
     const baseSize = containerWidth * 0.8;
-    const adjustedSize = baseSize / Math.max(1, textLength * 0.3);
-    return Math.min(Math.max(adjustedSize, 24), 300);
+    const adjustedSize = baseSize / Math.max(1, textLength * 0.6);
+    return Math.min(Math.max(adjustedSize, 16), 300);
   };
 
   useEffect(() => {
@@ -174,7 +177,9 @@ const FlashCardView = ({ words, onClose }) => {
     return () => { window.speechSynthesis.onvoiceschanged = null; };
   }, []);
 
-  useEffect(() => { speak(currentWord.word); }, [index]);
+  useEffect(() => {
+    speak(currentWord.word);
+  }, [index]);
   useEffect(() => { if (isPlaying) { timerRef.current = setInterval(() => { setIndex(prev => (prev + 1) % words.length); }, speed); } return () => clearInterval(timerRef.current); }, [isPlaying, speed, words.length]);
 
   useEffect(() => {
@@ -200,7 +205,10 @@ const FlashCardView = ({ words, onClose }) => {
       const parent = wordElementRef.current.parentElement;
       if (!parent) return;
       const containerWidth = parent.offsetWidth;
-      const textLength = currentWord.word.length;
+      const displayText = isPinyinMode
+        ? (showChinese ? currentWord.word : currentWord.pinyin)
+        : currentWord.word;
+      const textLength = displayText.length;
       const newSize = calculateFontSize(containerWidth, textLength);
       wordElementRef.current.style.fontSize = `${newSize}px`;
     };
@@ -215,11 +223,37 @@ const FlashCardView = ({ words, onClose }) => {
     return () => {
       resizeObserver.disconnect();
     };
-  }, [currentWord.word, isDarkMode]);
+  }, [currentWord.word, currentWord.pinyin, isDarkMode, isPinyinMode, showChinese]);
 
   const next = (e) => { e.stopPropagation(); setIndex((index + 1) % words.length); handleInteraction(); };
   const prev = (e) => { e.stopPropagation(); setIndex((index - 1 + words.length) % words.length); handleInteraction(); };
 
+  const toggleWrongMark = async (wordId) => {
+    const isWrong = markedWrong.has(wordId);
+    const newMarkedWrong = new Set(markedWrong);
+    if (isWrong) {
+      newMarkedWrong.delete(wordId);
+    } else {
+      newMarkedWrong.add(wordId);
+    }
+    setMarkedWrong(newMarkedWrong);
+
+    try {
+      const { error } = await supabase
+        .from('mastery_records')
+        .upsert({
+          id: wordId,
+          temp_state: { practice: !isWrong ? 'red' : 'white' },
+          updated_at: new Date().toISOString()
+        });
+      if (error) {
+        console.error('[FlashCardView] Error syncing wrong mark:', error);
+      }
+    } catch (e) {
+      console.error('[FlashCardView] Error syncing wrong mark:', e);
+    }
+  };
+  
   return (
     <div
       className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`}
@@ -232,8 +266,33 @@ const FlashCardView = ({ words, onClose }) => {
           <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${wordProgress}%` }} />
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center flex-1 w-full pointer-events-none px-4">
-        <div ref={wordElementRef} className={`font-kaiti font-black leading-none transition-colors ${isDarkMode ? 'text-white' : 'text-black'}`}>{currentWord.word}</div>
+      <div className="flex flex-col items-center justify-center flex-1 w-full pointer-events-auto px-4">
+        <div
+          ref={wordElementRef}
+          className={`font-kaiti font-black transition-colors cursor-pointer ${
+            markedWrong.has(currentWord.id)
+              ? 'text-red-500'
+              : isDarkMode
+              ? 'text-white'
+              : 'text-black'
+          }`}
+          onClick={() => {
+            if (isPinyinMode) {
+              if (!showChinese) {
+                setShowChinese(true);
+              } else {
+                toggleWrongMark(currentWord.id);
+              }
+            }
+          }}
+          style={{ maxWidth: '100%', lineHeight: 1.2, whiteSpace: 'nowrap' }}
+        >
+          {!isPinyinMode
+            ? currentWord.word
+            : showChinese
+            ? currentWord.word
+            : currentWord.pinyin}
+        </div>
       </div>
       <div className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
       <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
@@ -248,7 +307,15 @@ const FlashCardView = ({ words, onClose }) => {
           {showThumbnails && (
             <div className="w-full flex gap-2 overflow-x-auto pb-4 px-4 mask-fade-edges scrollbar-hide">
               {words.map((w, i) => (
-                <button key={i} onClick={() => setIndex(i)} className={`shrink-0 w-16 h-[100px] rounded-xl font-kaiti flex items-center justify-center transition-all ${index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-xl' : 'bg-black/5 text-black/40 text-xl')}`}>{w.word[0]}</button>
+                <button
+                  key={i}
+                  onClick={() => setIndex(i)}
+                  className={`shrink-0 px-3 py-2 rounded-xl font-kaiti flex items-center justify-center transition-all ${
+                    index === i ? 'bg-white text-black font-black text-lg shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-sm' : 'bg-black/5 text-black/40 text-sm')
+                  } ${markedWrong.has(w.id) ? 'text-red-500' : ''}`}
+                >
+                  {isPinyinMode ? w.pinyin : w.word[0]}
+                </button>
               ))}
             </div>
           )}
@@ -260,6 +327,18 @@ const FlashCardView = ({ words, onClose }) => {
             <button onClick={() => setIsPlaying(!isPlaying)} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-2xl active:scale-95 transition-transform">{isPlaying ? <Pause size={40} fill="black"/> : <Play size={40} fill="black" className="ml-1"/>}</button>
             <button onClick={() => setSoundOn(!soundOn)} className={`p-4 rounded-full transition-colors bg-black/20 backdrop-blur-md ${soundOn ? 'text-white' : 'text-white/30'}`}>{soundOn ? <Volume2 size={24}/> : <VolumeX size={24}/>}</button>
             <button onClick={() => setShowThumbnails(!showThumbnails)} className={`p-4 rounded-full transition-colors bg-black/20 backdrop-blur-md ${showThumbnails ? 'text-white' : 'text-white/50'}`}><Grid size={24}/></button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsPinyinMode(!isPinyinMode);
+                setShowChinese(false);
+              }}
+              className={`p-4 rounded-full transition-colors bg-black/20 backdrop-blur-md ${
+                isPinyinMode ? 'text-emerald-400' : 'text-white/50'
+              }`}
+            >
+              <Type size={24}/>
+            </button>
           </div>
         </div>
       </div>
