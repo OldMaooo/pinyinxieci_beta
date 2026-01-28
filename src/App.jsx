@@ -314,7 +314,9 @@ const FlashCardView = ({ words, onClose }) => {
       <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
       
       <div className={`absolute top-0 left-0 w-full p-8 flex justify-between items-start pointer-events-auto z-[2050] transition-opacity duration-500 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
-        <button onClick={onClose} className={`p-4 rounded-full backdrop-blur shadow-xl ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}><LogOut size={32}/></button>
+        <div className="p-4">
+          <button onClick={onClose} className={`p-4 rounded-full backdrop-blur shadow-xl ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}><LogOut size={32}/></button>
+        </div>
         <button onClick={(e) => { e.stopPropagation(); setIsDarkMode(!isDarkMode); }} className={`p-4 rounded-full backdrop-blur shadow-xl ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}>{isDarkMode ? <Sun size={32}/> : <Moon size={32}/>}</button>
       </div>
 
