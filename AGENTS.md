@@ -222,6 +222,138 @@ git commit -m "feat: add new feature"
 # Note: No automated hooks configured
 ```
 
+## Production Deployment
+
+### Project Structure
+
+This project has **two** production environments:
+
+#### Production (正式版)
+- **GitHub Repository**: `https://github.com/OldMaooo/pinyinxieci`
+- **Production URL**: `https://pinyinxieci.vercel.app`
+- **Vercel Project ID**: `prj_pEg1a6a6aXJmft2NE7Z9FX7T7Qlk`
+- **Git Remote Name**: `origin` (default)
+- **Use For**: Stable releases, production features
+
+#### Beta (测试版)
+- **GitHub Repository**: `https://github.com/OldMaooo/pinyinxieci_beta`
+- **Production URL**: `https://pinyinxieci-beta.vercel.app`
+- **Vercel Project ID**: `prj_CHWwC561PEEkTkvkygz6K7a5E4x3`
+- **Git Remote Name**: `beta`
+- **Use For**: Testing new features, experimental changes
+
+### Deployment Process
+
+#### Deploy to Production (正式版)
+
+```bash
+# 1. Ensure on correct branch
+git checkout main
+
+# 2. Build for production
+npm run build
+
+# 3. Link to production Vercel project (if not already linked)
+vercel link --yes
+
+# 4. Deploy to production
+vercel --prod --yes
+
+# 5. Verify deployment
+# Visit https://pinyinxieci.vercel.app
+```
+
+#### Deploy to Beta (测试版)
+
+```bash
+# 1. Add beta remote (if not already added)
+git remote add beta https://github.com/OldMaooo/pinyinxieci_beta.git
+
+# 2. Ensure on correct branch
+git checkout main
+
+# 3. Push to beta repository
+git push -u beta main
+
+# 4. Remove old Vercel config (to avoid linking to wrong project)
+rm -rf .vercel
+
+# 5. Configure Vercel project for beta
+echo '{"projectId":"prj_CHWwC561PEEkTkvkygz6K7a5E4x3","orgId":"team_6Gv04HgiucktUZJbrz6DFPcE","projectName":"pinyinxieci_beta"}' > .vercel/project.json
+
+# 6. Build for production
+npm run build
+
+# 7. Deploy to beta Vercel project
+vercel --prod --yes
+
+# 8. Verify deployment
+# Visit https://pinyinxieci-beta.vercel.app
+```
+
+### Vercel Project Management
+
+#### View All Deployments
+```bash
+# List all deployments in the current project
+vercel ls
+
+# View deployment logs
+vercel inspect <deployment-url> --logs
+
+# Redeploy a specific deployment
+vercel redeploy <deployment-url>
+```
+
+### Important Notes
+
+1. **Repository Separation**: Beta and production are separate GitHub repositories
+2. **Vercel Projects**: Each has its own Vercel project with unique Project ID
+3. **Domain Aliases**:
+   - Production: `pinyinxieci.vercel.app` points to production project
+   - Beta: `pinyinxieci-beta.vercel.app` points to beta project
+4. **Workflow**:
+   - Develop locally and test with `npm run dev`
+   - Test on beta first by pushing to beta repository
+   - After beta testing, push to production repository
+   - Deploy to production Vercel project
+5. **Local Git State**: Always work on local `main` branch, push to different remotes for deployment
+
+### Common Issues & Solutions
+
+#### Issue: Wrong Vercel Project Linked
+**Symptom**: Deploying to production but code goes to beta (or vice versa)
+
+**Solution**:
+```bash
+# Remove .vercel directory
+rm -rf .vercel
+
+# Re-link with correct project
+vercel link --yes
+
+# Verify correct project is linked
+cat .vercel/project.json
+```
+
+#### Issue: Code Changes Lost After Deployment
+**Symptom**: Previous code deployed instead of latest changes
+
+**Solution**:
+```bash
+# Check current commit
+git log --oneline -3
+
+# If wrong, use reflog to find lost commits
+git reflog | head -10
+
+# Restore correct commit
+git reset --hard <commit-hash>
+
+# Push again
+git push origin main  # or git push beta main for beta
+```
+
 ## Critical Issues Documented
 
 - **CODING_ERRORS.md**: Record of coding mistakes and lessons learned

@@ -166,8 +166,8 @@ const FlashCardView = ({ words, onClose }) => {
 
   const calculateFontSize = (containerWidth, textLength) => {
     const baseSize = containerWidth * 0.8;
-    const adjustedSize = baseSize / Math.max(1, textLength * 0.6);
-    return Math.min(Math.max(adjustedSize, 16), 300);
+    const adjustedSize = baseSize / Math.max(1, textLength * 0.7);
+    return Math.min(Math.max(adjustedSize, 12), 300);
   };
 
   useEffect(() => {
@@ -179,7 +179,10 @@ const FlashCardView = ({ words, onClose }) => {
 
   useEffect(() => {
     speak(currentWord.word);
-  }, [index]);
+    if (isPinyinMode) {
+      setShowChinese(false);
+    }
+  }, [index, isPinyinMode]);
   useEffect(() => { if (isPlaying) { timerRef.current = setInterval(() => { setIndex(prev => (prev + 1) % words.length); }, speed); } return () => clearInterval(timerRef.current); }, [isPlaying, speed, words.length]);
 
   useEffect(() => {
@@ -285,7 +288,7 @@ const FlashCardView = ({ words, onClose }) => {
               }
             }
           }}
-          style={{ maxWidth: '100%', lineHeight: 1.2, whiteSpace: 'nowrap' }}
+          style={{ maxWidth: '100%', lineHeight: 1.2 }}
         >
           {!isPinyinMode
             ? currentWord.word
