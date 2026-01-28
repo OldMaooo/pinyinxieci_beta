@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3, Type } from 'lucide-react';
+import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3, Type, PieChart } from 'lucide-react';
 import { pinyin } from 'pinyin-pro';
 import { createClient } from '@supabase/supabase-js';
 
@@ -505,11 +505,25 @@ function MainApp() {
     });
   }, [isDevMode]);
 
-  const getStatus = (id, useTemp = false) => { 
+  const getStatus = (id, useTemp = false) => {
     const m = useTemp && isAdminMode ? tempMastery[id] : mastery[id];
-    if (!m || !m.history || m.history.length === 0) return 'NEW'; 
-    return m.history.slice(-3).includes('red') ? 'WEAK' : 'MASTERED'; 
+    if (!m || !m.history || m.history.length === 0) return 'NEW';
+    return m.history.slice(-3).includes('red') ? 'WEAK' : 'MASTERED';
   };
+
+  const termStats = useMemo(() => {
+    let totalWords = 0;
+    let learnedWords = 0;
+    processedUnits.forEach(unit => {
+      unit.words.forEach(word => {
+        totalWords++;
+        const status = getStatus(word.id, false);
+        if (status === 'MASTERED') learnedWords++;
+      });
+    });
+    const percentage = totalWords > 0 ? ((learnedWords / totalWords) * 100).toFixed(1) : 0;
+    return { totalWords, learnedWords, percentage };
+  }, [processedUnits, mastery]);
 
   const currentTotalCount = useMemo(() => {
     let pool = []; processedUnits.forEach(u => { if (selectedUnits.has(u.name)) pool = [...pool, ...u.words]; });
@@ -667,9 +681,29 @@ function MainApp() {
         {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 animate-pulse z-[1000]" />}
         {isAdminMode && <div className="fixed top-0 left-0 w-full h-8 bg-purple-600 z-[1000] flex items-center justify-center text-white text-xs font-bold shadow-lg animate-in slide-in-from-top">🔧 数据修正模式：点击词组调整状态</div>}
         <header className="max-w-5xl w-full mx-auto px-8 py-2 flex justify-between items-baseline shrink-0 border-b border-slate-100 relative">
-          <div onClick={handleAdminTrigger} className="absolute top-0 left-1/2 -translate-x-1/2 w-[150px] h-full z-50 cursor-default" />
-          <div className="flex items-center gap-3"><h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1><span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.9.1' : 'Cloud V3.9.1'}</span></div>
-          <span className="text-lg font-bold text-slate-400">三年级上册</span>
+          <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.9.2' : 'Cloud V3.9.2'}</span>
+          </div>
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+              <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
+              <div className="relative w-6 h-6">
+                <svg viewBox="0 0 36 36" className="w-full h-full">
+                  <defs>
+                    <linearGradient id="pieGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#10b981" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" strokeWidth="4" />
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="url(#pieGradient)" strokeWidth="4"
+                    strokeDasharray={`${(termStats.percentage / 100) * 100.53} 100.53`}
+                    transform="rotate(-90 18 18)" />
+                </svg>
+              </div>
+              <span className="text-lg font-bold text-slate-400 ml-2">三年级上册</span>
+            </div>
         </header>
         <main className={`flex-1 overflow-y-auto px-8 pb-24 ${isAdminMode ? 'pt-8' : ''}`}><div className="max-w-5xl mx-auto">{processedUnits.map((unit) => { const isSelected = selectedUnits.has(unit.name); return (<div key={unit.name} onClick={() => { if(!isAdminMode) { const n = new Set(selectedUnits); if(n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); } }} className="flex items-baseline gap-6 py-3 border-b border-slate-100 group transition-colors hover:bg-slate-50/50 cursor-pointer"><div className={`w-5 h-5 rounded-sm shrink-0 border-2 flex items-center justify-center transition-all mt-1 ${isSelected ? 'bg-black border-black shadow-md' : 'border-slate-200'}`}>{isSelected && <Check size={14} className="text-white" strokeWidth={4} />}</div><div className="font-black text-lg text-black shrink-0 min-w-[6.5rem] tracking-tighter">{unit.name}</div><div className="flex flex-wrap gap-x-1 gap-y-0">{unit.words.map(w => { const st = getStatus(w.id, true); return (<div key={w.id} className="relative group/word"><span style={{ fontSize: '22px' }} className={`font-kaiti px-1.5 transition-colors ${st === 'WEAK' ? 'text-black font-bold' : st === 'MASTERED' ? 'text-emerald-600 font-bold' : 'text-black'}`}>{w.word}</span>{st === 'WEAK' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-red-500 rounded-full" />}{st === 'MASTERED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-600 rounded-full" />}</div>);})}</div></div>);})}</div></main>
         <div className="fixed bottom-0 left-0 w-full p-2 bg-white/95 backdrop-blur-xl border-t z-30 flex justify-center items-center gap-4 shadow-2xl">
