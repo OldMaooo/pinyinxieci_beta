@@ -332,7 +332,7 @@ const FlashCardView = ({ words, onClose }) => {
                     index === i ? 'bg-white text-black font-black text-lg shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-sm' : 'bg-black/5 text-black/40 text-sm')
                   } ${markedWrong.has(w.id) ? 'text-red-500' : ''}`}
                 >
-                  {isPinyinMode ? w.pinyin : w.word[0]}
+                  {isPinyinMode ? w.pinyin : w.word}
                 </button>
               ))}
             </div>
