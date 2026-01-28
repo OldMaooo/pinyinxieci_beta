@@ -139,6 +139,7 @@ const FlashCardView = ({ words, onClose }) => {
   const [volume, setVolume] = useState(1.0);
   const [showControls, setShowControls] = useState(true);
   const [showThumbnails, setShowThumbnails] = useState(false);
+  const [isPausedForViewingAnswer, setIsPausedForViewingAnswer] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(() => localStorage.getItem('pinyin_flash_dark') === 'true');
   const timerRef = useRef(null);
   const fadeRef = useRef(null);
@@ -228,7 +229,15 @@ const FlashCardView = ({ words, onClose }) => {
     };
   }, [currentWord.word, currentWord.pinyin, isDarkMode, isPinyinMode, showChinese]);
 
-  const next = (e) => { e.stopPropagation(); setIndex((index + 1) % words.length); handleInteraction(); };
+  const next = (e) => {
+    e.stopPropagation();
+    if (isPausedForViewingAnswer) {
+      setIsPausedForViewingAnswer(false);
+      setIsPlaying(true);
+    }
+    setIndex((index + 1) % words.length);
+    handleInteraction();
+  };
   const prev = (e) => { e.stopPropagation(); setIndex((index - 1 + words.length) % words.length); handleInteraction(); };
 
   const toggleWrongMark = async (wordId) => {
@@ -283,6 +292,8 @@ const FlashCardView = ({ words, onClose }) => {
             if (isPinyinMode) {
               if (!showChinese) {
                 setShowChinese(true);
+                setIsPausedForViewingAnswer(true);
+                setIsPlaying(false);
               } else {
                 toggleWrongMark(currentWord.id);
               }
