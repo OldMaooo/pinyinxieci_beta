@@ -286,6 +286,8 @@ const FlashCardView = ({ words, onClose }) => {
               } else {
                 toggleWrongMark(currentWord.id);
               }
+            } else {
+              toggleWrongMark(currentWord.id);
             }
           }}
           style={{ maxWidth: '100%', lineHeight: 1.2 }}
