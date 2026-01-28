@@ -275,7 +275,7 @@ const FlashCardView = ({ words, onClose }) => {
       <div className="absolute top-0 left-0 w-full p-4 flex flex-col items-center gap-1 z-[3000]">
         <div className={`font-mono font-black text-xl ${isDarkMode ? 'text-white/80' : 'text-slate-600'}`}>{index + 1} / {words.length}</div>
         <div className={`h-[4px] w-[200px] rounded-full overflow-hidden ${isDarkMode ? 'bg-white/30' : 'bg-slate-300'}`}>
-          <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${wordProgress}%` }} />
+          <div className="h-full bg-blue-600" style={{ width: `${wordProgress}%` }} />
         </div>
       </div>
       <div className="flex flex-col items-center justify-center flex-1 w-full pointer-events-auto px-4">
