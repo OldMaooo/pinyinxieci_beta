@@ -3,8 +3,9 @@ import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, Sk
 import { pinyin } from 'pinyin-pro';
 import { createClient } from '@supabase/supabase-js';
 
-const SUPABASE_URL = 'https://ynasoxvdalcmrrsxxmjr.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
+// Supabase 配置 - 支持环境变量，默认使用正式版数据库
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://ynasoxvdalcmrrsxxmjr.supabase.co';
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const DATA_BLUEPRINT = [
@@ -131,7 +132,7 @@ const AnswerCard = ({ word, onClose, onAutoNext }) => {
   );
 };
 
-const FlashCardView = ({ words, onClose }) => {
+const FlashCardView = ({ words, onClose, getStatus }) => {
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [speed, setSpeed] = useState(5000);
@@ -151,6 +152,9 @@ const FlashCardView = ({ words, onClose }) => {
   const [showChinese, setShowChinese] = useState(false);
 
   const currentWord = words[index];
+  const currentStatus = currentWord ? getStatus(currentWord.id) : 'NEW';
+  const isWeakWord = currentStatus === 'WEAK';
+
   useEffect(() => { localStorage.setItem('pinyin_flash_dark', isDarkMode); }, [isDarkMode]);
 
   const speak = (text) => {
@@ -284,6 +288,8 @@ const FlashCardView = ({ words, onClose }) => {
           className={`font-kaiti font-black transition-colors cursor-pointer ${
             markedWrong.has(currentWord.id)
               ? 'text-red-500'
+              : isWeakWord
+              ? 'text-red-300'
               : isDarkMode
               ? 'text-white'
               : 'text-black'
@@ -364,7 +370,7 @@ const FlashCardView = ({ words, onClose }) => {
   );
 };
 
-const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoiceActive, activeIndex, onStartVoice, progress, isShuffling, onShowStroke, onShowAnswer }) => {
+const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoiceActive, activeIndex, onStartVoice, progress, isShuffling, onShowStroke, onShowAnswer, status }) => {
   const handleBoxClick = (e, type) => {
     e.stopPropagation();
     if ((step === 0 && type !== 'markPractice') || (step === 1 && type !== 'markSelf') || (step === 2 && type !== 'markFinal')) return;
@@ -375,12 +381,13 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
   if (!item || !item.pinyin) return <div className="h-24" />;
   const isActive = isVoiceActive && activeIndex === index;
   const isWaiting = isVoiceActive && activeIndex === -1;
+  const isWeakWord = status === 'WEAK';
 
   return (
     <div onClick={() => isWaiting && onStartVoice(index)} className={`flex flex-col items-center border-b border-slate-200 pb-6 mb-0 w-full overflow-hidden relative transition-all duration-300 ${isActive ? 'bg-blue-50' : ''} ${isWaiting ? 'hover:bg-blue-50/30 cursor-pointer ring-2 ring-blue-400 ring-dashed ring-opacity-50 rounded-lg' : ''} ${isShuffling ? 'opacity-50 scale-95 blur-[1px]' : 'opacity-100 scale-100 blur-0'}`}>
       <div className="no-wrap-box relative select-none touch-none flex flex-col justify-end items-center transition-all duration-300 w-full overflow-hidden" style={{ minHeight: focusOnAnswer ? '94px' : '49px' }}>
-        <div className={`font-bold font-kaiti tracking-tight leading-none transition-all ${focusOnAnswer ? 'opacity-30 mb-1 text-[14px]' : 'text-black text-[32px]'} ${isActive ? 'text-blue-600' : ''}`}>{item.pinyin}</div>
-        <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti text-black font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? 'opacity-100 text-[64px] mt-1' : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
+        <div className={`font-bold font-kaiti tracking-tight leading-none transition-all ${focusOnAnswer ? 'opacity-30 mb-1 text-[14px]' : `text-[32px] ${isWeakWord ? 'text-red-300' : 'text-black'}`} ${isActive ? 'text-blue-600' : ''}`}>{item.pinyin}</div>
+        <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? 'opacity-100 text-[64px] mt-1' : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
       </div>
       <div className="flex justify-center items-center gap-2 mt-2 w-full">
         <span className="text-[10px] font-mono text-slate-300 italic">{index + 1}</span>
@@ -458,7 +465,7 @@ function MainApp() {
   const progressRef = useRef(0);
 
   useEffect(() => { localStorage.setItem('pinyin_selected_units', JSON.stringify(Array.from(selectedUnits))); }, [selectedUnits]);
-  useEffect(() => { async function loadCloud() { setIsLoading(true); try { const { data, error } = await supabase.from('mastery_records').select('*').range(0, 9999); if (data) { const m = {}; data.forEach(r => { m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date }; }); setMastery(m); } } catch (e) {} finally { setIsLoading(false); } } loadCloud(); }, []);
+  useEffect(() => { async function loadCloud() { setIsLoading(true); try { const { data, error } = await supabase.from('mastery_records').select('*').range(0, 9999); if (data) { const m = {}; data.forEach(r => { m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: r.consecutive_green, last_practice_date: r.last_practice_date }; }); setMastery(m); window.mastery = m; } } catch (e) {} finally { setIsLoading(false); } } loadCloud(); }, []);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
   const toggleMode = () => { window.location.href = isDevMode ? window.location.origin : window.location.origin + '?dev=1'; };
@@ -487,7 +494,7 @@ function MainApp() {
       }
     });
     if (upserts.length > 0) await supabase.from('mastery_records').upsert(upserts);
-    setMastery(tempMastery); setIsAdminMode(false);
+    setMastery(tempMastery); window.mastery = tempMastery; setIsAdminMode(false);
   };
 
   const processedUnits = useMemo(() => {
@@ -508,7 +515,17 @@ function MainApp() {
   const getStatus = (id, useTemp = false) => {
     const m = useTemp && isAdminMode ? tempMastery[id] : mastery[id];
     if (!m || !m.history || m.history.length === 0) return 'NEW';
-    return m.history.slice(-3).includes('red') ? 'WEAK' : 'MASTERED';
+
+    if ((m.consecutive_green || 0) >= 5) {
+      return 'MASTERED';
+    }
+
+    const lastResult = m.history[m.history.length - 1];
+    if (lastResult === 'red') {
+      return 'WEAK';
+    }
+
+    return 'NEW';
   };
 
   const termStats = useMemo(() => {
@@ -535,10 +552,26 @@ function MainApp() {
     if (isLoading) return;
     let pool = []; processedUnits.forEach(u => { if (selectedUnits.has(u.name)) pool = [...pool, ...u.words]; });
     let targetWords = [];
+    const todayStr = new Date().toISOString().split('T')[0];
+
     pool.forEach(w => {
-        const savedTemp = mastery[w.id]?.temp || {};
-        const wordData = { ...w, markPractice: savedTemp.practice || 'white', markSelf: savedTemp.self || 'white', markFinal: savedTemp.final || 'white' };
-        if (!onlyWrong || mastery[w.id]?.history?.includes('red')) targetWords.push(wordData);
+        const m = mastery[w.id];
+        const savedTemp = m?.temp || {};
+        const lastPracticeDate = m?.last_practice_date;
+        const isNewDay = lastPracticeDate !== todayStr;
+
+        let wordData = { ...w, markPractice: savedTemp.practice || 'white', markSelf: savedTemp.self || 'white', markFinal: savedTemp.final || 'white' };
+
+        if (isNewDay) {
+          wordData.markPractice = 'white';
+          wordData.markSelf = 'white';
+          wordData.markFinal = 'white';
+        }
+
+        const status = getStatus(w.id);
+        if (!onlyWrong || status === 'WEAK') {
+          targetWords.push(wordData);
+        }
     });
     if (targetWords.length === 0) return alert('没有符合条件的词语');
     setWords(targetWords); setStep(0); setTime(0); setShowAnswers(false); setView('RUNNING'); setModalConfig({ isOpen: false });
@@ -550,16 +583,30 @@ function MainApp() {
     words.forEach(w => {
       let currentFinal = w.markFinal; if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
       const currentTemp = { practice: w.markPractice, self: w.markSelf, final: currentFinal };
-      const m = nextMastery[w.id] || { history: [], lastUpdate: null };
-      let newHistory = [...(m.history || [])]; let newLastUpdate = m.lastUpdate;
+      const m = nextMastery[w.id] || { history: [], lastUpdate: null, consecutive_green: 0, last_practice_date: null };
+      let newHistory = [...(m.history || [])]; let newLastUpdate = m.lastUpdate; let newConsecutiveGreen = m.consecutive_green || 0; let newLastPracticeDate = m.last_practice_date;
+
       if (!isTemporary && step === 2) {
-          if (newLastUpdate !== todayStr) { newHistory.push(currentFinal); if (newHistory.length > 10) newHistory.shift(); newLastUpdate = todayStr; } 
-          else { const lastIdx = newHistory.length - 1; if (lastIdx >= 0 && currentFinal === 'red') newHistory[lastIdx] = 'red'; }
+          if (newLastPracticeDate !== todayStr) {
+            newHistory.push(currentFinal); if (newHistory.length > 10) newHistory.shift(); newLastUpdate = todayStr; newLastPracticeDate = todayStr;
+
+            if (currentFinal === 'green') {
+              newConsecutiveGreen = (newConsecutiveGreen || 0) + 1;
+            } else {
+              newConsecutiveGreen = 0;
+            }
+          } else {
+            const lastIdx = newHistory.length - 1;
+            if (lastIdx >= 0 && currentFinal === 'red') {
+              newHistory[lastIdx] = 'red';
+              newConsecutiveGreen = 0;
+            }
+          }
       }
-      nextMastery[w.id] = { history: newHistory, temp: currentTemp, lastUpdate: newLastUpdate };
-      upserts.push({ id: w.id, history: newHistory, temp_state: currentTemp, last_history_update_date: newLastUpdate, updated_at: new Date().toISOString() });
+      nextMastery[w.id] = { history: newHistory, temp: currentTemp, lastUpdate: newLastUpdate, consecutive_green: newConsecutiveGreen, last_practice_date: newLastPracticeDate };
+      upserts.push({ id: w.id, history: newHistory, temp_state: currentTemp, last_history_update_date: newLastUpdate, consecutive_green: newConsecutiveGreen, last_practice_date: newLastPracticeDate, updated_at: new Date().toISOString() });
     });
-    setMastery(nextMastery);
+    setMastery(nextMastery); window.mastery = nextMastery;
     if (upserts.length > 0) { const { error } = await supabase.from('mastery_records').upsert(upserts); if (error) setSyncStatus('error'); else setSyncStatus('idle'); }
     if (!isTemporary) { setView('SETUP'); window.scrollTo(0,0); }
   };
@@ -684,7 +731,7 @@ function MainApp() {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.9.2' : 'Cloud V3.9.2'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.0' : 'Cloud V3.10.0'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
@@ -729,8 +776,8 @@ function MainApp() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-white font-sans text-black overflow-hidden relative">
-      {isFlashCardMode && <FlashCardView words={words} onClose={() => setIsFlashCardMode(false)} />}
+    <div className="h-screen flex flex-col bg-white font-sans text-black overflow-hidden relative" onKeyDown={(e) => { if (e.shiftKey && e.key === 'S') { e.preventDefault(); testMasteryStatus(); } }}>
+      {isFlashCardMode && <FlashCardView words={words} onClose={() => setIsFlashCardMode(false)} getStatus={getStatus} />}
       {strokeTarget && <StrokeOrderPlayer word={strokeTarget} onClose={() => setStrokeTarget(null)} />}
       {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 z-[2000]" />}
       <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]">
@@ -778,10 +825,88 @@ function MainApp() {
           {isDictationFinished ? (<div className="w-full flex items-center justify-center gap-4 relative"><button onClick={() => { setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 text-slate-500 flex items-center justify-center"><MousePointerClick size={20}/></button>{step !== 2 && <><button onClick={restartWrong} className="px-6 h-10 rounded-lg bg-red-50 text-red-600 font-bold text-xs border border-red-100">重听错题</button><button onClick={() => handleTabChange(step + 1)} className="px-6 h-10 rounded-lg bg-black text-white font-bold text-xs shadow-lg">进入{step === 0 ? '自测' : '家长终测'}</button></>}<button onClick={stopVoice} className="absolute right-0 px-6 h-10 rounded-lg border border-slate-200 text-slate-400 font-bold text-xs">退出听写</button></div>) : (<><div className="flex items-center gap-3 w-[20%]"><span className="text-[10px] font-bold text-black">间隔</span><div className="flex items-center gap-1 bg-slate-50 px-2 py-1.5 rounded-lg border border-slate-100"><button onClick={() => setVoiceInterval(Math.max(5, voiceInterval-5))}><Minus size={14}/></button><span className="text-sm font-mono font-bold w-10 text-center">{voiceInterval}s</span><button onClick={() => setVoiceInterval(Math.min(60, voiceInterval+5))}><Plus size={14}/></button></div></div><div className="flex items-center gap-2 flex-1 justify-center"><button onClick={() => { stopVoice(); setIsVoiceActive(true); setActiveVoiceIndex(-1); }} className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-slate-400 mr-2"><MousePointerClick size={20}/></button><button onClick={() => setIsPaused(!isPaused)} className="w-[80px] h-10 rounded-lg bg-slate-100 text-black flex items-center justify-center border border-slate-200">{isPaused ? <Play size={20} fill="black"/> : <Pause size={20} fill="black"/>}</button><button onClick={() => speak(activeVoiceIndex - 1)} className="w-[80px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs uppercase">上一题</button><button onClick={() => speak(activeVoiceIndex + 1)} className="w-[150px] h-10 rounded-lg bg-black text-white flex items-center justify-center font-bold active:scale-95 transition-all text-xs uppercase">下一题</button><div className="w-4" /><button onClick={() => markAs('red')} className="w-[80px] h-10 rounded-lg border-2 border-red-500 text-red-500 flex items-center justify-center font-bold text-xs">不会</button>{step === 2 && <button onClick={() => markAs('green')} className="w-[80px] h-10 rounded-lg border-2 border-emerald-500 text-emerald-500 flex items-center justify-center font-bold text-xs ml-2">掌握</button>}</div><div className="w-[20%] flex justify-end"><button onClick={stopVoice} className="px-6 py-2 bg-slate-100 text-slate-400 rounded-lg font-bold text-[10px] uppercase">退出听写</button></div></>)}
         </div>
       )}
-      <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} onShowAnswer={handleShowAnswer} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
+      <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} onShowAnswer={handleShowAnswer} status={getStatus(item.id)} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
       {step === 2 && (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_STATS', title: "本次练习统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>)}
       {answerCardVisible && <AnswerCard word={answerCardWord} onClose={handleAnswerCardClose} onAutoNext={handleAnswerCardAutoNext} />}
       <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} isLoading={isModalLoading} onConfirm={async () => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { setIsModalLoading(true); await save(); setIsModalLoading(false); setModalConfig({ isOpen: false }); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{words.length}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{calculateStats().wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{calculateStats().mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div></div>) : modalConfig.content} />
+      
+      {/* 测试结果弹窗 */}
+      {showTestResult && (
+        <div className="fixed inset-0 z-[5000] bg-black/60 flex items-center justify-center p-4" onClick={() => setShowTestResult(false)}>
+          <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl" onClick={e => e.stopPropagation()}>
+            <h3 className="text-xl font-bold mb-4">📊 掌握状态统计</h3>
+            <div className="space-y-2 font-mono text-sm">
+              <div className="flex justify-between"><span>✅ 掌握 (连续5天答对):</span><span className="font-bold text-emerald-600">{testStats.MASTERED}</span></div>
+              <div className="flex justify-between"><span>❌ 薄弱 (最后答错):</span><span className="font-bold text-red-600">{testStats.WEAK}</span></div>
+              <div className="flex justify-between"><span>🆕 新词:</span><span className="font-bold text-slate-600">{testStats.NEW}</span></div>
+              <div className="border-t pt-2 mt-2"><span>总计: {testStats.total} 个词组</span></div>
+            </div>
+            <button onClick={() => setShowTestResult(false)} className="w-full mt-4 py-3 bg-slate-100 rounded-lg font-bold">关闭</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
+// 测试函数
+function testMasteryStatus() {
+  if (!window.mastery) {
+    alert('❌ 数据未加载！请确保应用已打开并显示"云端就绪"');
+    return;
+  }
+  
+  const mastery = window.mastery;
+  const wordIds = Object.keys(mastery);
+  const stats = { MASTERED: 0, WEAK: 0, NEW: 0 };
+  const examples = { MASTERED: [], WEAK: [], NEW: [] };
+  
+  wordIds.forEach(id => {
+    const m = mastery[id];
+    if (!m || !m.history || m.history.length === 0) {
+      stats.NEW++;
+      if (examples.NEW.length < 3) examples.NEW.push(id);
+      return;
+    }
+    
+    const consecutiveGreen = m.consecutive_green || 0;
+    const lastResult = m.history[m.history.length - 1];
+    
+    if (consecutiveGreen >= 5) {
+      stats.MASTERED++;
+      if (examples.MASTERED.length < 3) examples.MASTERED.push(id);
+    } else if (lastResult === 'red') {
+      stats.WEAK++;
+      if (examples.WEAK.length < 3) examples.WEAK.push(id);
+    } else {
+      stats.NEW++;
+      if (examples.NEW.length < 3) examples.NEW.push(id);
+    }
+  });
+  
+  stats.total = wordIds.length;
+  
+  console.log('═══════════════════════════════════════');
+  console.log('📊 掌握状态统计');
+  console.log('═══════════════════════════════════════');
+  console.log('✅ 掌握 (连续 5 天以上都答对): ' + stats.MASTERED);
+  console.log('❌ 薄弱 (最后一次答错): ' + stats.WEAK);
+  console.log('🆕 新词 (无历史或最近答对): ' + stats.NEW);
+  console.log('────────────────────────────────-------');
+  console.log('总计: ' + stats.total + ' 个词组');
+  console.log('═══════════════════════════════════════');
+  
+  alert('📊 掌握状态统计\n\n' +
+    '✅ 掌握: ' + stats.MASTERED + '\n' +
+    '❌ 薄弱: ' + stats.WEAK + '\n' +
+    '🆕 新词: ' + stats.NEW + '\n\n' +
+    '总计: ' + stats.total + ' 个词组\n\n' +
+    '💡 请对比 Setup 页面的下划线数量。\n' +
+    '🔴 红色下划线 ≈ ' + stats.WEAK + '\n' +
+    '🟢 绿色下划线 ≈ ' + stats.MASTERED);
+  
+  return stats;
+}
+
+// 暴露到全局
+window.testMasteryStatus = testMasteryStatus;
