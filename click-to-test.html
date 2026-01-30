@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>点击运行测试</title>
+  <style>
+    body { font-family: system-ui; padding: 40px; max-width: 600px; margin: 0 auto; text-align: center; }
+    button { 
+      font-size: 20px; 
+      padding: 15px 30px; 
+      background: #2563eb; 
+      color: white; 
+      border: none; 
+      border-radius: 8px; 
+      cursor: pointer;
+      margin: 20px;
+    }
+    button:hover { background: #1d4ed8; }
+    #result { 
+      margin-top: 30px; 
+      text-align: left; 
+      background: #1e1e1e; 
+      color: #d4d4d4; 
+      padding: 20px; 
+      border-radius: 8px;
+      font-family: monospace;
+      white-space: pre-wrap;
+    }
+    .note { 
+      background: #fef3c7; 
+      padding: 15px; 
+      border-radius: 8px; 
+      margin: 20px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>📊 掌握状态测试</h1>
+  
+  <div class="note">
+    <strong>使用方法：</strong><br>
+    点击下方按钮后，浏览器会弹出一个提示框，<br>
+    询问是否允许运行脚本，<br>
+    点击 <strong>"允许"</strong> 即可。
+  </div>
+
+  <button id="runTest">🟢 点击运行测试</button>
+
+  <div id="result"></div>
+
+  <script>
+    document.getElementById('runTest').onclick = function() {
+      const testCode = `
+        const testMastery = () => {
+          if (!window.mastery) {
+            alert('❌ mastery 数据未加载！\\n\\n请确保:\\n1. 应用已打开 (http://localhost:3009)\\n2. 页面显示"云端就绪"\\n3. 等待几秒让数据同步');
+            return;
+          }
+          
+          const mastery = window.mastery;
+          const wordIds = Object.keys(mastery);
+          const stats = { MASTERED: 0, WEAK: 0, NEW: 0, noData: 0 };
+          const examples = { MASTERED: [], WEAK: [], NEW: [] };
+          
+          wordIds.forEach(id => {
+            const m = mastery[id];
+            if (!m || !m.history || m.history.length === 0) {
+              stats.noData++;
+              return;
+            }
+            const consecutiveGreen = m.consecutive_green || 0;
+            const lastResult = m.history[m.history.length - 1];
+            if (consecutiveGreen >= 5) {
+              stats.MASTERED++;
+              if (examples.MASTERED.length < 3) examples.MASTERED.push(id);
+            } else if (lastResult === 'red') {
+              stats.WEAK++;
+              if (examples.WEAK.length < 3) examples.WEAK.push(id);
+            } else {
+              stats.NEW++;
+              if (examples.NEW.length < 3) examples.NEW.push(id);
+            }
+          });
+          
+          const result = '═══════════════════════════════════════\\n' +
+            '📊 掌握状态统计\\n' +
+            '═══════════════════════════════════════\\n' +
+            '✅ 掌握 (连续 5 天以上都答对): ' + stats.MASTERED + '\\n' +
+            '❌ 薄弱 (最后一次答错): ' + stats.WEAK + '\\n' +
+            '🆕 新词 (无历史或最近答对): ' + stats.NEW + '\\n' +
+            '──────────────────────────────────────-\\n' +
+            '总计: ' + wordIds.length + ' 个词组\\n' +
+            '═══════════════════════════════════════\\n\\n' +
+            '📝 示例词组:\\n' +
+            '- 掌握词组: ' + (examples.MASTERED.join(', ') || '无') + '\\n' +
+            '- 薄弱词组: ' + (examples.WEAK.join(', ') || '无') + '\\n' +
+            '- 新词: ' + (examples.NEW.join(', ') || '无') + '\\n\\n' +
+            '💡 请对比 Setup 页面的下划线数量：\\n' +
+            '🔴 红色下划线 ≈ ' + stats.WEAK + ' 个词组\\n' +
+            '🟢 绿色下划线 ≈ ' + stats.MASTERED + ' 个词组';
+          
+          alert(result);
+          return result;
+        };
+        testMastery();
+      `;
+      
+      // 使用 location.href 运行代码
+      window.location.href = 'javascript:' + encodeURIComponent(testCode);
+    };
+  </script>
+</body>
+</html>

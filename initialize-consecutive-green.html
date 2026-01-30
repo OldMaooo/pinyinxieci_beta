@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>初始化 consecutive_green 字段</title>
+</head>
+<body>
+  <h1>初始化 consecutive_green 字段</h1>
+  <p id="status">准备中...</p>
+  <pre id="result"></pre>
+
+  <script>
+    const SUPABASE_URL = 'https://ynasoxvdalcmrrsxxmjr.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
+
+    async function initialize() {
+      const status = document.getElementById('status');
+      const result = document.getElementById('result');
+
+      try {
+        status.textContent = '正在获取数据...';
+
+        const response = await fetch(
+          `${SUPABASE_URL}/rest/v1/mastery_records?select=*&limit=10000`,
+          {
+            headers: {
+              'apikey': SUPABASE_KEY,
+              'Authorization': `Bearer ${SUPABASE_KEY}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        status.textContent = `成功获取 ${data.length} 条记录\n`;
+
+        let updatedCount = 0;
+        let skippedCount = 0;
+        let errorCount = 0;
+
+        for (const record of data) {
+          const { id, history, consecutive_green } = record;
+
+          if (consecutive_green !== null && consecutive_green !== undefined) {
+            skippedCount++;
+            continue;
+          }
+
+          let consecutiveGreen = 0;
+
+          if (history && history.length > 0) {
+            for (let i = history.length - 1; i >= 0; i--) {
+              if (history[i] === 'green') {
+                consecutiveGreen++;
+              } else {
+                break;
+              }
+            }
+          }
+
+          const updateResponse = await fetch(
+            `${SUPABASE_URL}/rest/v1/mastery_records?id=eq.${id}`,
+            {
+              method: 'PATCH',
+              headers: {
+                'apikey': SUPABASE_KEY,
+                'Authorization': `Bearer ${SUPABASE_KEY}`,
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ consecutive_green: consecutiveGreen })
+            }
+          );
+
+          if (updateResponse.ok) {
+            updatedCount++;
+          } else {
+            console.error(`✗ 更新失败 [${id}]:`, await updateResponse.text());
+            errorCount++;
+          }
+
+          if (updatedCount % 50 === 0) {
+            status.textContent = `正在更新... 已完成 ${updatedCount} / ${data.length}`;
+          }
+        }
+
+        status.textContent = '✓ 初始化完成！';
+
+        result.textContent = `
+统计:
+  - 总记录数: ${data.length}
+  - 成功更新: ${updatedCount}
+  - 已有值（跳过）: ${skippedCount}
+  - 更新失败: ${errorCount}
+        `.trim();
+
+      } catch (error) {
+        status.textContent = '✗ 初始化失败';
+        result.textContent = '错误: ' + error.message;
+        console.error('Initialization error:', error);
+      }
+    }
+
+    window.onload = initialize;
+  </script>
+</body>
+</html>

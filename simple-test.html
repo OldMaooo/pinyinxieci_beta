@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>测试掌握状态</title>
+  <style>
+    body { font-family: system-ui; padding: 40px; max-width: 600px; margin: 0 auto; text-align: center; }
+    h1 { color: #2563eb; }
+    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 30px 0; }
+    .box { padding: 20px; border-radius: 12px; color: white; }
+    .green { background: #10b981; }
+    .red { background: #ef4444; }
+    .gray { background: #6b7280; }
+    .number { font-size: 36px; font-weight: bold; }
+    .label { font-size: 14px; margin-top: 5px; }
+    .total { background: #f3f4f6; padding: 15px; border-radius: 8px; margin-top: 20px; }
+    .note { background: #fef3c7; padding: 15px; border-radius: 8px; margin: 20px 0; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <h1>📊 掌握状态统计</h1>
+  
+  <div class="note">
+    <strong>操作步骤：</strong><br>
+    1. 点击下方"刷新测试"按钮<br>
+    2. 浏览器会询问是否允许弹出窗口，点击"允许"<br>
+    3. 弹出窗口会显示测试结果
+  </div>
+
+  <button onclick="runTest()" style="font-size: 18px; padding: 15px 30px; background: #2563eb; color: white; border: none; border-radius: 8px; cursor: pointer;">
+    🔄 刷新测试
+  </button>
+
+  <div class="stats" id="stats" style="display:none;">
+    <div class="box green">
+      <div class="number" id="mastered">-</div>
+      <div class="label">✅ 掌握</div>
+    </div>
+    <div class="box red">
+      <div class="number" id="weak">-</div>
+      <div class="label">❌ 薄弱</div>
+    </div>
+    <div class="box gray">
+      <div class="number" id="new">-</div>
+      <div class="label">🆕 新词</div>
+    </div>
+  </div>
+
+  <div class="total" id="total" style="display:none;">
+    总计: <span id="totalNum">-</span> 个词组
+  </div>
+
+  <script>
+    function runTest() {
+      // 打开测试窗口
+      const popup = window.open('http://localhost:3009', 'test', 'width=500,height=400');
+      
+      // 定期检查是否加载完成
+      let attempts = 0;
+      const check = setInterval(() => {
+        attempts++;
+        if (attempts > 30) {
+          clearInterval(check);
+          alert('❌ 测试超时\n\n请确保:\n1. 应用已打开 (http://localhost:3009)\n2. 页面显示"云端就绪"');
+        }
+      }, 500);
+      
+      // 20秒后显示提示
+      setTimeout(() => {
+        clearInterval(check);
+        alert('📋 测试说明\n\n如果弹出窗口已打开但没有显示结果，请：\n\n1. 在弹出窗口中按 Shift + S\n2. 或者刷新弹出窗口\n3. 等待几秒让数据加载');
+      }, 2000);
+    }
+  </script>
+</body>
+</html>

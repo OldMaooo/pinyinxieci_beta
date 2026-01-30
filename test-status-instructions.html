@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>掌握状态测试 - 在控制台运行</title>
+  <style>
+    body { font-family: system-ui; padding: 40px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+    code { background: #f5f5f5; padding: 2px 6px; border-radius: 4px; }
+    pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px; overflow-x: auto; }
+    .step { margin: 20px 0; padding: 15px; background: #f0f9ff; border-radius: 8px; }
+    h1 { color: #2563eb; }
+    h2 { color: #475569; margin-top: 30px; }
+    .warning { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h1>📊 掌握状态测试</h1>
+  
+  <div class="warning">
+    <strong>⚠️ 注意：</strong>这是一个说明页面，请按照下方步骤在浏览器控制台中运行测试。
+  </div>
+
+  <h2>🔧 测试步骤</h2>
+  
+  <div class="step">
+    <strong>步骤 1：</strong>确保应用已打开并数据已加载<br>
+    地址：<code>http://localhost:3009</code><br>
+    确认页面顶部显示"云端就绪"
+  </div>
+
+  <div class="step">
+    <strong>步骤 2：</strong>打开浏览器开发者工具<br>
+    按 <code>F12</code> 键<br>
+    切换到 <code>Console</code>（控制台）标签
+  </div>
+
+  <div class="step">
+    <strong>步骤 3：</strong>复制以下代码到控制台运行
+  </div>
+
+  <pre>// 测试掌握状态
+const testMastery = () => {
+  if (!window.mastery) {
+    console.log('❌ mastery 数据未加载，请确保应用已打开并等待数据同步');
+    return;
+  }
+  
+  const mastery = window.mastery;
+  const wordIds = Object.keys(mastery);
+  
+  console.log('📊 正在分析 ' + wordIds.length + ' 个词组...\n');
+  
+  // 统计各类状态
+  const stats = { MASTERED: 0, WEAK: 0, NEW: 0, noData: 0 };
+  const examples = { MASTERED: [], WEAK: [], NEW: [] };
+  
+  wordIds.forEach(id => {
+    const m = mastery[id];
+    if (!m || !m.history || m.history.length === 0) {
+      stats.noData++;
+      return;
+    }
+    
+    const consecutiveGreen = m.consecutive_green || 0;
+    const lastResult = m.history[m.history.length - 1];
+    
+    if (consecutiveGreen >= 5) {
+      stats.MASTERED++;
+      if (examples.MASTERED.length < 3) examples.MASTERED.push(id);
+    } else if (lastResult === 'red') {
+      stats.WEAK++;
+      if (examples.WEAK.length < 3) examples.WEAK.push(id);
+    } else {
+      stats.NEW++;
+      if (examples.NEW.length < 3) examples.NEW.push(id);
+    }
+  });
+  
+  // 输出结果
+  console.log('═══════════════════════════════════════');
+  console.log('📊 掌握状态统计');
+  console.log('═══════════════════════════════════════');
+  console.log('✅ 掌握 (连续 5 天以上都答对): ' + stats.MASTERED);
+  console.log('❌ 薄弱 (最后一次答错): ' + stats.WEAK);
+  console.log('🆕 新词 (无历史或最近答对): ' + stats.NEW);
+  console.log('❓ 无数据: ' + stats.noData);
+  console.log('───────────────────────────────────────');
+  console.log('总计: ' + wordIds.length + ' 个词组');
+  console.log('═══════════════════════════════════════\n');
+  
+  console.log('📝 示例词组:');
+  console.log('- 掌握词组: ' + (examples.MASTERED.join(', ') || '无'));
+  console.log('- 薄弱词组: ' + (examples.WEAK.join(', ') || '无'));
+  console.log('- 新词: ' + (examples.NEW.join(', ') || '无'));
+  
+  console.log('\n💡 验证方法:');
+  console.log('1. 打开应用 http://localhost:3009');
+  console.log('2. 查看 Setup 页面');
+  console.log('3. 红色下划线的词组数量 ≈ ' + stats.WEAK);
+  console.log('4. 绿色下划线的词组数量 ≈ ' + stats.MASTERED);
+  console.log('5. 无下划线的词组数量 ≈ ' + stats.NEW);
+};
+
+// 运行测试
+testMastery();
+console.log('\n✅ 测试完成！如果数字看起来合理，说明功能正常。');</pre>
+
+  <div class="step">
+    <strong>步骤 4：</strong>查看控制台输出<br>
+    运行代码后，你会看到类似这样的统计：<br><br>
+    <code>
+    ✅ 掌握: 260<br>
+    ❌ 薄弱: 140<br>
+    🆕 新词: 8
+    </code>
+  </div>
+
+  <h2>🔍 如何验证功能正常？</h2>
+  
+  <ol>
+    <li>打开应用 <code>http://localhost:3009</code></li>
+    <li>在 Setup 页面，数一下有红色下划线的词组数量</li>
+    <li>对比控制台显示的"薄弱"数量（应该接近）</li>
+    <li>同样方法验证"掌握"和"新词"数量</li>
+  </ol>
+
+  <h2>💬 验证后告诉我</h2>
+  
+  <p>请告诉我：</p>
+  <ul>
+    <li>控制台显示的统计数字是多少？</li>
+    <li>Setup 页面的下划线数量是否接近？</li>
+    <li>数字看起来合理吗？</li>
+  </ul>
+
+  <p><strong>如果数字接近，说明功能正常！</strong> ✅</p>
+
+  <hr style="margin: 40px 0;">
+  
+  <p style="color: #666; font-size: 14px;">
+    当前分支: feature/short-term-long-term-mastery<br>
+    版本: V3.10.0
+  </p>
+</body>
+</html>

@@ -1,0 +1,5764 @@
+{
+  "exportDate": "2026-01-29T09:02:12.917Z",
+  "source": "https://ynasoxvdalcmrrsxxmjr.supabase.co",
+  "totalRecords": 408,
+  "stats": {
+    "mastered": 260,
+    "weak": 140,
+    "new": 8
+  },
+  "records": [
+    {
+      "id": "3up-单元17-海滨-0-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-街道-1-test",
+      "history": [
+        "red",
+        "green",
+        "red"
+      ],
+      "last_status": "red",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "red",
+        "final": "red",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-交界-2-test",
+      "history": [
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-水平线-3-test",
+      "history": [
+        "red",
+        "green",
+        "red"
+      ],
+      "last_status": "red",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-机帆船-4-test",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-来来往往-5-test",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-语文园地2-申请-0",
+      "history": [
+        "red"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:10:33.944+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地2-介绍-1",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:10:33.944+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-朝阳-6-test",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-渔民-7-test",
+      "history": [
+        "green",
+        "green"
+      ],
+      "last_status": "green",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-贝壳-8-test",
+      "history": [
+        "green",
+        "green"
+      ],
+      "last_status": "green",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-汽笛-9-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-出海-10-test",
+      "history": [
+        "green",
+        "green"
+      ],
+      "last_status": "green",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-银光闪闪-11-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-庭院-12-test",
+      "history": [
+        "green",
+        "green"
+      ],
+      "last_status": "green",
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-亚热带-13-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-散发-14-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-打扫-15-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-干净-16-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-棕色-17-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-灰色-18-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-语文园地2-主旨-2",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:10:33.944+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地2-占领-3",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:10:33.944+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地2-乏力-4",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:10:33.944+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-盛开-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-玩耍-3",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地3-田螺-0",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地3-螃蟹-1",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地3-鲤鱼-2",
+      "history": [
+        "green"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地3-鲫鱼-3",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-一本正经-4",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "red",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-使劲-5",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-钓鱼-6",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-张开-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "red",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-喜爱-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地2-申请-0-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T09:31:57.789+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-语文园地2-介绍-1-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T09:31:57.789+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-语文园地2-主旨-2-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T09:31:57.789+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-语文园地2-占领-3-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T09:31:57.789+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-语文园地2-乏力-4-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T09:31:57.789+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-跟着-19-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元15-欠钱-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-物产-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-岩石-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-鹿角-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-布满-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-条纹-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地1-恒心-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元2-碰撞-12-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-28T00:50:10.252+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元2-黄色-13-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-28T00:50:15.172+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元6-清凉-1-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-28T00:50:30.541+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元15-草地-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-周身-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-皮球-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-透明-20-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-除去-21-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元17-踩踏-22-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-11T13:38:06.373+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-11"
+    },
+    {
+      "id": "3up-单元16-肥料-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-祖国-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地1-阁楼-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-母亲-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-外祖父-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元16-事业-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-平淡-16",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-深浅-17",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-划分-19",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-海滨-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-街道-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-水平线-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-机帆船-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元14-船夫-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-羽毛-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-翠绿-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-静悄悄-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-翠鸟-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-捕鱼-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元17-来来往往-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-朝阳-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元14-搭建-8",
+      "history": [
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "red",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-披上-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-摇动-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "red",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-停止-11",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元14-蓝色-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元17-渔民-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-汽笛-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-出海-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-亚热带-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-打扫-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-棕色-17",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-灰色-18",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-跟着-19",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-东北-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元1-飘扬-2-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T05:08:17.769+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-招引-5-test",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T05:13:12.244+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-热闹-6-test",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T05:13:17.334+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-语文园地1-培植-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-语文园地1-厘米-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-声明-0",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-神仙-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-让步-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-条件-4",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-指甲-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-得到-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-衣服-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元1-山坡-0-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T08:38:47.861+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-学校-1-test",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T10:01:47.741+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-课文-3-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T10:02:09.284+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元4-挑选-8",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:09:17.3+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元15-蒲公英-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元4-庭院-0",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元4-相信-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元11-普通-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:18:43.495+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元4-倾斜-5",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:23:18.816+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元1-声音-4-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-18T14:37:28.106+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元4-未来-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元4-寒冷-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元4-小径-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元4-枫叶-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元4-严霜-7",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元4-深沉-9",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-秋风-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-放晴-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元16-宽厚-20",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-交界-2",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-贝壳-8",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-庭院-12",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-散发-14",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-中断-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-至少-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-岸边-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-饮料-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-欲望-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-抹去-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-干净-16",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-透明-20",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-除去-21",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-踩踏-22",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-密密层层-1",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-严严实实-2",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-视线-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-山谷-4",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-起来-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-照射-6",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-各种各样-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-花坛-8",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-显得-9",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-苍翠-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-药材-11",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-捕捉-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-野兔-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-景色-14",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元1-打球-11-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T10:03:02.459+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-粗壮-8-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-18T14:37:28.106+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-枝干-9-test",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T08:08:53.48+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元11-所以-8",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:19:04.97+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元1-招呼-12-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-18T14:37:28.106+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元1-读书-13-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-18T14:37:28.106+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元18-宝库-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-抽象-16",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-封闭-17",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-遮挡-18",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-柔软-19",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元18-刮风-20",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元1-洁白-10-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T08:08:55.068+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元11-同学-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-最好-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-葫芦-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-宫殿-17",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元6-频频-9-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-28T00:51:27.577+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元1-古老-7-test",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T05:13:24.452+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-18"
+    },
+    {
+      "id": "3up-单元2-阵雨-1-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-28T01:03:16.947+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元8-因此-13",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:17:32.452+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元11-形式-20",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元1-山坡-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-学校-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-旅行-0",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元1-课文-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-声音-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-要好-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元1-热闹-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-古老-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-粗壮-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-枝干-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-答应-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元1-打球-11",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-招呼-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-读书-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-做梦-3",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元2-阵雨-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-来得及-4",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元2-风笛-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-狂欢-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-觉得-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-救命-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元2-放学-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元12-大吃一惊-6",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-尾巴-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-牙齿-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-肚皮-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-食物-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-消化-11",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-当然-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-刚才-13",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-知觉-14",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-光亮-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-另外-16",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元2-老师-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-急急忙忙-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-互相-11",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-碰撞-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-黄色-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:06:09.71+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元15-观察-7",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "red",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-合拢-8",
+      "history": [
+        "green",
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元15-脸庞-11",
+      "history": [
+        "green",
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-风景-0",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-优美-1",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-交错-3",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-成群结队-6",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-茂密-11",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-发展-15",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元16-底部-18",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元17-银光闪闪-11",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:05.417+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元1-招引-5",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:35:16.175+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元1-洁白-10",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:35:16.175+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-轰响-0",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:35:16.175+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-湿润-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:35:16.175+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-功课-6",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:35:16.175+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元2-处罚-10",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-22T11:35:16.175+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-单元14-羽毛-3-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-27T10:17:07.577+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元20-宜人-11",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元24-单位-22",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-手术台-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-阵地-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-战斗-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-打响-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-消灭-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-伤员-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-陆续-6",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-血丝-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-匆匆-8",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-医生-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-转告-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-赶忙-11",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元21-大自然-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-美妙-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-音乐家-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-手风琴-3",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-歌手-4",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-感受-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-部分-23",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元14-翠绿-4-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-27T10:17:12.245+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元14-静悄悄-5-test",
+      "history": [],
+      "last_status": null,
+      "updated_at": "2026-01-27T10:17:18.439+00:00",
+      "temp_state": {
+        "practice": "white"
+      },
+      "last_history_update_date": null
+    },
+    {
+      "id": "3up-单元1-飘扬-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:05:26.708+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-22"
+    },
+    {
+      "id": "3up-语文园地1-神圣-1",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-要是-9",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-可怜-11",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-科学-13",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元5-明朗-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-地面-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-亮晶晶-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-落叶-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-图案-6",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-闪闪发光-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-尽头-8",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-排列-9",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-凌乱-11",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-歌唱-12",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-迟到-13",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-规则-10",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:10:58.66+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-展现-17",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:13:15.194+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-争取-17",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:15:11.074+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-勾勒-18",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:15:24.234+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-珍珠-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-粘贴-15",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元5-印象-16",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-秋天-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-清凉-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-炎热-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-枫树-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-邮票-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-凉爽-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-果树-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-菊花-7",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-仙子-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-频频-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-气味-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-香甜-11",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-松果-12",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-丰收-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-杏花-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-一枚-15",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-拥挤-16",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-挖土-19",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元6-油画-20",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-门板-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-准备-1",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-旁边-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-暴风雨-3",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-安心-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-低头-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-吃力-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地1-萌发-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-语文园地1-妥当-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-语文园地1-车轴-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-芦苇-15",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-晴天-17",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-试卷-18",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元20-返回-0",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-希望-1",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-清楚-3",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-孤独-6",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元20-亦可-8",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元11-错误-16",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:20:03.693+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-肯定-18",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:20:36.103+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元11-冒险-19",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-28T11:21:27.062+00:00",
+      "temp_state": {
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元8-再见-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-母鸡-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-注意-9",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-屋子-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-漂亮-11",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-意思-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-等待-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-哦-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-钻孔-16",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-爬行-17",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元8-晾晒-18",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-司机-0",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-登山-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-跌倒-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-皆知-3",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-放弃-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-持久-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元23-打击-6",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-生物-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-从事-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-成就-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-学期-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-考试-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-再三-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-同意-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-难得-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-值班-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-努力-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-留学-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-国家-11",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-落后-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-地位-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-环节-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-难度-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-刻苦-16",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-兴奋-17",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-念书-18",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-差别-19",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-平均-20",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元24-后退-21",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-迅速-12",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-迅速-13",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-夺秒-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-连续-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-木棒-16",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-取消-17",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元25-盘子-18",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地4-怒目圆睁-0",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地4-眨眼-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地4-眼眶-2",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地4-目瞪口呆-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地4-耳闻目睹-4",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-语文园地4-瞅见-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-25T11:50:31.245+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-25"
+    },
+    {
+      "id": "3up-单元12-肠胃-19",
+      "history": [
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-管理-20",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元12-咬断-21",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:24.643+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    },
+    {
+      "id": "3up-单元21-温柔-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-合奏-7",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-充满-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-威力-9",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-乐器-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-屋顶-11",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-河流-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-轻快-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-合唱-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-水塘-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-汇集-16",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元21-鸣叫-17",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-昆虫-0",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-万物-1",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-沉思-2",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-搬家-3",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-井然有序-4",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-精神-5",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-植物-6",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-千姿百态-7",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-鲜美-8",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-池塘-9",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-秋高气爽-10",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-倒映-11",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-游玩-12",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-画册-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-无穷-14",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-奥秘-15",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-无尽-16",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-小虾-17",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-仅仅-18",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-荣誉-19",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-枯萎-20",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-刺激-21",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元22-梨树-22",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-语文园地3-鲨鱼-4",
+      "history": [
+        "red",
+        "red",
+        "red"
+      ],
+      "last_status": "white",
+      "updated_at": "2026-01-26T05:11:37.785+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "red",
+        "practice": "red"
+      },
+      "last_history_update_date": "2026-01-26"
+    },
+    {
+      "id": "3up-单元14-吞咽-13",
+      "history": [
+        "green"
+      ],
+      "last_status": null,
+      "updated_at": "2026-01-27T11:31:52.139+00:00",
+      "temp_state": {
+        "self": "white",
+        "final": "green",
+        "practice": "white"
+      },
+      "last_history_update_date": "2026-01-27"
+    }
+  ]
+}

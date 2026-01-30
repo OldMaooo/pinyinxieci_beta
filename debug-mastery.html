@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>掌握状态调试工具</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body { font-family: -apple-system, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+    .stats-row { display: flex; gap: 20px; margin-bottom: 20px; flex-wrap: wrap; }
+    .stat-box { background: #f0f0f0; padding: 15px 25px; border-radius: 8px; text-align: center; min-width: 120px; }
+    .stat-box h3 { margin: 0 0 5px 0; font-size: 14px; color: #666; }
+    .stat-box .num { font-size: 32px; font-weight: bold; }
+    .stat-box.mastered { background: #dcfce7; }
+    .stat-box.weak { background: #fee2e2; }
+    .stat-box.new { background: #f3f4f6; }
+    .stat-box.today { background: #dbeafe; }
+
+    .controls { margin: 20px 0; padding: 15px; background: #fffbeb; border-radius: 8px; }
+    .controls button { padding: 8px 16px; margin-right: 10px; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; background: white; }
+    .controls button:hover { background: #f5f5f5; }
+    .controls button.primary { background: #3b82f6; color: white; border: none; }
+
+    .word-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; }
+    .word-card { padding: 10px; border-radius: 6px; border: 1px solid #e5e7eb; font-size: 14px; }
+    .word-card.mastered { background: #dcfce7; border-color: #86efac; }
+    .word-card.weak { background: #fee2e2; border-color: #fca5a5; }
+    .word-card.new { background: #f9fafb; border-color: #e5e7eb; }
+    .word-card.today { border-color: #3b82f6; border-width: 2px; }
+
+    .word-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px; }
+    .word-id { font-size: 10px; color: #999; font-family: monospace; }
+    .word-details { font-size: 12px; color: #666; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+    .word-details span { background: rgba(255,255,255,0.5); padding: 2px 6px; border-radius: 3px; }
+
+    .history { margin-top: 5px; font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.05); padding: 3px 6px; border-radius: 3px; overflow-x: auto; white-space: nowrap; }
+
+    .filter-row { display: flex; gap: 10px; align-items: center; margin-bottom: 15px; flex-wrap: wrap; }
+    .filter-row input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; min-width: 200px; }
+    .error { background: #fee2e2; color: #dc2626; padding: 10px; border-radius: 6px; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>📊 掌握状态调试工具</h1>
+
+  <div id="error-area"></div>
+
+  <div class="stats-row">
+    <div class="stat-box mastered">
+      <h3>✅ 掌握 (连续≥5天)</h3>
+      <div class="num" id="count-mastered">-</div>
+    </div>
+    <div class="stat-box weak">
+      <h3>❌ 薄弱 (最后错)</h3>
+      <div class="num" id="count-weak">-</div>
+    </div>
+    <div class="stat-box new">
+      <h3>🆕 新词/刚对</h3>
+      <div class="num" id="count-new">-</div>
+    </div>
+    <div class="stat-box today">
+      <h3>📅 今天练过</h3>
+      <div class="num" id="count-today">-</div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="primary" onclick="loadData()">🔄 刷新数据</button>
+    <button onclick="showMastered()">只看掌握</button>
+    <button onclick="showWeak()">只看薄弱</button>
+    <button onclick="showAll()">显示全部</button>
+    <button onclick="clearFilter()">清除筛选</button>
+  </div>
+
+  <div class="filter-row">
+    <input type="text" id="search" placeholder="搜索词语..." oninput="filterWords()">
+    <span id="filter-status"></span>
+  </div>
+
+  <div class="word-list" id="word-list"></div>
+
+  <script>
+    const SUPABASE_URL = 'https://ynasoxvdalcmrrsxxmjr.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
+
+    // 初始化 Supabase 客户端
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let allData = [];
+    let todayStr = new Date().toISOString().split('T')[0];
+
+    async function loadData() {
+      console.log('📡 正在加载数据...');
+      document.getElementById('error-area').innerHTML = '';
+
+      const { data, error } = await client
+        .from('mastery_records')
+        .select('id, history, consecutive_green, last_practice_date, temp_state')
+        .range(0, 9999);
+
+      if (error) {
+        console.error('❌ 加载失败:', error);
+        document.getElementById('error-area').innerHTML = `<div class="error">❌ 加载失败: ${error.message}</div>`;
+        return;
+      }
+
+      console.log(`✅ 加载了 ${data.length} 条记录`);
+      allData = data;
+      renderAll();
+    }
+
+    function getStatus(record) {
+      if (!record || !record.history || record.history.length === 0) {
+        return 'NEW';
+      }
+
+      const consecutiveGreen = record.consecutive_green || 0;
+      const lastResult = record.history[record.history.length - 1];
+
+      if (consecutiveGreen >= 5) {
+        return 'MASTERED';
+      } else if (lastResult === 'red') {
+        return 'WEAK';
+      } else {
+        return 'NEW';
+      }
+    }
+
+    function renderAll() {
+      const stats = { mastered: 0, weak: 0, new: 0, today: 0 };
+      const list = document.getElementById('word-list');
+      list.innerHTML = '';
+
+      const searchTerm = document.getElementById('search').value.toLowerCase();
+      let filteredCount = 0;
+
+      allData.forEach(record => {
+        const status = getStatus(record);
+        const isToday = record.last_practice_date === todayStr;
+
+        if (status === 'MASTERED') stats.mastered++;
+        else if (status === 'WEAK') stats.weak++;
+        else stats.new++;
+
+        if (isToday) stats.today++;
+
+        // 搜索过滤
+        const word = record.id.split('-').pop() || record.id;
+        if (searchTerm && !word.includes(searchTerm)) return;
+
+        filteredCount++;
+
+        const div = document.createElement('div');
+        div.className = `word-card ${status.toLowerCase()} ${isToday ? 'today' : ''}`;
+        div.innerHTML = `
+          <div class="word-header">
+            <span>${word}</span>
+            <span class="word-id">${status}</span>
+          </div>
+          <div class="word-details">
+            <span>📅 连续: ${record.consecutive_green || 0}天</span>
+            <span>📝 练习: ${record.last_practice_date || '从未'}</span>
+          </div>
+          <div class="history">历史: [${(record.history || []).slice(-5).join(', ')}]</div>
+        `;
+        div.onclick = () => showDetail(record);
+        list.appendChild(div);
+      });
+
+      document.getElementById('count-mastered').textContent = stats.mastered;
+      document.getElementById('count-weak').textContent = stats.weak;
+      document.getElementById('count-new').textContent = stats.new;
+      document.getElementById('count-today').textContent = stats.today;
+      document.getElementById('filter-status').textContent = `显示 ${filteredCount}/${allData.length} 个词`;
+    }
+
+    function showDetail(record) {
+      console.log('═══════════════════════════════════════');
+      console.log(`📝 词语: ${record.id.split('-').pop()}`);
+      console.log(`🆔 ID: ${record.id}`);
+      console.log(`📊 状态: ${getStatus(record)}`);
+      console.log(`📅 连续绿: ${record.consecutive_green || 0} 天`);
+      console.log(`📝 最后练习: ${record.last_practice_date || '从未'}`);
+      console.log(`📋 历史记录: [${(record.history || []).join(', ')}]`);
+      console.log(`🎯 临时状态: ${JSON.stringify(record.temp_state || {})}`);
+      console.log('═══════════════════════════════════════');
+
+      alert(`📝 ${record.id.split('-').pop()}\n\n` +
+        `状态: ${getStatus(record)}\n` +
+        `连续绿: ${record.consecutive_green || 0}天\n` +
+        `最后练习: ${record.last_practice_date || '从未'}\n` +
+        `历史: [${(record.history || []).join(', ')}]`);
+    }
+
+    function showMastered() {
+      document.getElementById('search').value = '🎯 MASTERED_ONLY';
+      renderAll();
+    }
+
+    function showWeak() {
+      document.getElementById('search').value = '🎯 WEAK_ONLY';
+      renderAll();
+    }
+
+    function showAll() {
+      document.getElementById('search').value = '';
+      renderAll();
+    }
+
+    function clearFilter() {
+      document.getElementById('search').value = '';
+      renderAll();
+    }
+
+    function filterWords() {
+      renderAll();
+    }
+
+    // 初始加载
+    loadData();
+  </script>
+</body>
+</html>

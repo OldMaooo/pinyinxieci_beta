@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>掌握状态测试工具</title>
+</head>
+<body style="font-family: system-ui; padding: 40px; max-width: 800px; margin: 0 auto;">
+  <h1>掌握状态测试工具</h1>
+  <p id="status">正在测试...</p>
+  
+  <div id="results" style="margin-top: 20px;"></div>
+
+  <script>
+    async function testStatus() {
+      const status = document.getElementById('status');
+      const results = document.getElementById('results');
+      
+      try {
+        status.textContent = '正在获取数据...';
+        
+        // 等待 mastery 数据加载
+        if (!window.mastery) {
+          throw new Error('mastery 数据未加载，请先打开应用并等待数据同步');
+        }
+        
+        const mastery = window.mastery;
+        const wordIds = Object.keys(mastery);
+        
+        status.textContent = `正在分析 ${wordIds.length} 个词组...`;
+        
+        // 统计各类状态
+        const stats = {
+          MASTERED: 0,  // consecutive_green >= 5
+          WEAK: 0,      // 最后一次是 red
+          NEW: 0,       // 无历史或最后一次不是 red
+          noData: 0     // 无数据
+        };
+        
+        const examples = {
+          MASTERED: [],
+          WEAK: [],
+          NEW: []
+        };
+        
+        wordIds.forEach(id => {
+          const m = mastery[id];
+          
+          if (!m || !m.history || m.history.length === 0) {
+            stats.noData++;
+            return;
+          }
+          
+          const consecutiveGreen = m.consecutive_green || 0;
+          const lastResult = m.history[m.history.length - 1];
+          
+          let status;
+          if (consecutiveGreen >= 5) {
+            status = 'MASTERED';
+            stats.MASTERED++;
+            if (examples.MASTERED.length < 3) examples.MASTERED.push(id);
+          } else if (lastResult === 'red') {
+            status = 'WEAK';
+            stats.WEAK++;
+            if (examples.WEAK.length < 3) examples.WEAK.push(id);
+          } else {
+            status = 'NEW';
+            stats.NEW++;
+            if (examples.NEW.length < 3) examples.NEW.push(id);
+          }
+        });
+        
+        // 生成报告
+        let html = `
+          <h2>📊 统计结果</h2>
+          <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+            <tr style="background: #f5f5f5;">
+              <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">状态</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">数量</th>
+              <th style="padding: 10px; text-align: left; border: 1px solid #ddd;">说明</th>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;">✅ 掌握 (MASTERED)</td>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>${stats.MASTERED}</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">连续 5 天以上都答对</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;">❌ 薄弱 (WEAK)</td>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>${stats.WEAK}</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">最后一次答错</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;">🆕 新词 (NEW)</td>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>${stats.NEW}</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">无历史或最近答对</td>
+            </tr>
+            <tr>
+              <td style="padding: 10px; border: 1px solid #ddd;">❓ 无数据</td>
+              <td style="padding: 10px; border: 1px solid #ddd;"><strong>${stats.noData}</strong></td>
+              <td style="padding: 10px; border: 1px solid #ddd;">数据库中无记录</td>
+            </tr>
+          </table>
+          
+          <h3>📝 示例词组</h3>
+          <p><strong>掌握词组</strong> (连续 5 天以上都答对): ${examples.MASTERED.length > 0 ? examples.MASTERED.join(', ') : '无'}</p>
+          <p><strong>薄弱词组</strong> (最后一次答错): ${examples.WEAK.length > 0 ? examples.WEAK.join(', ') : '无'}</p>
+          <p><strong>新词</strong> (无历史或最近答对): ${examples.NEW.length > 0 ? examples.NEW.join(', ') : '无'}</p>
+          
+          <h3>🔍 验证步骤</h3>
+          <ol style="line-height: 1.8;">
+            <li>查看上方统计，确认有 3 种状态</li>
+            <li>在 Setup 页面，检查有红色下划线的词是否在"薄弱"列表中</li>
+            <li>在 Setup 页面，检查有绿色下划线的词是否在"掌握"列表中</li>
+            <li>在 Setup 页面，检查无下划线的词是否在"新词"列表中</li>
+          </ol>
+          
+          <h3>💡 提示</h3>
+          <ul style="line-height: 1.8;">
+            <li>打开应用（http://localhost:3009），确保数据已加载</li>
+            <li>按 F12 打开开发者工具，切换到 Console 标签</li>
+            <li>运行: <code>testMasteryStatus()</code> 可以重新测试</li>
+          </ul>
+        `;
+        
+        results.innerHTML = html;
+        status.textContent = '✅ 测试完成！请查看下方结果。';
+        
+        // 将测试函数暴露到全局
+        window.testMasteryStatus = testStatus;
+        
+      } catch (error) {
+        status.textContent = '❌ 测试失败';
+        results.innerHTML = `<p style="color: red;">错误: ${error.message}</p>
+          <p>请确保:</p>
+          <ol>
+            <li>应用已打开（http://localhost:3009）</li>
+            <li>数据已加载完成（页面显示云端就绪）</li>
+            <li>再刷新此页面重试</li>
+          </ol>
+        `;
+        console.error('Test error:', error);
+      }
+    }
+    
+    window.onload = testStatus;
+  </script>
+</body>
+</html>

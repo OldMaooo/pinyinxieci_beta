@@ -465,7 +465,21 @@ function MainApp() {
   const progressRef = useRef(0);
 
   useEffect(() => { localStorage.setItem('pinyin_selected_units', JSON.stringify(Array.from(selectedUnits))); }, [selectedUnits]);
-  useEffect(() => { async function loadCloud() { setIsLoading(true); try { const { data, error } = await supabase.from('mastery_records').select('*').range(0, 9999); if (data) { const m = {}; data.forEach(r => { m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: r.consecutive_green, last_practice_date: r.last_practice_date }; }); setMastery(m); window.mastery = m; } } catch (e) {} finally { setIsLoading(false); } } loadCloud(); }, []);
+  useEffect(() => { async function loadCloud() { setIsLoading(true); try { const { data, error } = await supabase.from('mastery_records').select('*').range(0, 9999); if (data) { const m = {}; data.forEach(r => {
+        // 根据老数据的最终状态初始化 consecutive_green
+        // 初始化规则：
+        // 根据 history 状态初始化 consecutive
+        // 如果 history 包含红色 → consecutive = 0（薄弱，需要连续5天恢复）
+        // 如果 history 最后是 green → consecutive = 365（已掌握）
+        // 如果没有历史 → consecutive = 0（NEW）
+        const hasRedHistory = r.history && r.history.includes('red');
+        const lastResult = r.history && r.history.length > 0 ? r.history[r.history.length - 1] : null;
+        let initialConsecutive = 0;
+        if (lastResult === 'green' && !hasRedHistory) {
+          initialConsecutive = 365;  // 已掌握（最后是绿，且没有红色历史）
+        }
+        m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: initialConsecutive, last_practice_date: r.last_practice_date };
+      }); setMastery(m); window.mastery = m; } } catch (e) {} finally { setIsLoading(false); } } loadCloud(); }, []);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
   const toggleMode = () => { window.location.href = isDevMode ? window.location.origin : window.location.origin + '?dev=1'; };
@@ -516,13 +530,24 @@ function MainApp() {
     const m = useTemp && isAdminMode ? tempMastery[id] : mastery[id];
     if (!m || !m.history || m.history.length === 0) return 'NEW';
 
-    if ((m.consecutive_green || 0) >= 5) {
+    const consecutive = m.consecutive_green || 0;
+    const lastResult = m.history[m.history.length - 1];
+    
+    // 规则：连续 >=5 天答对 = 掌握（绿色下划线）
+    if (consecutive >= 5) {
       return 'MASTERED';
     }
 
-    const lastResult = m.history[m.history.length - 1];
-    if (lastResult === 'red') {
+    // 规则：曾经是红色下划线（history 中有 red）= 薄弱（红色下划线）
+    // 即使今天答对了（lastResult = green），只要没连续5天，就还是薄弱
+    if (m.history.includes('red')) {
       return 'WEAK';
+    }
+
+    // 规则：没有红色历史，最后是绿色 = NEW（无下划线）
+    // 表示今天刚答对，还没达到掌握标准
+    if (lastResult === 'green') {
+      return 'NEW';
     }
 
     return 'NEW';
@@ -559,14 +584,17 @@ function MainApp() {
         const savedTemp = m?.temp || {};
         const lastPracticeDate = m?.last_practice_date;
         const isNewDay = lastPracticeDate !== todayStr;
+        const hasHistory = m?.history && m.history.length > 0;
 
-        let wordData = { ...w, markPractice: savedTemp.practice || 'white', markSelf: savedTemp.self || 'white', markFinal: savedTemp.final || 'white' };
+        // 如果有历史记录，用历史记录的最后状态初始化，否则用 'white'
+        const lastHistoryStatus = hasHistory ? m.history[m.history.length - 1] : 'white';
 
-        if (isNewDay) {
-          wordData.markPractice = 'white';
-          wordData.markSelf = 'white';
-          wordData.markFinal = 'white';
-        }
+        let wordData = {
+          ...w,
+          markPractice: isNewDay ? lastHistoryStatus : (savedTemp.practice || 'white'),
+          markSelf: isNewDay ? lastHistoryStatus : (savedTemp.self || 'white'),
+          markFinal: isNewDay ? lastHistoryStatus : (savedTemp.final || 'white')
+        };
 
         const status = getStatus(w.id);
         if (!onlyWrong || status === 'WEAK') {
@@ -583,7 +611,7 @@ function MainApp() {
     words.forEach(w => {
       let currentFinal = w.markFinal; if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
       const currentTemp = { practice: w.markPractice, self: w.markSelf, final: currentFinal };
-      const m = nextMastery[w.id] || { history: [], lastUpdate: null, consecutive_green: 0, last_practice_date: null };
+       const m = nextMastery[w.id] || mastery[w.id];
       let newHistory = [...(m.history || [])]; let newLastUpdate = m.lastUpdate; let newConsecutiveGreen = m.consecutive_green || 0; let newLastPracticeDate = m.last_practice_date;
 
       if (!isTemporary && step === 2) {
@@ -829,22 +857,6 @@ function MainApp() {
       {step === 2 && (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_STATS', title: "本次练习统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>)}
       {answerCardVisible && <AnswerCard word={answerCardWord} onClose={handleAnswerCardClose} onAutoNext={handleAnswerCardAutoNext} />}
       <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} isLoading={isModalLoading} onConfirm={async () => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { setIsModalLoading(true); await save(); setIsModalLoading(false); setModalConfig({ isOpen: false }); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{words.length}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{calculateStats().wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{calculateStats().mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div></div>) : modalConfig.content} />
-      
-      {/* 测试结果弹窗 */}
-      {showTestResult && (
-        <div className="fixed inset-0 z-[5000] bg-black/60 flex items-center justify-center p-4" onClick={() => setShowTestResult(false)}>
-          <div className="bg-white rounded-xl p-6 max-w-lg w-full shadow-2xl" onClick={e => e.stopPropagation()}>
-            <h3 className="text-xl font-bold mb-4">📊 掌握状态统计</h3>
-            <div className="space-y-2 font-mono text-sm">
-              <div className="flex justify-between"><span>✅ 掌握 (连续5天答对):</span><span className="font-bold text-emerald-600">{testStats.MASTERED}</span></div>
-              <div className="flex justify-between"><span>❌ 薄弱 (最后答错):</span><span className="font-bold text-red-600">{testStats.WEAK}</span></div>
-              <div className="flex justify-between"><span>🆕 新词:</span><span className="font-bold text-slate-600">{testStats.NEW}</span></div>
-              <div className="border-t pt-2 mt-2"><span>总计: {testStats.total} 个词组</span></div>
-            </div>
-            <button onClick={() => setShowTestResult(false)} className="w-full mt-4 py-3 bg-slate-100 rounded-lg font-bold">关闭</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

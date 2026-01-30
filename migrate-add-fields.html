@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>数据库迁移 - 添加新字段</title>
+</head>
+<body>
+  <h1>数据库迁移 - 添加新字段</h1>
+  <p id="status">准备中...</p>
+  <pre id="result"></pre>
+
+  <script>
+    const SUPABASE_URL = 'https://ynasoxvdalcmrrsxxmjr.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
+
+    async function migrate() {
+      const status = document.getElementById('status');
+      const result = document.getElementById('result');
+
+      status.textContent = '正在连接 Supabase...';
+
+      try {
+        const response = await fetch(`${SUPABASE_URL}/rest/v1/`, {
+          method: 'POST',
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json',
+            'Prefer': 'return=minimal'
+          },
+          body: JSON.stringify({
+            query: `
+              ALTER TABLE mastery_records 
+              ADD COLUMN IF NOT EXISTS consecutive_green INTEGER DEFAULT 0;
+              
+              ALTER TABLE mastery_records 
+              ADD COLUMN IF NOT EXISTS last_practice_date DATE;
+            `
+          })
+        });
+
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(`HTTP ${response.status}: ${text}`);
+        }
+
+        status.textContent = '✓ 字段添加成功！';
+
+        result.textContent = `
+请验证：
+1. 登录 Supabase 控制台
+2. 进入 SQL Editor
+3. 运行以下 SQL 验证字段已添加：
+
+SELECT column_name, data_type, column_default 
+FROM information_schema.columns 
+WHERE table_name = 'mastery_records' 
+  AND column_name IN ('consecutive_green', 'last_practice_date');
+
+预期结果：
+  column_name          | data_type | column_default
+  ---------------------|-----------|----------------
+  consecutive_green    | integer   | 0
+  last_practice_date   | date      | null
+        `.trim();
+
+      } catch (error) {
+        status.textContent = '✗ 迁移失败';
+        result.textContent = '错误: ' + error.message + '\n\n' +
+          '注意：Supabase REST API 不支持 DDL 操作（如 ALTER TABLE）。\n' +
+          '请手动在 Supabase SQL Editor 中运行以下 SQL：\n\n' +
+          `ALTER TABLE mastery_records ADD COLUMN IF NOT EXISTS consecutive_green INTEGER DEFAULT 0;
+ALTER TABLE mastery_records ADD COLUMN IF NOT EXISTS last_practice_date DATE;`;
+        console.error('Migration error:', error);
+      }
+    }
+
+    window.onload = migrate;
+  </script>
+</body>
+</html>
