@@ -1,0 +1,47 @@
+# Load Summary
+
+描述：对话开始时加载所有开发会话的summary记录
+
+输入：无（从SUMMARY_INDEX.md读取）
+
+输出：
+```javascript
+{
+  sessions: [
+    {
+      id: "session_YYYYMMDD_HHMMSS",
+      date: "YYYY-MM-DD HH:MM:SS",
+      theme: "主题",
+      status: "进行中/完成/暂停/已取消",
+      desc: "一句话概括",
+      details: "./{session_id}_{主题}.md"
+    }
+  ],
+  totalCount: number
+}
+```
+
+---
+
+## 使用方法
+
+1. 对话开始时调用此skill加载SUMMARY_INDEX.md
+2. 返回sessions数组给主系统
+3. 用于显示会话历史、回顾工作进展
+4. 为后续create-summary-entry skill提供数据
+
+---
+
+## 技术实现要点
+
+- 从SUMMARY_INDEX.md按日期排序（最新的在前）
+- 解析每行的：session_id | 日期 | 主题 | 状态
+- 返回包含详细信息的sessions数组
+- 添加totalCount字段
+
+---
+
+## 依赖
+
+- 需要先存在 `create-summary-entry.skill`
+- 需要存在 `SUMMARY_INDEX.md` 文件

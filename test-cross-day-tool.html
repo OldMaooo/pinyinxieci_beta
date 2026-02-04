@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>跨天逻辑测试工具</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: -apple-system, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; background: #f5f5f5; }
+    h1 { margin-bottom: 10px; }
+    .subtitle { color: #666; margin-bottom: 20px; font-size: 14px; }
+    .panel { background: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .panel h2 { margin-top: 0; font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+    .controls { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+    .controls button { padding: 8px 16px; cursor: pointer; border: 1px solid #ddd; border-radius: 4px; background: white; }
+    .controls button:hover { background: #f5f5f5; }
+    .controls button.primary { background: #3b82f6; color: white; border: none; }
+    .controls button.success { background: #22c55e; color: white; border: none; }
+    .controls button.danger { background: #ef4444; color: white; border: none; }
+    input, select { padding: 8px 12px; border: 1px solid #ddd; border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: center; }
+    th { background: #f9fafb; font-weight: 600; }
+    th, td { border: 1px solid #e5e7eb; padding: 10px; text-align: center; }
+    .test-table tr:nth-child(even) { background: #f9fafb; }
+    .test-table select { padding: 4px 8px; border: 1px solid #ddd; border-radius: 3px; }
+    .test-table input { padding: 4px 8px; border: 1px solid #ddd; border-radius: 3px; }
+    .test-table input[type="datetime-local"] { width: 180px; }
+    .test-table .remove-btn { background: #fee2e2; color: #dc2626; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+    .result-panel { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+    .result-card { padding: 15px; border-radius: 8px; text-align: center; }
+    .result-card.mastered { background: #dcfce7; border: 2px solid #22c55e; }
+    .result-card.weak { background: #fee2e2; border: 2px solid #ef4444; }
+    .result-card.new { background: #f3f4f6; border: 2px solid #9ca3af; }
+    .result-card .status { font-size: 24px; font-weight: bold; }
+    .result-card .value { font-size: 32px; font-weight: bold; margin-top: 10px; }
+    .result-card .desc { font-size: 12px; color: #666; margin-top: 5px; }
+    .rules { background: #fffbeb; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+    .rules h3 { margin: 0 0 10px 0; color: #92400e; font-size: 14px; }
+    .rules ul { margin: 0; padding-left: 20px; font-size: 13px; color: #78350f; }
+    .rules li { margin-bottom: 5px; }
+    .history-display { font-family: monospace; background: #1e293b; color: #22c55e; padding: 10px; border-radius: 6px; margin-top: 10px; font-size: 13px; }
+    .case-buttons { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 15px; }
+    .case-buttons button { font-size: 13px; padding: 6px 12px; border: 1px solid #e5e7eb; border-radius: 4px; background: #f9fafb; }
+    .case-buttons button:hover { background: #f3f4f6; }
+    .add-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+    .add-row button { padding: 6px 12px; }
+    .remove-btn { background: #fee2e2; color: #dc2626; border: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; }
+  </style>
+</head>
+<body>
+   <h1>跨天逻辑测试工具</h1>
+   <p class="subtitle">模拟多天练习，支持一天内多次测试，验证「短期 vs 长期掌握」状态变化</p>
+
+  <div class="panel">
+    <h2>核心规则</h2>
+    <ul>
+      <li><strong>红色下划线</strong>：history 中有红色记录，标记为 WEAK</li>
+      <li><strong>绿色下划线</strong>：consecutive >= 5 次都答对，标记为 MASTERED</li>
+      <li><strong>无下划线</strong>：history 为空 或 最后是 green 但 consecutive < 5</li>
+      <li><strong>红色优先</strong>：同一次测试标记过红色，结果就是红色</li>
+      <li><strong>连续中断</strong>：标记红色后，consecutive 重置为 0</li>
+      <li><strong>时间排序</strong>：按日期时间升序排列，一天内多次测试也算多次</li>
+    </ul>
+  </div>
+
+  <div class="panel">
+    <h2>加载测试案例</h2>
+    <div class="case-buttons">
+      <button class="primary" onclick="loadCase(1)">案例1：连续5天答对</button>
+      <button class="primary" onclick="loadCase(2)">案例2：中途答错打断</button>
+      <button class="primary" onclick="loadCase(3)">案例3：红色优先（多次测试）</button>
+      <button class="primary" onclick="loadCase(4)">案例4：空白起点测试</button>
+      <button class="danger" onclick="clearAll()">清空重新开始</button>
+    </div>
+    <div>
+      <input type="text" id="custom-word" placeholder="自定义词组名">
+      <button class="primary" onclick="loadCustom()">加载</button>
+    </div>
+  </div>
+
+   <div class="panel">
+    <h2>测试数据（表格一行 = 一次测试）</h2>
+    <p style="font-size: 13px; color: #666; margin-bottom: 15px;">表格一行代表一次测试。按日期时间升序排列，一天内可以多次测试。</p>
+    <table class="test-table">
+      <thead>
+        <tr>
+          <th style="width: 50px;">#</th>
+          <th style="width: 180px;">日期时间</th>
+          <th style="width: 80px;">标记</th>
+          <th style="width: 80px;">历史</th>
+          <th style="width: 80px;">连续数</th>
+          <th style="width: 100px;">状态</th>
+          <th style="width: 50px;">操作</th>
+        </tr>
+      </thead>
+      <tbody id="test-body">
+      </tbody>
+    </table>
+    <div style="margin-top: 15px;">
+      <span>新增：</span>
+      <input type="datetime-local" id="new-date">
+      <select id="new-mark">
+        <option value="green">绿色</option>
+        <option value="red">红色</option>
+        <option value="white">白色</option>
+      </select>
+      <button class="success" onclick="addDay()">+ 添加</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>最终状态</h2>
+    <div id="result-display" class="result-panel">
+    </div>
+  </div>
+
+  <script>
+    console.log('页面脚本开始加载...');
+
+    let testData = [];
+    let currentWord = '测试词语';
+
+    const cases = {
+      1: {
+        name: '连续5天答对',
+        data: [
+          {date: '2026-01-25T09:00', m: 'green'},
+          {date: '2026-01-26T09:00', m: 'green'},
+          {date: '2026-01-27T09:00', m: 'green'},
+          {date: '2026-01-28T09:00', m: 'green'},
+          {date: '2026-01-29T09:00', m: 'green'}
+        ]
+      },
+      2: {
+        name: 'D2答错',
+        data: [
+          {date: '2026-01-25T09:00', m: 'green'},
+          {date: '2026-01-26T09:00', m: 'red'},
+          {date: '2026-01-27T09:00', m: 'green'}
+        ]
+      },
+      3: {
+        name: '红色优先（一天多次测试）',
+        data: [
+          {date: '2026-01-25T09:00', m: 'green'},
+          {date: '2026-01-25T14:00', m: 'red'},
+          {date: '2026-01-25T19:00', m: 'green'},
+          {date: '2026-01-26T09:00', m: 'green'}
+        ]
+      },
+      4: {
+        name: '新词起点',
+        data: [
+          {date: '2026-01-25T09:00', m: 'white'}
+        ]
+      }
+    };
+
+    console.log('cases 对象已定义:', Object.keys(cases));
+
+    function loadCase(n) {
+      console.log('loadCase 被调用, n =', n);
+      if (!cases[n]) {
+        console.error('案例', n, '不存在');
+        alert('案例不存在');
+        return;
+      }
+      const c = cases[n];
+      currentWord = c.name;
+      testData = c.data.map((d, i) => ({ ...d, id: i + 1 }));
+      console.log('testData 已设置:', testData);
+      renderTable();
+      updateResults();
+      console.log('已加载:', c.name);
+    }
+
+    function loadCustom() {
+      console.log('loadCustom 被调用');
+      const word = document.getElementById('custom-word').value.trim();
+      if (!word) {
+        alert('请输入词组名');
+        return;
+      }
+      currentWord = word;
+      testData = [{ id: 1, date: getToday(), m: 'white' }];
+      renderTable();
+      updateResults();
+      console.log('已加载自定义:', word);
+    }
+
+    function clearAll() {
+      console.log('clearAll 被调用');
+      testData = [];
+      renderTable();
+      updateResults();
+      console.log('已清空');
+    }
+
+    function getToday() {
+      const d = new Date();
+      // 返回 YYYY-MM-DDTHH:mm 格式（datetime-local 使用本地时区）
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      const hours = String(d.getHours()).padStart(2, '0');
+      const minutes = String(d.getMinutes()).padStart(2, '0');
+      return `${year}-${month}-${day}T${hours}:${minutes}`;
+    }
+
+    function renderTable() {
+      console.log('renderTable 被调用, testData.length =', testData.length);
+      const tbody = document.getElementById('test-body');
+      if (!tbody) {
+        console.error('找不到 test-body 元素');
+        return;
+      }
+      tbody.innerHTML = '';
+
+      testData.forEach((row, idx) => {
+        const calc = calculateStatus(testData.slice(0, idx + 1));
+        const colors = {white: '#fff', green: '#dcfce7', red: '#fee2e2'};
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><input type="datetime-local" value="${row.date}" onchange="updateRow(${idx}, 'date', this.value)"></td>
+          <td>
+            <select onchange="updateRow(${idx}, 'm', this.value)" style="background: ${colors[row.m]}">
+              <option value="white" ${row.m === 'white' ? 'selected' : ''}>白色</option>
+              <option value="green" ${row.m === 'green' ? 'selected' : ''}>绿色</option>
+              <option value="red" ${row.m === 'red' ? 'selected' : ''}>红色</option>
+            </select>
+          </td>
+          <td class="history-display">[${calc.history.join(', ')}]</td>
+          <td>${calc.consecutive}</td>
+          <td style="font-weight: bold; color: ${calc.status === 'MASTERED' ? '#22c55e' : calc.status === 'WEAK' ? '#ef4444' : '#666'};">
+            ${calc.status === 'MASTERED' ? '掌握' : calc.status === 'WEAK' ? '薄弱' : '新词'}
+          </td>
+          <td><button class="remove-btn" onclick="removeRow(${idx})" style="padding: 4px 8px;">删</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateRow(idx, field, value) {
+      testData[idx][field] = value;
+      renderTable();
+      updateResults();
+    }
+
+    function removeRow(idx) {
+      testData.splice(idx, 1);
+      renderTable();
+      updateResults();
+    }
+
+    function addDay() {
+      const date = document.getElementById('new-date').value || getToday();
+      const mark = document.getElementById('new-mark').value;
+
+      testData.push({ id: testData.length + 1, date: date, m: mark });
+      renderTable();
+      updateResults();
+      console.log('已添加:', date, mark);
+    }
+
+    function calculateStatus(data) {
+      let history = [];
+      let consecutive = 0;
+
+      // 按完整日期时间排序
+      const sortedData = [...data].sort((a, b) => a.date.localeCompare(b.date));
+
+      sortedData.forEach(row => {
+        const result = row.m;
+        history.push(result);
+
+        if (result === 'green') {
+          consecutive += 1;
+        } else {
+          consecutive = 0;
+        }
+      });
+
+      let status = 'NEW';
+      if (consecutive >= 5) {
+        status = 'MASTERED';
+      } else if (history.length > 0 && history[history.length - 1] === 'red') {
+        status = 'WEAK';
+      }
+
+      return { history, consecutive, status };
+    }
+
+    function updateResults() {
+      console.log('updateResults 被调用');
+      const final = calculateStatus(testData);
+      console.log('最终状态:', final.status, final.consecutive, final.history);
+
+      const display = document.getElementById('result-display');
+      if (!display) {
+        console.error('找不到 result-display 元素');
+        return;
+      }
+
+      display.innerHTML = `
+        <div class="result-card ${final.status === 'MASTERED' ? 'mastered' : final.status === 'WEAK' ? 'weak' : 'new'}">
+          <div class="status">
+            ${final.status === 'MASTERED' ? '掌握' : final.status === 'WEAK' ? '薄弱' : '新词'}
+          </div>
+          <div class="value">${final.consecutive} 天</div>
+          <div class="desc">连续绿色天数</div>
+        </div>
+      `;
+    }
+
+    // 等待 DOM 加载完成
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM 已加载完成，初始化测试工具');
+        try {
+          loadCase(1);
+        } catch (e) {
+          console.error('初始化失败:', e);
+        }
+      });
+    } else {
+      console.log('DOM 已经加载完成，直接初始化测试工具');
+      try {
+        loadCase(1);
+      } catch (e) {
+        console.error('初始化失败:', e);
+      }
+    }
+
+    console.log('页面脚本加载完成');
+  </script>
+</body>
+</html>

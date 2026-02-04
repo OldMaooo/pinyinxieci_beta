@@ -1,24 +1,36 @@
-# Session Summary Index
+# Session Summaries
 
-此索引文件记录所有开发会话的summary。
+## Sessions
 
-## 2026-01-27
+| Session ID | 日期 | 主题 | 状态 |
+|------------|------|------|--------|
+| session_20260130_095300_cross_day_test_tool_creation | 2026-01-30 09:53:00 | cross_day_test_tool_creation | 已完成 |
+| [会话索引] | [日期] | [主题] | [进行中/完成] |
 
-### session_20260121_09445_flashcard-ui-improvement
-- **时间**: 2026-01-21 09:44:56
-- **主题**: flashcard-ui-improvement
-- **简述**: 闪卡模式UI改造和练习页答案弹窗功能实现
-- **状态**: 进行中（版本已保存，准备重新实现）
-- **详情**: [查看详情](./session_20260121_09445_flashcard-ui-improvement.md)
+## 说明
+
+- 查看详情：`{session_id}_{主题}.md`
+- Session ID 格式：`session_YYYYMMDD_HHMMSS`
 
 ---
 
-### session_20260127_194500_flashcard-pinyin-mode
-- **时间**: 2026-01-27 19:45:00
-- **主题**: flashcard-pinyin-mode
-- **简述**: 闪卡模式拼音功能开发（状态管理、拼音显示、错题标记、字体优化、计时暂停）
-- **状态**: 已完成，等待用户测试验证
-- **详情**: [查看详情](./session_20260127_194500_flashcard-pinyin-mode.md)
+**最后更新**: 2026-02-03 14:30:00
+
+### session_20260203_143000_short_term_vs_long_term_mastery
+- **时间**: 2026-02-03 14:30:00
+- **主题**: short_term_vs_long_term_mastery（短期 vs 长期掌握区分方案规划）
+- **简述**: 完成短期 vs 长期掌握区分方案规划和UI展示设计
+- **状态**: 已完成（规划阶段）
+- **详情**: [查看详情](./session_20260203_143000_short_term_vs_long_term_mastery.md)
+
+---
+
+### session_20260130_095000_old_data_compatibility_fix
+- **时间**: 2026-01-30 09:50:30
+- **主题**: old_data_compatibility_fix
+- **简述**: 修复老数据兼容性问题（history状态初始化、consecutive_green字段处理）
+- **状态**: 已完成
+- **详情**: [查看详情](./session_20260130_095000_old_data_compatibility_fix.md)
 
 ---
 
@@ -26,3 +38,5 @@
 - 按日期分组，每个session一个条目
 - 包含session ID、时间、主题、简述、状态和详情链接
 - 状态标签：进行中/完成/暂停/已取消
+
+---

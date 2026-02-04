@@ -1,0 +1,28 @@
+# Create Summary
+
+描述：创建新的开发会话summary记录
+
+输入：无
+
+输出：
+```javascript
+{
+  session: {
+    id: "session_YYYYMMDD_HHMMSS",
+    date: "YYYY-MM-DD HH:MM:SS",
+    theme: "主题",
+    status: "进行中/完成/暂停/已取消",
+    desc: "一句话概括",
+    details: "./{session_id}_{主题}.md"
+  },
+  totalCount: number
+}
+```
+
+---
+
+## 使用方法
+
+1. 对话开始时调用此skill加载历史summary
+2. 用于显示会话历史、回顾工作进展
+3. 为后续操作提供上下文
