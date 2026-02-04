@@ -386,7 +386,7 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
   return (
     <div onClick={() => isWaiting && onStartVoice(index)} className={`flex flex-col items-center border-b border-slate-200 pb-6 mb-0 w-full overflow-hidden relative transition-all duration-300 ${isActive ? 'bg-blue-50' : ''} ${isWaiting ? 'hover:bg-blue-50/30 cursor-pointer ring-2 ring-blue-400 ring-dashed ring-opacity-50 rounded-lg' : ''} ${isShuffling ? 'opacity-50 scale-95 blur-[1px]' : 'opacity-100 scale-100 blur-0'}`}>
       <div className="no-wrap-box relative select-none touch-none flex flex-col justify-end items-center transition-all duration-300 w-full overflow-hidden" style={{ minHeight: focusOnAnswer ? '94px' : '49px' }}>
-        <div className={`font-bold font-kaiti tracking-tight leading-none transition-all ${focusOnAnswer ? 'opacity-30 mb-1 text-[14px]' : `text-[32px] ${isWeakWord ? 'text-red-300' : 'text-black'}`} ${isActive ? 'text-blue-600' : ''}`}>{item.pinyin}</div>
+        <div className={`font-bold font-kaiti tracking-tight leading-none transition-all ${focusOnAnswer ? 'opacity-30 mb-1 text-[14px]' : `text-[32px] ${item.isWeak ? 'text-red-300' : 'text-black'}`} ${isActive ? 'text-blue-600' : ''}`}>{item.pinyin}</div>
         <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? 'opacity-100 text-[64px] mt-1' : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
       </div>
       <div className="flex justify-center items-center gap-2 mt-2 w-full">
@@ -581,23 +581,19 @@ function MainApp() {
 
     pool.forEach(w => {
         const m = mastery[w.id];
-        const savedTemp = m?.temp || {};
-        const lastPracticeDate = m?.last_practice_date;
-        const isNewDay = lastPracticeDate !== todayStr;
-        const hasHistory = m?.history && m.history.length > 0;
+        const status = getStatus(w.id);
+        const isWeak = status === 'WEAK';  // 长期未掌握（history中有red）
 
-        // 如果有历史记录，用历史记录的最后状态初始化，否则用 'white'
-        const lastHistoryStatus = hasHistory ? m.history[m.history.length - 1] : 'white';
-
+        // 每次进入练习时，方框都是空的，重新标记
         let wordData = {
           ...w,
-          markPractice: isNewDay ? lastHistoryStatus : (savedTemp.practice || 'white'),
-          markSelf: isNewDay ? lastHistoryStatus : (savedTemp.self || 'white'),
-          markFinal: isNewDay ? lastHistoryStatus : (savedTemp.final || 'white')
+          markPractice: 'white',
+          markSelf: 'white',
+          markFinal: 'white',
+          isWeak: isWeak  // 用于判断是否显示浅红色
         };
 
-        const status = getStatus(w.id);
-        if (!onlyWrong || status === 'WEAK') {
+        if (!onlyWrong || isWeak) {
           targetWords.push(wordData);
         }
     });
@@ -759,7 +755,7 @@ function MainApp() {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.2' : 'Cloud V3.10.2'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.3' : 'Cloud V3.10.3'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
