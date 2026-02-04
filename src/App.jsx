@@ -203,7 +203,7 @@ const FlashCardView = ({ words, onClose, getStatus }) => {
     return () => clearInterval(progressInterval);
   }, [index, speed, isPlaying]);
 
-  const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); fadeRef.current = setTimeout(() => setShowControls(false), 6000); };
+  const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); if (!showThumbnails) { fadeRef.current = setTimeout(() => setShowControls(false), 6000); } };
   useEffect(() => { handleInteraction(); }, []);
 
   useEffect(() => {
@@ -759,7 +759,7 @@ function MainApp() {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.1' : 'Cloud V3.10.1'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.2' : 'Cloud V3.10.2'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>

@@ -376,3 +376,119 @@ git push origin main  # or git push beta main for beta
 - **Problem**: Browser autoplay policy blocks audio
 - **Solution**: Always unlock on first user interaction
 - **Pattern**: See unlockAudio() function for reference implementation
+
+---
+
+## 掌握状态追踪系统 (Short-term vs Long-term Mastery)
+
+### 数据结构设计 (mastery_records 表)
+
+```javascript
+// Supabase mastery_records 表结构
+{
+  id: "wordId",                    // 词组唯一标识
+  history: ["green", "green", "red", "green", "green"],  // 历史记录（每天的结果）
+  consecutive_green: 3,            // 当前连续绿色天数（>=5 = 掌握）
+  last_practice_date: "2026-01-29", // 最后练习日期
+  temp_state: {                    // 本轮练习状态（短期标记）
+    practice: "white" | "red",
+    self: "white" | "red",
+    final: "white" | "red" | "green"
+  },
+  updated_at: "2026-01-29T10:00:00Z"  // 更新时间
+}
+```
+
+### 状态定义
+
+| 状态 | 定义 | 连续天数 |
+|------|------|----------|
+| NEW | 新词或刚清空标记 | 无 |
+| WEAK | 最近一次答错（历史中有red）或连续中断 | < 5 |
+| MASTERED | 连续 5 天每天都答对 | >= 5 |
+
+### 核心逻辑
+
+#### 1. 进入练习时 (start 函数)
+- 判断是否新的一天（对比 `last_practice_date` 和今天日期）
+- 新的一天：清空所有短期标记（markPractice, markSelf, markFinal）
+- 错题筛选：只展示 WEAK 状态的词
+
+#### 2. 保存时 (save 函数 - 仅家长终测)
+- 判断是否新的一天
+- **新的一天**：
+  - 写入新记录到 `history`
+  - 如果答对（green）：`consecutive_green += 1`
+  - 如果答错（red）：`consecutive_green = 0`
+  - 更新 `last_practice_date`
+- **同一天**：
+  - 红色优先于绿色
+  - 如果标记过红色，保持红色，打断连胜
+
+#### 3. 状态判断 (getStatus 函数)
+```javascript
+if (consecutive_green >= 5) return 'MASTERED';
+if (history.includes('red')) return 'WEAK';
+if (lastResult === 'green') return 'NEW';
+return 'NEW';
+```
+
+### 红色优先规则
+```
+一旦今天标记过红色，今天结果就是 "red"（不可逆）
+绿色不能覆盖红色
+只有明天才是新的机会
+```
+
+### UI 展示规则
+
+#### Setup 页面（单元选择页）
+| 状态 | 文字颜色 | 下划线 |
+|------|----------|--------|
+| NEW | 黑色 | 无 |
+| WEAK | 黑色 + 红色实线 | 红色 |
+| MASTERED | 绿色 + 绿色实线 | 绿色 |
+
+#### 练习页面
+| 状态 | 文字颜色 | 框框 |
+|------|----------|------|
+| WEAK | 淡红色 | 白色（提示需关注） |
+| NEW / MASTERED | 黑色 | 白色 |
+| 本轮标记错 | 淡红色 | 红色 |
+| 本轮标记对 | 黑色 | 绿色 |
+
+#### 闪卡模式
+| 状态 | 文字颜色 |
+|------|----------|
+| WEAK | 淡红色 (text-red-300) |
+| NEW / MASTERED | 正常色 |
+| 本轮错题 | 纯红色 (text-red-500) |
+
+### 数据库迁移
+
+#### SQL 迁移脚本
+文件：`scripts/migrations/add-last-practice-date.sql`
+
+```sql
+ALTER TABLE mastery_records
+ADD COLUMN IF NOT EXISTS last_practice_date text;
+
+ALTER TABLE mastery_records
+ADD COLUMN IF NOT EXISTS consecutive_green integer default 0;
+```
+
+#### 数据初始化脚本
+文件：`scripts/initialize-mastery-fields.js`
+
+运行命令：
+```bash
+node scripts/initialize-mastery-fields.js
+```
+
+### 关键变量名
+- `mastery` - 全局掌握状态（从 Supabase 加载）
+- `temp_state` - 本轮练习状态（短期标记）
+- `history` - 每天练习结果数组
+- `consecutive_green` - 连续绿色天数
+- `last_practice_date` - 最后练习日期
+- `today_red_marked` - 今天是否标记过红色（临时追踪）
