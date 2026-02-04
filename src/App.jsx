@@ -428,7 +428,15 @@ function MainApp() {
   const [isLoading, setIsLoading] = useState(true);
   const [syncStatus, setSyncStatus] = useState('idle');
   const [isShuffling, setIsShuffling] = useState(false);
-  const [isFlashCardMode, setIsFlashCardMode] = useState(false);
+  const [isFlashCardView, setIsFlashCardView] = useState([false, false, false]); // 每tab独立的闪卡视图模式
+
+  const toggleFlashCardView = (tabIndex) => {
+    setIsFlashCardView(prev => {
+      const newState = [...prev];
+      newState[tabIndex] = !newState[tabIndex];
+      return newState;
+    });
+  };
 
   const [answerCardVisible, setAnswerCardVisible] = useState(false);
   const [answerCardWord, setAnswerCardWord] = useState(null);
@@ -755,7 +763,7 @@ function MainApp() {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.3' : 'Cloud V3.10.3'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.4' : 'Cloud V3.10.4'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
@@ -801,7 +809,7 @@ function MainApp() {
 
   return (
     <div className="h-screen flex flex-col bg-white font-sans text-black overflow-hidden relative" onKeyDown={(e) => { if (e.shiftKey && e.key === 'S') { e.preventDefault(); testMasteryStatus(); } }}>
-      {isFlashCardMode && <FlashCardView words={words} onClose={() => setIsFlashCardMode(false)} getStatus={getStatus} />}
+      {isFlashCardView[step] && <FlashCardView words={words} onClose={() => toggleFlashCardView(step)} getStatus={getStatus} />}
       {strokeTarget && <StrokeOrderPlayer word={strokeTarget} onClose={() => setStrokeTarget(null)} />}
       {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 z-[2000]" />}
       <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]">
@@ -810,7 +818,7 @@ function MainApp() {
             <LogOut size={14}/> 退出
           </button>
           <div className="flex items-center gap-2">
-            {step === 0 && <button onClick={() => setIsFlashCardMode(true)} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><Monitor size={18}/></button>}
+            <button onClick={() => toggleFlashCardView(step)} className={`p-2 rounded-lg transition-all ${isFlashCardView[step] ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-black hover:bg-slate-50'}`}><Monitor size={18}/></button>
             <button onClick={() => { stopVoice(); setIsShuffling(true); setTimeout(() => { setWords(prev => [...prev].sort(() => Math.random() - 0.5)); setIsShuffling(false); }, 300); }} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><RefreshCw size={18}/></button>
             <button onClick={() => setShowAnswers(!showAnswers)} className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-black transition-all ${showAnswers ? 'bg-slate-50 text-black' : 'text-slate-400 hover:text-black'}`}>
               {showAnswers ? <EyeOff size={18}/> : <Eye size={18}/>} 看答案
