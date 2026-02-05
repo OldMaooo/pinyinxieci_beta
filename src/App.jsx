@@ -204,6 +204,13 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
   }, [index, speed, isPlaying]);
 
   const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); if (!showThumbnails) { fadeRef.current = setTimeout(() => setShowControls(false), 6000); } };
+  useEffect(() => {
+    setShowControls(showThumbnails);
+    if (showThumbnails && fadeRef.current) {
+      clearTimeout(fadeRef.current);
+      fadeRef.current = null;
+    }
+  }, [showThumbnails]);
   useEffect(() => { handleInteraction(); }, []);
 
   useEffect(() => {
@@ -392,7 +399,7 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
     <div onClick={() => isWaiting && onStartVoice(index)} className={`flex flex-col items-center border-b border-slate-200 pb-6 mb-0 w-full overflow-hidden relative transition-all duration-300 ${isActive ? 'bg-blue-50' : ''} ${isWaiting ? 'hover:bg-blue-50/30 cursor-pointer ring-2 ring-blue-400 ring-dashed ring-opacity-50 rounded-lg' : ''} ${isShuffling ? 'opacity-50 scale-95 blur-[1px]' : 'opacity-100 scale-100 blur-0'}`}>
       <div className="no-wrap-box relative select-none touch-none flex flex-col justify-end items-center transition-all duration-300 w-full overflow-hidden" style={{ minHeight: focusOnAnswer ? '94px' : '49px' }}>
         <div className={`font-bold font-kaiti tracking-tight leading-none transition-all ${focusOnAnswer ? 'opacity-30 mb-1 text-[14px]' : `text-[32px] ${item.isWeak ? 'text-red-300' : 'text-black'}`} ${isActive ? 'text-blue-600' : ''}`}>{item.pinyin}</div>
-        <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? 'opacity-100 text-[64px] mt-1' : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
+        <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? `opacity-100 text-[64px] mt-1 ${item.isWeak ? 'text-red-300' : ''}` : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
       </div>
       <div className="flex justify-center items-center gap-2 mt-2 w-full">
         <span className="text-[10px] font-mono text-slate-300 italic">{index + 1}</span>
