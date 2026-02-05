@@ -684,7 +684,22 @@ function MainApp() {
 
   const handleTabChange = (idx) => {
     if (idx === 2 && step < 2) setModalConfig({ isOpen: true, type: 'TO_FINAL', title: "确认进入终测？", content: "确认进入终测吗？" });
-    else { setStep(idx); setShowAnswers(false); stopVoice(); if (idx === 2) setWords(prev => prev.map(w => (!mastery[w.id]?.history?.length && (w.markPractice==='red' || w.markSelf==='red')) ? {...w, markFinal:'red'} : w)); }
+    else {
+      setStep(idx);
+      setShowAnswers(false);
+      stopVoice();
+      if (idx === 2) {
+        // 切换到 Tab 3 时，确保保留 isWeak 字段并设置 markFinal
+        setWords(prev => prev.map(w => {
+          const newData = (!mastery[w.id]?.history?.length && (w.markPractice==='red' || w.markSelf==='red')) ? {...w, markFinal:'red'} : w;
+          // 确保 isWeak 字段保留
+          if (!('isWeak' in newData)) {
+            newData.isWeak = w.isWeak;
+          }
+          return newData;
+        }));
+      }
+    }
   };
 
   const updateWordsWithFilter = (enableFilter) => {
@@ -696,6 +711,9 @@ function MainApp() {
         const savedTemp = curW ? { practice: curW.markPractice, self: curW.markSelf, final: curW.markFinal } : (mastery[w.id]?.temp || {});
         const wordData = { ...w, markPractice: savedTemp.practice || 'white', markSelf: savedTemp.self || 'white', markFinal: savedTemp.final || 'white' };
         const hasHist = mastery[w.id]?.history?.includes('red');
+        // 设置 isWeak 字段，用于判断是否显示浅红色
+        const isWeak = getStatus(w.id) === 'WEAK';
+        wordData.isWeak = isWeak;
         let shouldShow = true;
         if (enableFilter) {
             if (step === 0) shouldShow = wordData.markPractice === 'red' || hasHist;
