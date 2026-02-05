@@ -132,7 +132,7 @@ const AnswerCard = ({ word, onClose, onAutoNext }) => {
   );
 };
 
-const FlashCardView = ({ words, onClose, getStatus }) => {
+const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
   const [index, setIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [speed, setSpeed] = useState(5000);
@@ -253,6 +253,11 @@ const FlashCardView = ({ words, onClose, getStatus }) => {
       newMarkedWrong.add(wordId);
     }
     setMarkedWrong(newMarkedWrong);
+
+    // 同步到words状态
+    if (onSyncMarks) {
+      onSyncMarks(newMarkedWrong);
+    }
 
     try {
       const { error } = await supabase
@@ -381,7 +386,7 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
   if (!item || !item.pinyin) return <div className="h-24" />;
   const isActive = isVoiceActive && activeIndex === index;
   const isWaiting = isVoiceActive && activeIndex === -1;
-  const isWeakWord = status === 'WEAK';
+  const isWeakWord = item.isWeak;  // 使用item.isWeak判断长期未掌握
 
   return (
     <div onClick={() => isWaiting && onStartVoice(index)} className={`flex flex-col items-center border-b border-slate-200 pb-6 mb-0 w-full overflow-hidden relative transition-all duration-300 ${isActive ? 'bg-blue-50' : ''} ${isWaiting ? 'hover:bg-blue-50/30 cursor-pointer ring-2 ring-blue-400 ring-dashed ring-opacity-50 rounded-lg' : ''} ${isShuffling ? 'opacity-50 scale-95 blur-[1px]' : 'opacity-100 scale-100 blur-0'}`}>
@@ -436,6 +441,11 @@ function MainApp() {
       newState[tabIndex] = !newState[tabIndex];
       return newState;
     });
+  };
+
+  // 获取当前tab对应的标记字段名
+  const getMarkType = (step) => {
+    return step === 0 ? 'markPractice' : step === 1 ? 'markSelf' : 'markFinal';
   };
 
   const [answerCardVisible, setAnswerCardVisible] = useState(false);
@@ -763,7 +773,7 @@ function MainApp() {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.4' : 'Cloud V3.10.4'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.5' : 'Cloud V3.10.5'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
@@ -809,7 +819,16 @@ function MainApp() {
 
   return (
     <div className="h-screen flex flex-col bg-white font-sans text-black overflow-hidden relative" onKeyDown={(e) => { if (e.shiftKey && e.key === 'S') { e.preventDefault(); testMasteryStatus(); } }}>
-      {isFlashCardView[step] && <FlashCardView words={words} onClose={() => toggleFlashCardView(step)} getStatus={getStatus} />}
+      {isFlashCardView[step] && <FlashCardView
+        words={words}
+        onClose={() => toggleFlashCardView(step)}
+        onSyncMarks={(markedIds) => {
+          setWords(prev => prev.map(w =>
+            markedIds.has(w.id) ? { ...w, [getMarkType(step)]: 'red' } : w
+          ));
+        }}
+        getStatus={getStatus}
+      />}
       {strokeTarget && <StrokeOrderPlayer word={strokeTarget} onClose={() => setStrokeTarget(null)} />}
       {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 z-[2000]" />}
       <header className="fixed top-0 left-0 w-full bg-white border-b z-[100]">
