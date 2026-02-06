@@ -339,8 +339,8 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
             : currentWord.pinyin}
         </div>
       </div>
-      <div className="absolute inset-y-0 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
-      <div className="absolute inset-y-0 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
+      <div className="absolute top-1/4 bottom-1/4 left-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={prev} style={{cursor: 'pointer'}} />
+      <div className="absolute top-1/4 bottom-1/4 right-0 w-1/4 z-10 cursor-pointer hover:bg-white/5" onClick={next} style={{cursor: 'pointer'}} />
       
       <div className={`absolute top-0 left-0 w-full p-8 flex justify-between items-start pointer-events-auto z-[2050] transition-opacity duration-500 ${showControls ? 'opacity-100' : 'opacity-0'}`}>
         <div className="p-4">
@@ -357,8 +357,8 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
-                  className={`shrink-0 px-3 py-2 rounded-xl font-kaiti flex items-center justify-center transition-all ${
-                    index === i ? 'bg-white text-black font-black text-lg shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-sm' : 'bg-black/5 text-black/40 text-sm')
+                  className={`shrink-0 px-6 py-4 rounded-xl font-kaiti flex items-center justify-center transition-all ${
+                    index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-lg' : 'bg-black/5 text-black/40 text-lg')
                   } ${markedWrong.has(w.id) ? 'text-red-500' : ''}`}
                 >
                   {isPinyinMode ? w.pinyin : w.word}
