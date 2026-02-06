@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
-import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3, Type, PieChart } from 'lucide-react';
+import { LogOut, Check, X, Eye, EyeOff, Save, Volume2, Play, Pause, SkipBack, SkipForward, Plus, Minus, MousePointerClick, Loader2, Cloud, AlertCircle, RefreshCw, Monitor, VolumeX, Moon, Sun, Grid, Edit3, Type, PieChart, ChevronRight } from 'lucide-react';
 import { pinyin } from 'pinyin-pro';
 import { createClient } from '@supabase/supabase-js';
 
@@ -387,6 +387,77 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
               <Type size={24}/>
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* 左下角扇形菜单 - 左手操控区 */}
+      <div className="absolute bottom-0 left-0 pointer-events-auto z-[2100]">
+        <div className="relative">
+          {/* 暂停/继续按钮 - 最下角 */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsPlaying(!isPlaying);
+              handleInteraction();
+            }}
+            className="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-white text-black shadow-2xl flex items-center justify-center active:scale-95 transition-transform"
+          >
+            {isPlaying ? <Pause size={32} fill="black"/> : <Play size={32} fill="black" className="ml-0.5"/>}
+          </button>
+          
+          {/* 「不会」按钮 - 上方 */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleInteraction();
+              // 实现自动化逻辑
+              if (isPinyinMode && !showChinese) {
+                // 第一次点击：显示红色汉字并暂停
+                setShowChinese(true);
+                setIsPausedForViewingAnswer(true);
+                setIsPlaying(false);
+                setMarkedWrong(prev => new Set(prev).add(currentWord.id));
+              } else if (markedWrong.has(currentWord.id)) {
+                // 第二次点击：取消标记
+                setMarkedWrong(prev => {
+                  const newSet = new Set(prev);
+                  newSet.delete(currentWord.id);
+                  return newSet;
+                });
+                setIsPausedForViewingAnswer(false);
+                setIsPlaying(true);
+              }
+            }}
+            className={`absolute bottom-20 left-4 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
+              markedWrong.has(currentWord.id)
+                ? 'bg-red-500 text-white'
+                : isDarkMode
+                ? 'bg-white/20 text-white'
+                : 'bg-white text-black'
+            }`}
+          >
+            <span className="font-black text-base">不会</span>
+          </button>
+          
+          {/* 下一题按钮 - 右边 */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (isPausedForViewingAnswer) {
+                setIsPausedForViewingAnswer(false);
+                setIsPlaying(true);
+              }
+              setIndex((index + 1) % words.length);
+              handleInteraction();
+            }}
+            className={`absolute bottom-4 left-20 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
+              isDarkMode
+                ? 'bg-white/20 text-white'
+                : 'bg-white text-black'
+            }`}
+          >
+            <ChevronRight size={28} strokeWidth={3}/>
+          </button>
         </div>
       </div>
     </div>
