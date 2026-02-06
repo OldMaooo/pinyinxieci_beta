@@ -353,17 +353,20 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
         <div className="p-8 flex flex-col gap-6 items-center pointer-events-auto">
           {showThumbnails && (
             <div className="w-full flex gap-2 overflow-x-auto pb-4 px-4 mask-fade-edges scrollbar-hide">
-              {words.map((w, i) => (
+              {words.map((w, i) => {
+                const isCurrent = index === i;
+                const isWeakWord = getStatus(w.id) === 'WEAK';
+                return (
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
                   className={`shrink-0 px-6 py-4 rounded-xl font-kaiti flex items-center justify-center transition-all ${
-                    index === i ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white/40 text-lg' : 'bg-black/5 text-black/40 text-lg')
-                  } ${markedWrong.has(w.id) ? 'text-red-500' : ''}`}
+                    isCurrent ? 'bg-white text-black font-black text-2xl shadow-lg' : (isDarkMode ? 'bg-white/10 text-white font-black text-2xl' : 'bg-black/5 text-black font-black text-2xl')
+                  } ${markedWrong.has(w.id) ? 'text-red-500' : (isWeakWord ? 'text-red-300' : '')}`}
                 >
                   {isPinyinMode ? w.pinyin : w.word}
                 </button>
-              ))}
+              )})}
             </div>
           )}
           <div className="flex items-center gap-8 px-10 py-6">
@@ -410,15 +413,9 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
             onClick={(e) => {
               e.stopPropagation();
               handleInteraction();
-              // 实现自动化逻辑
-              if (isPinyinMode && !showChinese) {
-                // 第一次点击：显示红色汉字并暂停
-                setShowChinese(true);
-                setIsPausedForViewingAnswer(true);
-                setIsPlaying(false);
-                setMarkedWrong(prev => new Set(prev).add(currentWord.id));
-              } else if (markedWrong.has(currentWord.id)) {
-                // 第二次点击：取消标记
+              // 修复Bug：先判断是否已标记，优先取消
+              if (markedWrong.has(currentWord.id)) {
+                // 取消标记
                 setMarkedWrong(prev => {
                   const newSet = new Set(prev);
                   newSet.delete(currentWord.id);
@@ -426,9 +423,15 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
                 });
                 setIsPausedForViewingAnswer(false);
                 setIsPlaying(true);
+              } else {
+                // 标记：显示红色汉字并暂停
+                setShowChinese(true);
+                setIsPausedForViewingAnswer(true);
+                setIsPlaying(false);
+                setMarkedWrong(prev => new Set(prev).add(currentWord.id));
               }
             }}
-            className={`absolute bottom-20 left-4 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
+            className={`absolute bottom-24 left-4 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
               markedWrong.has(currentWord.id)
                 ? 'bg-red-500 text-white'
                 : isDarkMode
@@ -450,7 +453,7 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
               setIndex((index + 1) % words.length);
               handleInteraction();
             }}
-            className={`absolute bottom-4 left-20 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
+            className={`absolute bottom-4 left-24 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
               isDarkMode
                 ? 'bg-white/20 text-white'
                 : 'bg-white text-black'
