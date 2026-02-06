@@ -413,23 +413,8 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
             onClick={(e) => {
               e.stopPropagation();
               handleInteraction();
-              // 修复Bug：先判断是否已标记，优先取消
-              if (markedWrong.has(currentWord.id)) {
-                // 取消标记
-                setMarkedWrong(prev => {
-                  const newSet = new Set(prev);
-                  newSet.delete(currentWord.id);
-                  return newSet;
-                });
-                setIsPausedForViewingAnswer(false);
-                setIsPlaying(true);
-              } else {
-                // 标记：显示红色汉字并暂停
-                setShowChinese(true);
-                setIsPausedForViewingAnswer(true);
-                setIsPlaying(false);
-                setMarkedWrong(prev => new Set(prev).add(currentWord.id));
-              }
+              // 调用 toggleWrongMark 函数（已实现持久化和双模式同步）
+              toggleWrongMark(currentWord.id);
             }}
             className={`absolute bottom-24 left-4 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
               markedWrong.has(currentWord.id)
