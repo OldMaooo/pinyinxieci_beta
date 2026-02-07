@@ -384,12 +384,22 @@ function parseMD(content) {
 }
 
 function parseLessonKey(lesson) {
-  // 返回排序用的键：数字课的序号在前，识字课的9999+序号在后
-  if (lesson.startsWith('识字')) {
-    return '9' + lesson.replace('识字', '');
+  // 排序优先级：阅读课(1) > 识字课(9) > 语文园地(8)
+  // 提取课名中的数字
+  const numMatch = lesson.match(/(\d+)/);
+  const num = numMatch ? parseInt(numMatch[1], 10) : 0;
+
+  if (lesson.startsWith('阅读')) {
+    return '1' + String(num).padStart(3, '0');  // 阅读1 → 1001
   }
-  // 数字课：补零排序
-  return '1' + lesson.padStart(3, '0');
+  if (lesson.startsWith('识字')) {
+    return '9' + String(num).padStart(3, '0');  // 识字1 → 9001
+  }
+  if (lesson.startsWith('语文园地')) {
+    return '8' + String(num).padStart(3, '0');  // 语文园地一 → 8001
+  }
+  // 默认数字课
+  return '1' + String(num).padStart(3, '0');
 }
 
 function generateFinalTable(parsed) {
