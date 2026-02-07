@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>词库 JSON 解析器</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      padding: 15px;
+      max-width: 1600px;
+      margin: 0 auto;
+      background: #fafafa;
+      font-size: 14px;
+    }
+    h1 { text-align: center; color: #333; margin: 0 0 15px 0; font-size: 20px; }
+
+    #drop-zone {
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 30px;
+      text-align: center;
+      background: white;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+    #drop-zone:hover { border-color: #3b82f6; background: #f0f7ff; }
+    #drop-zone h2 { margin: 0; font-size: 16px; color: #666; }
+    #drop-zone p { margin: 5px 0 0; color: #999; font-size: 12px; }
+    #file-input { display: none; }
+
+    #stats { display: none; background: white; padding: 12px 15px; border-radius: 8px; margin-bottom: 15px; display: flex; gap: 20px; flex-wrap: wrap; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-item { text-align: center; }
+    .stat-item .label { font-size: 11px; color: #888; }
+    .stat-item .value { font-size: 18px; font-weight: bold; color: #3b82f6; }
+
+    #search-area { display: none; margin-bottom: 10px; }
+    #search-input { width: 100%; padding: 8px 12px; font-size: 14px; border: 1px solid #ddd; border-radius: 6px; }
+
+    #error-area { display: none; background: #fef2f2; color: #dc2626; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+
+    #lesson-nav { display: none; position: sticky; top: 0; background: #fafafa; padding: 8px 0; margin-bottom: 10px; z-index: 100; }
+    #lesson-nav h4 { margin: 0 0 8px 0; font-size: 12px; color: #666; }
+    .nav-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .nav-tag { padding: 4px 10px; background: #e8e8e8; border: none; border-radius: 15px; font-size: 12px; cursor: pointer; }
+    .nav-tag:hover { background: #ddd; }
+    .nav-tag.active { background: #3b82f6; color: white; }
+
+    #word-list { display: none; }
+    .lesson-row { display: flex; align-items: flex-start; padding: 8px 10px; border-bottom: 1px solid #eee; gap: 15px; }
+    .lesson-row:hover { background: #f8f9fa; }
+    .lesson-name { min-width: 80px; font-weight: 600; color: #333; font-size: 14px; }
+    .lesson-words { flex: 1; display: flex; flex-wrap: wrap; gap: 6px; }
+    .word-chip { background: #f0f0f0; padding: 3px 8px; border-radius: 4px; font-size: 14px; cursor: pointer; }
+    .word-chip:hover { background: #3b82f6; color: white; }
+    .word-chip .pinyin { font-size: 10px; color: #888; margin-left: 4px; }
+
+    #back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 36px;
+      height: 36px;
+      background: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 词库 JSON 解析器</h1>
+
+  <div id="drop-zone">
+    <h2>📁 拖拽 JSON 文件到这里</h2>
+    <p>或点击选择文件</p>
+  </div>
+  <input type="file" id="file-input" accept=".json">
+
+  <div id="error-area"></div>
+
+  <div id="stats" style="display:none;">
+    <div class="stat-item"><div class="label">学期</div><div class="value" id="grade-semester">-</div></div>
+    <div class="stat-item"><div class="label">总词数</div><div class="value" id="total-count">-</div></div>
+    <div class="stat-item"><div class="label">课数</div><div class="value" id="lesson-count">-</div></div>
+  </div>
+
+  <div id="search-area" style="display:none;">
+    <input type="text" id="search-input" placeholder="🔍 搜索词语...">
+  </div>
+
+  <div id="lesson-nav">
+    <h4>📑 快速跳转</h4>
+    <div class="nav-tags" id="nav-tags"></div>
+  </div>
+
+  <div id="word-list"></div>
+
+  <button id="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('file-input');
+    const errorArea = document.getElementById('error-area');
+    const statsArea = document.getElementById('stats');
+    const searchArea = document.getElementById('search-area');
+    const lessonNav = document.getElementById('lesson-nav');
+    const wordList = document.getElementById('word-list');
+    const backToTop = document.getElementById('back-to-top');
+
+    let currentData = null;
+
+    dropZone.onclick = () => fileInput.click();
+    fileInput.onchange = (e) => { if (e.target.files[0]) parseFile(e.target.files[0]); };
+
+    dropZone.ondragover = (e) => { e.preventDefault(); dropZone.style.borderColor = '#3b82f6'; };
+    dropZone.ondragleave = () => { dropZone.style.borderColor = '#ddd'; };
+    dropZone.ondrop = (e) => { e.preventDefault(); if (e.dataTransfer.files[0]) parseFile(e.dataTransfer.files[0]); };
+
+    function parseFile(file) {
+      if (!file.name.endsWith('.json')) { showError('请选择 JSON 文件'); return; }
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          currentData = JSON.parse(e.target.result);
+          renderData(currentData);
+        } catch (err) { showError('JSON 解析失败: ' + err.message); }
+      };
+      reader.readAsText(file);
+    }
+
+    function showError(msg) {
+      errorArea.textContent = msg;
+      errorArea.style.display = 'block';
+      statsArea.style.display = 'none';
+      searchArea.style.display = 'none';
+      lessonNav.style.display = 'none';
+      wordList.style.display = 'none';
+    }
+
+    function renderData(data) {
+      errorArea.style.display = 'none';
+      statsArea.style.display = 'flex';
+      searchArea.style.display = 'block';
+      lessonNav.style.display = 'block';
+      wordList.style.display = 'block';
+
+      document.getElementById('grade-semester').textContent = data.gradeSemester || '-';
+      document.getElementById('total-count').textContent = data.count || data.wordBank?.length || 0;
+
+      const lessonGroups = {};
+      (data.wordBank || []).forEach(item => {
+        const unit = item.unit || '未分类';
+        if (!lessonGroups[unit]) lessonGroups[unit] = [];
+        lessonGroups[unit].push(item);
+      });
+
+      const sortedLessons = Object.entries(lessonGroups).sort((a, b) => {
+        const aYu = a[0].includes('语文园地');
+        const bYu = b[0].includes('语文园地');
+        if (aYu && !bYu) return 1;
+        if (!aYu && bYu) return -1;
+        return a[0].localeCompare(b[0], 'zh-CN');
+      });
+
+      document.getElementById('lesson-count').textContent = sortedLessons.length;
+
+      const navTags = document.getElementById('nav-tags');
+      navTags.innerHTML = '';
+      sortedLessons.forEach(([lessonName]) => {
+        const tag = document.createElement('button');
+        tag.className = 'nav-tag';
+        tag.textContent = lessonName;
+        tag.onclick = () => {
+          document.getElementById(`lesson-${lessonName}`).scrollIntoView({ behavior: 'smooth' });
+          document.querySelectorAll('.nav-tag').forEach(t => t.classList.remove('active'));
+          tag.classList.add('active');
+        };
+        navTags.appendChild(tag);
+      });
+
+      wordList.innerHTML = '';
+      sortedLessons.forEach(([lessonName, words]) => {
+        const row = document.createElement('div');
+        row.className = 'lesson-row';
+        row.id = `lesson-${lessonName}`;
+        row.innerHTML = `
+          <div class="lesson-name">${lessonName}</div>
+          <div class="lesson-words">${words.map(item => `
+            <span class="word-chip" data-word="${item.word}">
+              ${item.word}${item.pinyin ? `<span class="pinyin">${item.pinyin}</span>` : ''}
+            </span>
+          `).join('')}</div>
+        `;
+        wordList.appendChild(row);
+      });
+
+      document.getElementById('search-input').oninput = (e) => {
+        const term = e.target.value.toLowerCase();
+        document.querySelectorAll('.lesson-row').forEach(row => {
+          const visible = Array.from(row.querySelectorAll('.word-chip')).some(chip =>
+            chip.dataset.word.toLowerCase().includes(term)
+          );
+          row.style.display = visible ? 'flex' : 'none';
+        });
+      };
+
+      window.onscroll = () => { backToTop.style.display = window.scrollY > 200 ? 'block' : 'none'; };
+    }
+  </script>
+</body>
+</html>

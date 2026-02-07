@@ -8,6 +8,24 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'https://ynasoxvdalcmr
 const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_ap2IKSLCxabTzVTQNbw45Q_iFBUaNJW';
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// 学期列表常量
+const SEMESTERS = ["一年级上册", "一年级下册", "二年级上册", "二年级下册", "三年级上册", "三年级下册"];
+
+// 默认学期（从localStorage读取，如果没有则默认为三年级上册）
+const DEFAULT_SEMESTER = localStorage.getItem('pinyin_selected_semester') || '三年级上册';
+
+// 动态加载词库
+async function loadWordBank(grade, semester) {
+  try {
+    const response = await fetch(`/data/${grade}${semester}.json`);
+    const data = await response.json();
+    return data.wordBank || [];
+  } catch (error) {
+    console.error('[App] Error loading word bank:', error);
+    return [];
+  }
+}
+
 const DATA_BLUEPRINT = [
     { title: "单元1", vocab: ["山坡", "学校", "飘扬", "课文", "声音", "招引", "热闹", "古老", "粗壮", "枝干", "洁白"], chars: "球招呼读" },
     { title: "单元2", vocab: ["轰响", "阵雨", "湿润", "风笛", "狂欢", "觉得", "功课", "放学", "老师", "急急忙忙"], chars: "笛罚互碰黄" },
@@ -204,13 +222,6 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
   }, [index, speed, isPlaying]);
 
   const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); if (!showThumbnails) { fadeRef.current = setTimeout(() => setShowControls(false), 6000); } };
-  useEffect(() => {
-    setShowControls(showThumbnails);
-    if (showThumbnails && fadeRef.current) {
-      clearTimeout(fadeRef.current);
-      fadeRef.current = null;
-    }
-  }, [showThumbnails]);
   useEffect(() => { handleInteraction(); }, []);
 
   useEffect(() => {
@@ -399,7 +410,7 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
     <div onClick={() => isWaiting && onStartVoice(index)} className={`flex flex-col items-center border-b border-slate-200 pb-6 mb-0 w-full overflow-hidden relative transition-all duration-300 ${isActive ? 'bg-blue-50' : ''} ${isWaiting ? 'hover:bg-blue-50/30 cursor-pointer ring-2 ring-blue-400 ring-dashed ring-opacity-50 rounded-lg' : ''} ${isShuffling ? 'opacity-50 scale-95 blur-[1px]' : 'opacity-100 scale-100 blur-0'}`}>
       <div className="no-wrap-box relative select-none touch-none flex flex-col justify-end items-center transition-all duration-300 w-full overflow-hidden" style={{ minHeight: focusOnAnswer ? '94px' : '49px' }}>
         <div className={`font-bold font-kaiti tracking-tight leading-none transition-all ${focusOnAnswer ? 'opacity-30 mb-1 text-[14px]' : `text-[32px] ${item.isWeak ? 'text-red-300' : 'text-black'}`} ${isActive ? 'text-blue-600' : ''}`}>{item.pinyin}</div>
-        <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? `opacity-100 text-[64px] mt-1 ${item.isWeak ? 'text-red-300' : ''}` : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
+        <div onClick={(e) => { e.stopPropagation(); onShowStroke && onShowStroke(item.word); }} className={`font-kaiti font-bold leading-none transition-all cursor-pointer hover:text-blue-600 ${focusOnAnswer ? 'opacity-100 text-[64px] mt-1' : 'opacity-0 h-0 overflow-hidden'}`}>{item.word}</div>
       </div>
       <div className="flex justify-center items-center gap-2 mt-2 w-full">
         <span className="text-[10px] font-mono text-slate-300 italic">{index + 1}</span>
@@ -418,6 +429,11 @@ export default function App() {
 
 function MainApp() {
   const [view, setView] = useState('SETUP'); 
+  
+  // 学期状态
+  const [selectedSemester, setSelectedSemester] = useState(DEFAULT_SEMESTER);
+  const [wordBank, setWordBank] = useState([]);
+  
   const [step, setStep] = useState(0); 
   const [selectedUnits, setSelectedUnits] = useState(() => { const saved = localStorage.getItem('pinyin_selected_units'); return saved ? new Set(JSON.parse(saved)) : new Set(['单元1']); });
   const [onlyWrong, setOnlyWrong] = useState(false);
@@ -441,6 +457,20 @@ function MainApp() {
   const [syncStatus, setSyncStatus] = useState('idle');
   const [isShuffling, setIsShuffling] = useState(false);
   const [isFlashCardView, setIsFlashCardView] = useState([false, false, false]); // 每tab独立的闪卡视图模式
+
+  // 动态加载词库（根据选择的学期）
+  useEffect(() => {
+    const loadWords = async () => {
+      const grade = selectedSemester.includes('一') ? '一年级' :
+                    selectedSemester.includes('二') ? '二年级' :
+                    selectedSemester.includes('三') ? '三年级' : '一年级';
+      const semester = selectedSemester.replace(grade, '');
+      const words = await loadWordBank(grade, semester);
+      setWordBank(words);
+    };
+    
+    loadWords();
+  }, [selectedSemester]);
 
   const toggleFlashCardView = (tabIndex) => {
     setIsFlashCardView(prev => {
@@ -536,20 +566,26 @@ function MainApp() {
     setMastery(tempMastery); window.mastery = tempMastery; setIsAdminMode(false);
   };
 
+  // 动态加载词库（根据选择的学期动态生成单元数据）
   const processedUnits = useMemo(() => {
-    return DATA_BLUEPRINT.map(unit => {
-      const finalWords = [...unit.vocab];
-      const existStr = finalWords.join("");
-      [...unit.chars].forEach(c => { if (!existStr.includes(c)) { const phrase = charToWordMap[c] || c; if (!finalWords.includes(phrase)) finalWords.push(phrase); }});
-      return {
-        name: unit.title,
-        words: finalWords.map((w, idx) => {
-          const baseId = `3up-${unit.title}-${w}-${idx}`;
-          return { id: isDevMode ? `${baseId}-test` : baseId, word: String(w), pinyin: pinyin(String(w), { toneType: 'symbol' }) || '' };
-        })
-      };
+    const unitsMap = {};
+    wordBank.forEach(item => {
+      if (!unitsMap[item.unit]) {
+        unitsMap[item.unit] = [];
+      }
+      unitsMap[item.unit].push(item);
     });
-  }, [isDevMode]);
+    
+    return Object.entries(unitsMap).map(([unitKey, items]) => {
+      const name = items[0]?.unit || `单元${unitKey}`;
+      const words = items.map((w, idx) => {
+        const prefix = selectedSemester === '三年级上册' ? '3up' : selectedSemester;
+        const baseId = `${prefix}-${name}-${w.word}-${idx}`;
+        return { id: isDevMode ? `${baseId}-test` : baseId, word: w.word, pinyin: pinyin(String(w.word), { toneType: 'symbol' }) || '' };
+      });
+      return { name, words };
+    });
+  }, [wordBank, selectedSemester, isDevMode]);
 
   const getStatus = (id, useTemp = false) => {
     const m = useTemp && isAdminMode ? tempMastery[id] : mastery[id];
@@ -795,7 +831,7 @@ function MainApp() {
         {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 animate-pulse z-[1000]" />}
         {isAdminMode && <div className="fixed top-0 left-0 w-full h-8 bg-purple-600 z-[1000] flex items-center justify-center text-white text-xs font-bold shadow-lg animate-in slide-in-from-top">🔧 数据修正模式：点击词组调整状态</div>}
         <header className="max-w-5xl w-full mx-auto px-8 py-2 flex justify-between items-baseline shrink-0 border-b border-slate-100 relative">
-          <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[150px] h-full z-50 cursor-default" />
+          <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[80px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
             <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.10.5' : 'Cloud V3.10.5'}</span>
@@ -816,7 +852,21 @@ function MainApp() {
                     transform="rotate(-90 18 18)" />
                 </svg>
               </div>
-              <span className="text-lg font-bold text-slate-400 ml-2">三年级上册</span>
+              <select
+                value={selectedSemester}
+                onChange={(e) => {
+                  const newSemester = e.target.value;
+                  setSelectedSemester(newSemester);
+                  localStorage.setItem('pinyin_selected_semester', newSemester);
+                }}
+                className="text-lg font-bold text-slate-400 bg-transparent border-none cursor-pointer hover:text-slate-600 focus:outline-none"
+              >
+                {SEMESTERS.map(semester => (
+                  <option key={semester} value={semester}>
+                    {semester}
+                  </option>
+                ))}
+              </select>
             </div>
         </header>
         <main className={`flex-1 overflow-y-auto px-8 pb-24 ${isAdminMode ? 'pt-8' : ''}`}><div className="max-w-5xl mx-auto">{processedUnits.map((unit) => { const isSelected = selectedUnits.has(unit.name); return (<div key={unit.name} onClick={() => { if(!isAdminMode) { const n = new Set(selectedUnits); if(n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); } }} className="flex items-baseline gap-6 py-3 border-b border-slate-100 group transition-colors hover:bg-slate-50/50 cursor-pointer"><div className={`w-5 h-5 rounded-sm shrink-0 border-2 flex items-center justify-center transition-all mt-1 ${isSelected ? 'bg-black border-black shadow-md' : 'border-slate-200'}`}>{isSelected && <Check size={14} className="text-white" strokeWidth={4} />}</div><div className="font-black text-lg text-black shrink-0 min-w-[6.5rem] tracking-tighter">{unit.name}</div><div className="flex flex-wrap gap-x-1 gap-y-0">{unit.words.map(w => { const st = getStatus(w.id, true); return (<div key={w.id} className="relative group/word"><span style={{ fontSize: '22px' }} className={`font-kaiti px-1.5 transition-colors ${st === 'WEAK' ? 'text-black font-bold' : st === 'MASTERED' ? 'text-emerald-600 font-bold' : 'text-black'}`}>{w.word}</span>{st === 'WEAK' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-red-500 rounded-full" />}{st === 'MASTERED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-600 rounded-full" />}</div>);})}</div></div>);})}</div></main>

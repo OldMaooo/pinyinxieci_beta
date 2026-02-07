@@ -1,0 +1,54 @@
+{
+  "version": "1.0",
+  "buildDate": "2026-02-07T00:00:00.000Z",
+  "gradeSemester": "一年级上册",
+  "sourcePdf": "【人教版】一年级上册(2024秋版)语文电子课本.pdf",
+
+  // === 阶段1：原始数据提取 ===
+  "rawExtraction": {
+    "unit1": {
+      "name": "第一单元",
+      "wordList": ["天空", "白云", "太阳", "大地", "小草", "花儿", "树木", "小鸟", "虫子", "蚂蚁"],
+      "charList": ["天", "空", "白", "云", "太", "阳", "大", "地", "小", "草", "花", "儿", "树", "木", "鸟", "虫", "蚂", "蚁"]
+    },
+    "unit2": {
+      "name": "第二单元",
+      "wordList": ["爸爸", "妈妈", "爷爷", "奶奶", "哥哥", "弟弟", "姐姐", "妹妹", "朋友"],
+      "charList": ["爸", "妈", "爷", "奶", "哥", "弟", "姐", "妹", "朋", "友"]
+    },
+    "yuwenyuandi1": {
+      "name": "语文园地一",
+      "wordList": ["天地人", "你我他", "金木水火土", "口耳目", "日月水火", "对错", "大小", "多少"],
+      "charList": ["天", "地", "人", "你", "我", "他", "金", "木", "水", "火", "土", "口", "耳", "目", "日", "月", "水", "火", "对", "错", "大", "小", "多", "少"]
+    }
+  },
+
+  // === 阶段2：数据处理 ===
+  "processing": {
+    "unit1": {
+      "wordsFromWordList": ["天空", "白云", "太阳", "大地", "小草", "花儿", "树木", "小鸟", "虫子", "蚂蚁"],
+      "wordsGeneratedFromChars": [
+        {
+          "char": "天",
+          "originalInWordList": true,
+          "action": "SKIP - already in word list"
+        },
+        {
+          "char": "空",
+          "originalInWordList": true,
+          "action": "SKIP - already in word list"
+        },
+        {
+          "char": "蚂",
+          "originalInWordList": true,
+          "action": "SKIP - already in word list"
+        }
+      ],
+      "duplicatesRemoved": [],
+      "finalWordCount": 10
+    }
+  },
+
+  // === 阶段3：最终输出（与 dist/data 目录下的词库一致）===
+  "wordBank": []
+}
