@@ -765,32 +765,8 @@ function MainApp() {
     setSyncStatus('saving');
     const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
 
-    // 在终测 + 仅错题模式下，需要保存"本次练习选中的所有题目"
-    // 包括那些被筛选掉的题目，确保未标记的题目自动算正确
-    const wordsToSave = !isTemporary && step === 2 && onlyWrong ? (() => {
-      const wordIdsInWords = new Set(words.map(w => w.id));
-      const allWords = [];
-      processedUnits.forEach(u => {
-        if (selectedUnits.has(u.name)) {
-          u.words.forEach(w => {
-            const curW = words.find(cw => cw.id === w.id);
-            if (wordIdsInWords.has(w.id)) {
-              allWords.push(curW);
-            } else {
-              // 被筛选掉的题目，也加入保存列表（使用当前 words 中的标记）
-              allWords.push({
-                ...w,
-                markPractice: curW?.markPractice || 'white',
-                markSelf: curW?.markSelf || 'white',
-                markFinal: curW?.markFinal || 'white',
-                isWeak: curW?.isWeak
-              });
-            }
-          });
-        }
-      });
-      return allWords;
-    })() : words;
+    // 仅错题模式下，只保存当前显示的题目（被筛选掉的自动算正确）
+    const wordsToSave = !isTemporary && step === 2 && onlyWrong ? words : words;
 
     wordsToSave.forEach(w => {
       let currentFinal = w.markFinal; if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
