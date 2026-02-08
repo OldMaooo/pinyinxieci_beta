@@ -753,7 +753,34 @@ function MainApp() {
   const save = async (isTemporary = false) => {
     setSyncStatus('saving');
     const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
-    words.forEach(w => {
+
+    // 在终测模式下，需要保存"本次练习中出现的所有题目"
+    // 包括那些在仅错题模式下被筛选掉但实际练习过的题目
+    const wordsToSave = !isTemporary && step === 2 ? (() => {
+      const wordIdsInWords = new Set(words.map(w => w.id));
+      const allWords = [];
+      processedUnits.forEach(u => {
+        if (selectedUnits.has(u.name)) {
+          u.words.forEach(w => {
+            const m = mastery[w.id];
+            // 找到今天已经练习过的题目（根据 temp_state 判断）
+            const hasPracticedToday = m?.temp && (m.temp.practice || m.temp.self || m.temp.final);
+            if (hasPracticedToday && !wordIdsInWords.has(w.id)) {
+              // 这个题目被练习过但不在 words 中（仅错题模式被筛选掉了）
+              allWords.push({
+                ...w,
+                markPractice: m.temp.practice || 'white',
+                markSelf: m.temp.self || 'white',
+                markFinal: m.temp.final || 'white'
+              });
+            }
+          });
+        }
+      });
+      return [...words, ...allWords];
+    })() : words;
+
+    wordsToSave.forEach(w => {
       let currentFinal = w.markFinal; if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
       const currentTemp = { practice: w.markPractice, self: w.markSelf, final: currentFinal };
        const m = nextMastery[w.id] || mastery[w.id];
