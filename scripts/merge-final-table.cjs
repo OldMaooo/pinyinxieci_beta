@@ -323,7 +323,97 @@ const charToWordMap = {
  '杆': '杆子', '栋': '栋梁', '库': '车库', '闸': '水闸', '羔': '羊羔',
  '蝗': '蝗虫', '狼': '大浪', '猩': '猩猩', '鹤': '白鹤', '蛇': '毒蛇',
  '鸽': '鸽子', '蚕': '蚕茧', '蚯': '蚯蚓', '蚓': '蚯蚓', '骆': '骆驼',
- '驼': '骆驼', '狮': '狮子',
+  '驼': '骆驼', '狮': '狮子',
+
+  // 一年级下册专用（确保所有单字转成简单双字词）
+  '吹': '吹风', '入': '进入', '什': '什么', '古': '古代',
+  '胡': '胡萝卜', '言': '语言', '晴': '晴天', '请': '请坐',
+  '动': '动物', '万': '万一', '共': '共同', '产': '生产',
+  '党': '党旗', '阳': '阳光', '井': '井水', '住': '住手',
+  '京': '北京', '广': '广大', '走': '走路', '河': '河水',
+  '让': '让开', '己': '自己', '快': '快乐', '乐': '音乐',
+  '书': '书本', '床': '床单', '故': '故事', '乡': '乡村',
+  '样': '样子', '笑': '笑声', '再': '再见', '米': '大米',
+  '肉': '肉类', '物': '动物', '造': '建造', '欢': '欢迎',
+  '网': '网络', '今': '今天', '细': '细心', '夕': '夕阳',
+  '沙': '沙子', '近': '近视', '习': '学习', '玉': '玉石',
+  '义': '义务', '池': '池子', '玩': '玩耍', '眼': '眼睛',
+  '泪': '眼泪', '台': '台风', '唱': '唱歌', '美': '美丽',
+  '这': '这里', '知': '知道', '平': '平安', '车': '车轮',
+  '百': '百分', '时': '时间', '兴': '高兴', '往': '往常',
+  '瓜': '西瓜', '她': '她们', '还': '还有', '身': '身体',
+  '吓': '吓人', '赶': '赶走', '过': '过去', '卡': '卡片',
+  '叫': '叫喊', '册': '手册', '支': '一支', '衣': '衣服',
+  '饱': '饱满', '抱': '拥抱', '豆': '豆子', '父': '父亲',
+
+  // 一年级上下册补充映射
+  '西': '西瓜', '小': '小孩', '男': '男孩', '正': '正确',
+  '王': '国王', '午': '中午', '个': '一个', '去': '过去',
+  '工': '工人', '厂': '工厂', '门': '大门', '卫': '卫生',
+
+  // 三年级下册
+  '融': '融化', '燕': '燕子', '鸳': '鸳鸯', '鸯': '鸳鸯',
+  '惠': '优惠', '崇': '崇拜', '芦': '芦苇', '芽': '发芽', '梅': '梅花',
+  '溪': '溪水', '泛': '广泛', '减': '减少', '凑': '凑合',
+  '拂': '拂过', '集': '集合', '聚': '聚集', '形': '形成',
+  '掠': '掠过', '偶': '偶尔', '尔': '偶尔', '沾': '沾湿',
+  '倦': '疲倦', '闲': '闲散', '纤': '纤细', '痕': '痕迹',
+  '瓣': '花瓣', '蓬': '莲蓬', '胀': '膨胀', '裂': '破裂',
+  '姿': '姿势', '势': '姿势', '仿': '仿佛', '佛': '仿佛',
+  '随': '随风', '蹈': '舞蹈', '止': '停止',
+  '守': '守株待兔', '株': '守株待兔', '等': '等待', '宋': '宋朝',
+  '耕': '耕种', '触': '接触', '颈': '颈部', '释': '解释', '其': '其他',
+  '骄': '骄傲', '傲': '骄傲', '谦': '谦虚', '懦': '懦弱', '虚': '虚心',
+  '提': '提问', '尘': '尘土', '讶': '惊讶', '捧': '捧着', '价': '代价',
+  '鹿': '小鹿', '塘': '池塘', '映': '倒映', '欣': '欣赏',
+  '赏': '欣赏', '匀': '均匀', '致': '精致', '配': '配合',
+  '哎': '哎呀', '狮': '狮子', '追': '追赶', '叹': '叹气',
+  '符': '符号', '欲': '欲望', '魂': '灵魂', '借': '借书',
+  '酒': '喝酒', '何': '何方', '牧': '牧民', '兄': '兄弟',
+  '独': '独自', '异': '奇异', '佳': '佳句',
+  '世': '世界', '界': '世界', '伟': '伟大', '录': '记录',
+  '保': '保存', '存': '保存', '约': '大约', '验': '经验',
+  '捞': '打捞', '阿': '阿姨', '欧': '欧洲', '洲': '欧洲', '社': '社会',
+  '赵': '赵州桥', '省': '省市', '县': '县城', '匠': '石匠',
+  '设': '设计', '计': '设计', '史': '历史', '创': '创造',
+  '举': '创举', '且': '而且', '智': '智慧', '慧': '智慧', '历': '历史',
+  '芬': '芬芳', '芳': '芬芳', '内': '内部', '醒': '苏醒',
+  '寿': '长寿', '苏': '苏醒', '强': '强壮', '示': '表示',
+  '昆': '昆虫', '修': '修建', '建': '修建', '组': '组成',
+  '蜜': '蜜蜂', '蜂': '蜜蜂', '辨': '辨认', '阻': '阻力',
+  '跨': '跨步', '括': '包括', '检': '检查', '查': '检查',
+  '确': '确实', '误': '错误', '途': '途中', '陌': '陌生',
+  '宇': '宇宙', '宙': '宇宙', '淌': '流淌', '秘': '秘密',
+  '密': '秘密', '栋': '栋梁', '梯': '楼梯', '铃': '铃声',
+  '乘': '乘法', '绪': '情绪', '篇': '篇章', '越': '跨越',
+  '状': '形状', '狐': '狐狸', '狸': '狐狸', '腰': '腰部',
+  '零': '零钱', '巧': '巧妙', '克': '克服', '肠': '香肠',
+  '继': '继续', '续': '继续', '抬': '抬头', '烦': '麻烦',
+  '墨': '墨水', '染': '染色', '竿': '竹竿', '腾': '沸腾',
+  '碎': '碎片', '拨': '拨动', '浪': '浪花', '葫': '葫芦',
+  '爽': '凉爽', '蘑': '蘑菇', '菇': '蘑菇',
+  '表': '代表', '胆': '胆量', '夺': '夺取', '骂': '责骂',
+  '仇': '仇人', '差': '差别', '付': '付钱', '倍': '双倍',
+  '虽': '虽然', '式': '方式', '鬼': '小鬼', '泡': '气泡',
+  '件': '事件', '皂': '肥皂', '剩': '剩下', '碗': '碗筷',
+  '悠': '悠闲', '若': '若是', '透': '透明', '娇': '娇小',
+  '扯': '拉扯', '仰': '仰望', '串': '串门', '婴': '婴儿',
+  '希': '希望', '呈': '呈现', '幻': '变幻', '诱': '诱人',
+  '润': '湿润', '芒': '光芒', '翔': '飞翔', '冰': '冰块',
+  '剑': '刀剑', '普': '普通', '模': '模型', '型': '模型',
+  '宁': '宁静', '官': '官员', '汪': '汪洋', '参': '参加',
+  '攻': '攻击', '推': '推动', '迅': '迅速', '速': '速度',
+  '退': '后退', '轮': '轮船', '煤': '煤炭', '铁': '铁路',
+  '必': '必须', '灿': '金灿灿', '骑': '骑马', '秒': '秒针',
+  '腿': '腿部', '凶': '凶猛', '猛': '凶猛', '接': '接着',
+  '庙': '寺庙', '威': '威武', '武': '威武', '镇': '镇静',
+  '性': '性子', '卷': '试卷', '货': '货物', '算': '计算',
+  '夹': '夹杂', '夸': '夸奖', '务': '服务', '衬': '衬衫',
+  '衫': '衬衫', '负': '负责', '责': '负责', '艺': '手艺',
+  '漏': '漏水', '喂': '喂食', '胖': '肥胖', '驴': '毛驴',
+  '贼': '贼眉', '狼': '狼狗', '莫': '莫属', '厉': '厉害',
+  '抱': '拥抱', '架': '架子', '胶': '胶水', '粘': '粘贴',
+  '偏': '偏心',
 };
 
 function parseMD(content) {
@@ -338,11 +428,13 @@ function parseMD(content) {
   const lines = content.split('\n');
   for (const line of lines) {
     // 检测章节
-    if (line.startsWith('## 一、写字表')) {
+    // 支持中文数字（一二三...）和阿拉伯数字
+    if (line.match(/^## [一二三四五六七八九十\d]+、写字表/)) {
       currentSection = 'writing';
       continue;
     }
-    if (line.startsWith('## 二、词语表')) {
+    // 支持中文数字（一二三...）和阿拉伯数字
+    if (line.match(/^## [一二三四五六七八九十\d]+、词语表/)) {
       currentSection = 'word';
       continue;
     }
@@ -383,23 +475,33 @@ function parseMD(content) {
   return result;
 }
 
-function parseLessonKey(lesson) {
-  // 排序优先级：阅读课(1) > 识字课(9) > 语文园地(8)
-  // 提取课名中的数字
-  const numMatch = lesson.match(/(\d+)/);
-  const num = numMatch ? parseInt(numMatch[1], 10) : 0;
+const cnNumMap = { '一': 1, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9, '十': 10 };
 
+function parseLessonKey(lesson) {
+  // 排序优先级：单元(0) > 阅读(1) > 识字(2) > 语文园地(3)
+  // 提取课名中的数字（中文或阿拉伯）
+  const cnMatch = lesson.match(/([一二三四五六七八九十]+)/);
+  const numMatch = lesson.match(/(\d+)/);
+  let num = 0;
+  if (numMatch) {
+    num = parseInt(numMatch[1], 10);
+  } else if (cnMatch) {
+    num = cnNumMap[cnMatch[1]] || 0;
+  }
+
+  if (lesson.startsWith('单元')) {
+    return String(num).padStart(3, '0');  // 单元1 → 000
+  }
   if (lesson.startsWith('阅读')) {
-    return '1' + String(num).padStart(3, '0');  // 阅读1 → 1001
+    return String(100 + num).padStart(3, '0');  // 阅读1 → 100
   }
   if (lesson.startsWith('识字')) {
-    return '9' + String(num).padStart(3, '0');  // 识字1 → 9001
+    return String(200 + num).padStart(3, '0');  // 识字1 → 200
   }
   if (lesson.startsWith('语文园地')) {
-    return '8' + String(num).padStart(3, '0');  // 语文园地一 → 8001
+    return String(300 + num).padStart(3, '0');  // 语文园地一 → 300
   }
-  // 默认数字课
-  return '1' + String(num).padStart(3, '0');
+  return String(num).padStart(3, '0');
 }
 
 function generateFinalTable(parsed) {
@@ -492,13 +594,11 @@ function generateJSON(parsed, finalTable, gradeSemester) {
   const wordLessons = Object.keys(parsed.wordTable);
   const allLessons = [...new Set([...writingLessons, ...wordLessons])];
 
-  // 按顺序排列
+  // 使用统一的排序函数
   allLessons.sort((a, b) => {
-    const aIsShizi = a.startsWith('识字');
-    const bIsShizi = b.startsWith('识字');
-    if (aIsShizi && !bIsShizi) return 1;
-    if (!aIsShizi && bIsShizi) return -1;
-    return a.localeCompare(b, 'zh-CN');
+    const keyA = parseLessonKey(a);
+    const keyB = parseLessonKey(b);
+    return keyA.localeCompare(keyB, 'zh-CN');
   });
 
   const wordBank = [];
@@ -525,6 +625,159 @@ function generateJSON(parsed, finalTable, gradeSemester) {
   };
 }
 
+// 一年级专用：仅从写字表生成，每个字作为独立词
+function generateJSONForGrade1(parsed, gradeSemester) {
+  const writingLessons = Object.keys(parsed.writingTable);
+
+  // 排序：数字在前，语文园地在后
+  writingLessons.sort((a, b) => {
+    const keyA = parseLessonKey(a);
+    const keyB = parseLessonKey(b);
+    return keyA.localeCompare(keyB, 'zh-CN');
+  });
+
+  const wordBank = [];
+
+  for (const lesson of writingLessons) {
+    const chars = parsed.writingTable[lesson];
+    for (const char of chars) {
+      // 使用映射表转成词，否则用单字本身
+      const word = charToWordMap[char] || char;
+      wordBank.push({
+        word: word,
+        pinyin: '',
+        grade: '一',
+        semester: '上册',
+        unit: lesson
+      });
+    }
+  }
+
+  return {
+    version: '1.0',
+    buildDate: new Date().toISOString(),
+    gradeSemester: gradeSemester,
+    count: wordBank.length,
+    wordBank: wordBank
+  };
+}
+
+// 一年级上册专用：写字表全部转成词（忽略词语表，去重）
+function generateJSONForGrade1Shang(parsed, gradeSemester) {
+  const writingLessons = Object.keys(parsed.writingTable);
+
+  // 排序
+  writingLessons.sort((a, b) => {
+    const keyA = parseLessonKey(a);
+    const keyB = parseLessonKey(b);
+    return keyA.localeCompare(keyB, 'zh-CN');
+  });
+
+  const wordBank = [];
+  const seenWords = new Set();
+
+  for (const lesson of writingLessons) {
+    const chars = parsed.writingTable[lesson];
+    for (const char of chars) {
+      // 使用映射表转成词，确保一年级都是双字词
+      const word = charToWordMap[char] || char;
+      // 去重：同一词只保留第一次出现的
+      if (!seenWords.has(word)) {
+        seenWords.add(word);
+        wordBank.push({
+          word: word,
+          pinyin: '',
+          grade: '一',
+          semester: '上册',
+          unit: lesson
+        });
+      }
+    }
+  }
+
+  return {
+    version: '1.0',
+    buildDate: new Date().toISOString(),
+    gradeSemester: gradeSemester,
+    count: wordBank.length,
+    wordBank: wordBank
+  };
+}
+
+// 一年级上册专用：生成纯净版MD（去重）
+function generateMarkdownForGrade1Shang(parsed, gradeSemester) {
+  const writingLessons = Object.keys(parsed.writingTable);
+
+  // 排序
+  writingLessons.sort((a, b) => {
+    const keyA = parseLessonKey(a);
+    const keyB = parseLessonKey(b);
+    return keyA.localeCompare(keyB, 'zh-CN');
+  });
+
+  let md = `# ${gradeSemester} - 纯净版\n\n`;
+  md += `> 一年级上册：写字表全部转成双字词（去重）\n\n`;
+  md += `---\n\n`;
+
+  let totalCount = 0;
+  const seenWords = new Set();
+
+  for (const lesson of writingLessons) {
+    const chars = parsed.writingTable[lesson];
+    const uniqueWords = [];
+    for (const c of chars) {
+      const word = charToWordMap[c] || c;
+      if (!seenWords.has(word)) {
+        seenWords.add(word);
+        uniqueWords.push(word);
+      }
+    }
+    const count = uniqueWords.length;
+    totalCount += count;
+
+    md += `#### ${lesson} (${count}词)\n\n`;
+    md += uniqueWords.join('、') + '\n\n';
+  }
+
+  md += `---\n\n`;
+  md += `**总词数**: ${totalCount}词\n`;
+
+  return md;
+}
+
+// 一年级专用：生成纯净版MD（仅写字表）
+function generateMarkdownForGrade1(parsed, gradeSemester) {
+  const writingLessons = Object.keys(parsed.writingTable);
+
+  // 排序
+  writingLessons.sort((a, b) => {
+    const keyA = parseLessonKey(a);
+    const keyB = parseLessonKey(b);
+    return keyA.localeCompare(keyB, 'zh-CN');
+  });
+
+  let md = `# ${gradeSemester} - 纯净版\n\n`;
+  md += `> 一年级专用：仅写字表，每个字作为独立词\n\n`;
+  md += `---\n\n`;
+
+  let totalCount = 0;
+
+  for (const lesson of writingLessons) {
+    const chars = parsed.writingTable[lesson];
+    const words = chars.map(c => charToWordMap[c] || c);
+    const count = words.length;
+    totalCount += count;
+
+    md += `#### ${lesson} (${count}词)\n\n`;
+    md += words.join('、') + '\n\n';
+  }
+
+  md += `---\n\n`;
+  md += `**总词数**: ${totalCount}词\n`;
+
+  return md;
+}
+
 // 主程序
 const args = process.argv.slice(2);
 if (args.length < 2) {
@@ -536,20 +789,54 @@ if (args.length < 2) {
 const inputFile = args[0];
 const gradeSemester = args[1];
 
+// 判断年级模式
+const isGrade1Shang = gradeSemester === '一年级上册';
+const isGrade1Xia = gradeSemester === '一年级下册';
+const isGrade1 = gradeSemester.startsWith('一年级');
+
 console.log(`📖 读取文件: ${inputFile}`);
 const content = fs.readFileSync(inputFile, 'utf8');
 
 console.log('🔄 解析MD文件...');
 const parsed = parseMD(content);
 
-console.log('🔄 生成最终总表...');
-const finalTable = generateFinalTable(parsed);
+let mdContent, jsonContent;
 
-console.log('🔄 生成纯净版MD...');
-const mdContent = generateMarkdown(parsed, finalTable);
+if (isGrade1Xia) {
+  // 一年级下册专用：仅写字表
+  console.log('📐 检测到一年级下册：仅使用写字表模式');
+  console.log('🔄 生成纯净版MD（仅写字表）...');
+  mdContent = generateMarkdownForGrade1(parsed, gradeSemester);
 
-console.log('🔄 生成JSON...');
-const jsonContent = generateJSON(parsed, finalTable, gradeSemester);
+  console.log('🔄 生成JSON（仅写字表）...');
+  jsonContent = generateJSONForGrade1(parsed, gradeSemester);
+} else if (isGrade1Shang) {
+  // 一年级上册专用：仅写字表模式（每个字转成双字词）
+  console.log('📐 检测到一年级上册：仅使用写字表模式');
+  console.log('🔄 生成纯净版MD（仅写字表）...');
+  mdContent = generateMarkdownForGrade1Shang(parsed, gradeSemester);
+
+  console.log('🔄 生成JSON（仅写字表）...');
+  jsonContent = generateJSONForGrade1Shang(parsed, gradeSemester);
+} else if (isGrade1) {
+  // 其他一年级（兜底）：仅写字表
+  console.log('📐 检测到一年级：仅使用写字表模式');
+  console.log('🔄 生成纯净版MD（仅写字表）...');
+  mdContent = generateMarkdownForGrade1(parsed, gradeSemester);
+
+  console.log('🔄 生成JSON（仅写字表）...');
+  jsonContent = generateJSONForGrade1(parsed, gradeSemester);
+} else {
+  // 2-3年级：合并模式
+  console.log('🔄 生成最终总表...');
+  const finalTable = generateFinalTable(parsed);
+
+  console.log('🔄 生成纯净版MD...');
+  mdContent = generateMarkdown(parsed, finalTable);
+
+  console.log('🔄 生成JSON...');
+  jsonContent = generateJSON(parsed, finalTable, gradeSemester);
+}
 
 // 保存文件
 const baseName = inputFile.replace('.md', '').replace(/.*\//, '');
