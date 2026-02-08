@@ -29,7 +29,7 @@ async function loadWordBank(grade, semester) {
 const DATA_BLUEPRINT = [
     { title: "单元1", vocab: ["山坡", "学校", "飘扬", "课文", "声音", "招引", "热闹", "古老", "粗壮", "枝干", "洁白"], chars: "球招呼读" },
     { title: "单元2", vocab: ["轰响", "阵雨", "湿润", "风笛", "狂欢", "觉得", "功课", "放学", "老师", "急急忙忙"], chars: "笛罚互碰黄" },
-    { title: "单元4", vocab: [], chars: "庭相未寒径斜枫霜挑深" },
+    { title: "单元4", vocab: ["枫叶", "寒冷", "倾斜", "深沉", "挑选", "庭院", "未来", "相信", "小径", "严霜"], chars: "庭相未寒径斜枫霜挑深" },
     { title: "单元5", vocab: ["秋风", "放晴", "明朗", "地面", "亮晶晶", "落叶", "图案", "闪闪发光", "尽头", "排列", "规则", "凌乱", "歌唱", "迟到"], chars: "珠粘印案展" },
     { title: "单元6", vocab: ["秋天", "清凉", "炎热", "枫树", "邮票", "凉爽", "果树", "菊花", "仙子", "频频", "气味", "香甜", "松果", "丰收"], chars: "凉杏枚爽挤争菊勾挖油" },
     { title: "单元8", vocab: ["门板", "准备", "旁边", "暴风雨", "安心", "低头", "吃力", "再见", "母鸡", "注意", "屋子", "漂亮", "意思", "因此"], chars: "等哦钻爬漂晒" },
@@ -42,14 +42,14 @@ const DATA_BLUEPRINT = [
     { title: "单元16", vocab: ["风景", "优美", "物产", "交错", "岩石", "鹿角", "成群结队", "布满", "条纹", "周身", "皮球", "茂密", "肥料", "祖国", "事业", "发展"], chars: "淡浅底划布厚料" },
     { title: "单元17", vocab: ["海滨", "街道", "交界", "水平线", "机帆船", "来来往往", "朝阳", "渔民", "贝壳", "汽笛", "出海", "银光闪闪", "庭院", "亚热带", "散发", "打扫", "干净"], chars: "滨棕帆灰跟渔壳院亚透除踩" },
     { title: "单元18", vocab: ["东北", "密密层层", "严严实实", "视线", "山谷", "起来", "照射", "各种各样", "花坛", "显得", "苍翠", "药材", "捕捉", "野兔", "景色", "宝库"], chars: "抽封严挡坛显苍软刮捉" },
-    { title: "单元20", vocab: [], chars: "返望断楚至岸孤饮亦欲抹宜" },
+    { title: "单元20", vocab: ["岸边", "返回", "孤独", "抹去", "清楚", "希望", "宜人", "亦可", "饮料", "欲望", "至少", "中断"], chars: "返望断楚至岸孤饮亦欲抹宜" },
     { title: "单元21", vocab: ["大自然", "美妙", "音乐家", "手风琴", "歌手", "感受", "温柔", "合奏", "充满", "威力", "乐器", "屋顶", "河流", "轻快", "合唱", "水塘"], chars: "妙奏琴柔感充威器汇鸣塘" },
     { title: "单元22", vocab: ["昆虫", "万物", "沉思", "搬家", "井然有序", "精神", "植物", "千姿百态", "鲜美", "池塘", "秋高气爽", "倒映", "游玩", "画册", "无穷", "奥秘", "无尽"], chars: "虾昆仅序荣枯姿态刺梨部" },
     { title: "语文园地3", vocab: ["田螺", "螃蟹", "鲤鱼", "鲫鱼", "鲨鱼"], chars: "螺螃蟹鲤鲫鲨" },
-    { title: "单元23", vocab: [], chars: "司登跌皆弃持击" },
+    { title: "单元23", vocab: ["持久", "打击", "登山", "跌倒", "放弃", "皆知", "司机"], chars: "司登跌皆弃持击" },
     { title: "单元24", vocab: ["生物", "从事", "成就", "学期", "考试", "再三", "同意", "难得", "值班", "努力", "留学", "国家", "落后", "地位", "环节", "难度", "刻苦", "兴奋"], chars: "念差均退努单留度奋" },
     { title: "单元25", vocab: ["手术台", "阵地", "战斗", "打响", "消灭", "伤员", "陆续", "血丝", "匆匆", "医生", "转告", "赶忙", "迅速", "迅速", "夺秒", "连续"], chars: "棒伤陆血取盘匆医迅速夺秒" },
-    { title: "语文园地4", vocab: ["怒目圆睁", "眨眼", "眼眶", "目瞪口呆", "耳闻目睹"], chars: "睁眨瞪瞅怒眶呆睹" }
+    { title: "语文园地4", vocab: ["怒目圆睁", "眨眼", "眼眶", "目瞪口呆", "耳闻目睹", "瞅见"], chars: "睁眨瞪瞅怒眶呆睹" }
 ];
 
 const charToWordMap = {"球":"打球", "呼":"招呼", "读":"读书", "笛":"笛子", "罚":"处罚", "互":"互相", "碰":"碰撞", "黄":"黄色", "急":"急忙", "庭":"庭院", "相":"相信", "未":"未来", "寒":"寒冷", "径":"小径", "斜":"倾斜", "枫":"枫叶", "霜":"严霜", "挑":"挑选", "深":"深沉", "落":"落下", "珠":"珍珠", "粘":"粘贴", "印":"印象", "案":"方案", "展":"展现", "凉":"凉快", "杏":"杏花", "枚":"一枚", "爽":"清爽", "挤":"拥挤", "争":"争取", "菊":"菊花", "频":"频度", "勾":"勾勒", "挖":"挖土", "油":"油画", "等":"等待", "钻":"钻孔", "爬":"爬行", "漂":"漂亮", "晒":"晾晒", "葫":"葫芦", "芦":"芦苇", "错":"错误", "普":"普通", "宫":"宫殿", "肯":"肯定", "冒":"冒险", "式":"形式", "极":"极致", "怜":"怜悯", "另":"另外", "晴":"晴天", "及":"及时", "卷":"试卷", "齿":"牙齿", "胃":"肠胃", "管":"管理", "刚":"刚才", "咬":"咬断", "申":"申请", "介":"介绍", "绍":"介绍", "宗":"祖宗", "旨":"宗旨", "占":"占据", "乏":"缺乏", "搭":"搭建", "亲":"亲人", "祖":"祖国", "披":"披上", "摇":"摇动", "停":"停止", "羽":"羽毛", "翠":"翠绿", "蓝":"蓝色", "吞":"吞咽", "蒲":"蒲公英", "英":"英雄", "耍":"玩耍", "使":"使用", "劲":"使劲", "脸":"脸庞", "欠":"欠钱", "朝":"朝向", "钓":"钓鱼", "察":"观察", "拢":"合拢", "喜":"喜欢", "景":"景象", "优":"优秀", "淡":"平淡", "浅":"深浅", "底":"底部", "岩":"岩松", "鹿":"梅花鹿", "划":"划分", "布":"棉布", "茂":"茂密", "密":"秘密", "厚":"宽厚", "料":"料理", "滨":"海滨", "棕":"棕色", "帆":"帆船", "灰":"灰色", "跟":"跟着", "渔":"渔民", "壳":"贝壳", "院":"院子", "亚":"亚热带", "透":"透明", "除":"除去", "踩":"踩踏", "抽":"抽象", "封":"封闭", "严":"严实", "挡":"遮挡", "坛":"花坛", "显":"显得", "苍":"苍翠", "药":"药材", "材":"材料", "软":"柔软", "刮":"刮风", "捉":"捕捉", "返":"返回", "望":"希望", "断":"中断", "楚":"清楚", "至":"至少", "岸":"岸边", "孤":"孤独", "饮":"饮料", "亦":"亦可", "欲":"欲望", "抹":"抹去", "宜":"宜人", "妙":"美妙", "奏":"演奏", "琴":"手风琴", "柔":"柔和", "感":"感谢", "充":"充足", "威":"威力", "器":"乐器", "汇":"汇集", "鸣":"鸣叫", "塘":"池塘", "虾":"小虾", "昆":"昆虫", "仅":"仅仅", "序":"有序", "荣":"荣誉", "枯":"枯萎", "姿":"姿势", "态":"态度", "刺":"刺激", "梨":"梨树", "部":"部分", "奥":"奥秘", "秘":"秘密", "螺":"田螺", "螃":"螃蟹", "蟹":"螃蟹", "鲤":"鲤鱼", "鲫":"鲫鱼", "鲨":"鲨鱼", "司":"司机", "联":"联合", "步":"步骤", "登":"登山", "跌":"跌倒", "皆":"皆知", "弃":"放弃", "持":"持久", "击":"打击", "念":"念书", "差":"差别", "考":"考试", "试":"试题", "均":"平均", "退":"后退", "努":"努力", "单":"单位", "留":"留心", "度":"态度", "奋":"奋斗", "棒":"木棒", "伤":"伤害", "陆":"陆地", "血":"血液", "取":"取消", "盘":"盘子", "匆":"匆忙", "医":"医生", "迅速":"迅速", "速":"速度", "夺":"夺取", "秒":"秒表", "睁":"睁眼", "眨":"眨眼", "瞪":"瞪眼", "瞅":"瞅见", "怒":"发怒", "眶":"眼眶", "呆":"发呆", "睹":"目睹"};
@@ -520,21 +520,36 @@ function MainApp() {
   const progressRef = useRef(0);
 
   useEffect(() => { localStorage.setItem('pinyin_selected_units', JSON.stringify(Array.from(selectedUnits))); }, [selectedUnits]);
-  useEffect(() => { async function loadCloud() { setIsLoading(true); try { const { data, error } = await supabase.from('mastery_records').select('*').range(0, 9999); if (data) { const m = {}; data.forEach(r => {
-        // 根据老数据的最终状态初始化 consecutive_green
-        // 初始化规则：
-        // 根据 history 状态初始化 consecutive
-        // 如果 history 包含红色 → consecutive = 0（薄弱，需要连续5天恢复）
-        // 如果 history 最后是 green → consecutive = 365（已掌握）
-        // 如果没有历史 → consecutive = 0（NEW）
-        const hasRedHistory = r.history && r.history.includes('red');
-        const lastResult = r.history && r.history.length > 0 ? r.history[r.history.length - 1] : null;
-        let initialConsecutive = 0;
-        if (lastResult === 'green' && !hasRedHistory) {
-          initialConsecutive = 365;  // 已掌握（最后是绿，且没有红色历史）
-        }
-        m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: initialConsecutive, last_practice_date: r.last_practice_date };
-      }); setMastery(m); window.mastery = m; } } catch (e) {} finally { setIsLoading(false); } } loadCloud(); }, []);
+  useEffect(() => { console.log('[loadCloud] Starting...'); async function loadCloud() { 
+      setIsLoading(true); 
+      console.log('[loadCloud] About to query Supabase...');
+      try { 
+        const result = await supabase.from('mastery_records').select('*').range(0, 9999);
+        console.log('[loadCloud] Supabase result:', result);
+        const { data, error } = result;
+        console.log('[loadCloud] Data count:', data?.length, 'Error:', error); 
+      console.log('[loadCloud] Supabase query completed, data count:', data?.length, 'error:', error);
+      if (error) { console.error('[loadCloud] Supabase error:', error); }
+      if (data) { 
+        console.log('[loadCloud] Processing', data.length, 'records...');
+        const m = {}; 
+        let count = 0;
+        data.forEach(r => {
+          // 只处理 3up 记录
+          if (r.id.startsWith('3up-')) {
+            m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: r.consecutive_green || 0, last_practice_date: r.last_practice_date };
+            count++;
+          }
+        });
+        console.log('[loadCloud] Setting mastery state with', count, 'records');
+        setMastery(m); window.mastery = m; 
+        console.log('[loadCloud] Mastery state set. Sample:', Object.keys(m).slice(0, 3));
+      } else {
+        console.log('[loadCloud] No data returned from Supabase');
+      }
+    } catch (e) { 
+      console.error('[loadCloud] Exception:', e); 
+    } finally { setIsLoading(false); } } loadCloud(); }, []);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
   const toggleMode = () => { window.location.href = isDevMode ? window.location.origin : window.location.origin + '?dev=1'; };
@@ -577,40 +592,54 @@ function MainApp() {
     });
     
     return Object.entries(unitsMap).map(([unitKey, items]) => {
-      const name = items[0]?.unit || `单元${unitKey}`;
+      const unitNum = items[0]?.unit;
+      // 只有数字单元才加"单元"前缀，语文园地等特殊单元保持原样
+      const name = (typeof unitNum === 'number' || (typeof unitNum === 'string' && /^\d+$/.test(unitNum))) ? `单元${unitNum}` : unitNum;
       const words = items.map((w, idx) => {
         const prefix = selectedSemester === '三年级上册' ? '3up' : selectedSemester;
-        const baseId = `${prefix}-${name}-${w.word}-${idx}`;
-        return { id: isDevMode ? `${baseId}-test` : baseId, word: w.word, pinyin: pinyin(String(w.word), { toneType: 'symbol' }) || '' };
+        const wordId = `${prefix}-${name}-${w.word}-${idx}`;
+        return { id: isDevMode ? `${wordId}-test` : wordId, word: w.word, pinyin: pinyin(String(w.word), { toneType: 'symbol' }) || '' };
       });
       return { name, words };
     });
   }, [wordBank, selectedSemester, isDevMode]);
 
   const getStatus = (id, useTemp = false) => {
+    // 如果云端还在加载中，暂时返回 null（无状态），等加载完成后再显示
+    if (isLoading) {
+      console.log(`[getStatus] ${id} -> null (still loading)`);
+      return null;
+    }
     const m = useTemp && isAdminMode ? tempMastery[id] : mastery[id];
-    if (!m || !m.history || m.history.length === 0) return 'NEW';
+    if (!m || !m.history || m.history.length === 0) {
+      console.log(`[getStatus] ${id} -> NEW (no history)`);
+      return 'NEW';
+    }
 
     const consecutive = m.consecutive_green || 0;
     const lastResult = m.history[m.history.length - 1];
     
     // 规则：连续 >=5 天答对 = 掌握（绿色下划线）
     if (consecutive >= 5) {
+      console.log(`[getStatus] ${id} -> MASTERED (consecutive=${consecutive}, history=${JSON.stringify(m.history)})`);
       return 'MASTERED';
     }
 
     // 规则：曾经是红色下划线（history 中有 red）= 薄弱（红色下划线）
     // 即使今天答对了（lastResult = green），只要没连续5天，就还是薄弱
     if (m.history.includes('red')) {
+      console.log(`[getStatus] ${id} -> WEAK (has red in history)`);
       return 'WEAK';
     }
 
-    // 规则：没有红色历史，最后是绿色 = NEW（无下划线）
-    // 表示今天刚答对，还没达到掌握标准
+    // 规则：没有红色历史，最后是绿色 = TESTED（绿色下划线）
+    // 表示已经测过且对了（绿色下划线）
     if (lastResult === 'green') {
-      return 'NEW';
+      console.log(`[getStatus] ${id} -> TESTED (lastResult=green, consecutive=${consecutive})`);
+      return 'TESTED';
     }
 
+    console.log(`[getStatus] ${id} -> NEW (no history)`);
     return 'NEW';
   };
 
@@ -621,7 +650,7 @@ function MainApp() {
       unit.words.forEach(word => {
         totalWords++;
         const status = getStatus(word.id, false);
-        if (status === 'MASTERED') learnedWords++;
+        if (status === 'MASTERED' || status === 'TESTED') learnedWords++;
       });
     });
     const percentage = totalWords > 0 ? ((learnedWords / totalWords) * 100).toFixed(1) : 0;
@@ -630,7 +659,7 @@ function MainApp() {
 
   const currentTotalCount = useMemo(() => {
     let pool = []; processedUnits.forEach(u => { if (selectedUnits.has(u.name)) pool = [...pool, ...u.words]; });
-    if (onlyWrong) pool = pool.filter(w => getStatus(w.id) !== 'MASTERED');
+    if (onlyWrong) pool = pool.filter(w => getStatus(w.id) === 'WEAK');
     return pool.length;
   }, [selectedUnits, processedUnits, onlyWrong, mastery]);
 
@@ -869,7 +898,7 @@ function MainApp() {
               </select>
             </div>
         </header>
-        <main className={`flex-1 overflow-y-auto px-8 pb-24 ${isAdminMode ? 'pt-8' : ''}`}><div className="max-w-5xl mx-auto">{processedUnits.map((unit) => { const isSelected = selectedUnits.has(unit.name); return (<div key={unit.name} onClick={() => { if(!isAdminMode) { const n = new Set(selectedUnits); if(n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); } }} className="flex items-baseline gap-6 py-3 border-b border-slate-100 group transition-colors hover:bg-slate-50/50 cursor-pointer"><div className={`w-5 h-5 rounded-sm shrink-0 border-2 flex items-center justify-center transition-all mt-1 ${isSelected ? 'bg-black border-black shadow-md' : 'border-slate-200'}`}>{isSelected && <Check size={14} className="text-white" strokeWidth={4} />}</div><div className="font-black text-lg text-black shrink-0 min-w-[6.5rem] tracking-tighter">{unit.name}</div><div className="flex flex-wrap gap-x-1 gap-y-0">{unit.words.map(w => { const st = getStatus(w.id, true); return (<div key={w.id} className="relative group/word"><span style={{ fontSize: '22px' }} className={`font-kaiti px-1.5 transition-colors ${st === 'WEAK' ? 'text-black font-bold' : st === 'MASTERED' ? 'text-emerald-600 font-bold' : 'text-black'}`}>{w.word}</span>{st === 'WEAK' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-red-500 rounded-full" />}{st === 'MASTERED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-600 rounded-full" />}</div>);})}</div></div>);})}</div></main>
+        <main className={`flex-1 overflow-y-auto px-8 pb-24 ${isAdminMode ? 'pt-8' : ''}`}><div className="max-w-5xl mx-auto">{processedUnits.map((unit) => { const isSelected = selectedUnits.has(unit.name); return (<div key={unit.name} onClick={() => { if(!isAdminMode) { const n = new Set(selectedUnits); if(n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); } }} className="flex items-baseline gap-6 py-3 border-b border-slate-100 group transition-colors hover:bg-slate-50/50 cursor-pointer"><div className={`w-5 h-5 rounded-sm shrink-0 border-2 flex items-center justify-center transition-all mt-1 ${isSelected ? 'bg-black border-black shadow-md' : 'border-slate-200'}`}>{isSelected && <Check size={14} className="text-white" strokeWidth={4} />}</div><div className="font-black text-lg text-black shrink-0 min-w-[6.5rem] tracking-tighter">{unit.name}</div><div className="flex flex-wrap gap-x-1 gap-y-0">{unit.words.map(w => { const st = getStatus(w.id, true); return (<div key={w.id} className="relative group/word"><span style={{ fontSize: '22px' }} className={`font-kaiti px-1.5 transition-colors ${st === 'WEAK' ? 'text-black font-bold' : st === 'MASTERED' ? 'text-emerald-600 font-bold' : st === 'TESTED' ? 'text-black' : 'text-black'}`}>{w.word}</span>{st === 'WEAK' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-red-500 rounded-full" />}{st === 'TESTED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-500 rounded-full" />}{st === 'MASTERED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-600 rounded-full" />}</div>);})}</div></div>);})}</div></main>
         <div className="fixed bottom-0 left-0 w-full p-2 bg-white/95 backdrop-blur-xl border-t z-30 flex justify-center items-center gap-4 shadow-2xl">
           {isAdminMode ? (
             <>

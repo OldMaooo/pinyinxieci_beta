@@ -2,7 +2,7 @@
   "version": "1.0",
   "buildDate": "2025-01-20T00:00:00.000Z",
   "gradeSemester": "三年级上册",
-  "count": 250,
+  "count": 280,
   "wordBank": [
     {
       "word": "山坡",
@@ -150,6 +150,76 @@
       "grade": "三年级",
       "semester": "上册",
       "unit": 2
+    },
+    {
+      "word": "枫叶",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "寒冷",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "倾斜",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "深沉",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "挑选",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "庭院",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "未来",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "相信",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "小径",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
+    },
+    {
+      "word": "严霜",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 4
     },
     {
       "word": "秋风",
@@ -450,56 +520,56 @@
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "神圣",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "萌发",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "妥当",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "车轴",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "阁楼",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "培植",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "厘米",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地1"
     },
     {
       "word": "声明",
@@ -716,35 +786,35 @@
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地2"
     },
     {
       "word": "介绍",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地2"
     },
     {
       "word": "主旨",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地2"
     },
     {
       "word": "占领",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地2"
     },
     {
       "word": "乏力",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地2"
     },
     {
       "word": "母亲",
@@ -1223,6 +1293,90 @@
       "unit": 18
     },
     {
+      "word": "岸边",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "返回",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "孤独",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "抹去",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "清楚",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "希望",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "宜人",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "亦可",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "饮料",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "欲望",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "至少",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
+      "word": "中断",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 20
+    },
+    {
       "word": "大自然",
       "pinyin": "",
       "grade": "三年级",
@@ -1333,6 +1487,55 @@
       "grade": "三年级",
       "semester": "上册",
       "unit": 21
+    },
+    {
+      "word": "持久",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
+    },
+    {
+      "word": "打击",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
+    },
+    {
+      "word": "登山",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
+    },
+    {
+      "word": "跌倒",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
+    },
+    {
+      "word": "放弃",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
+    },
+    {
+      "word": "皆知",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
+    },
+    {
+      "word": "司机",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": 23
     },
     {
       "word": "昆虫",
@@ -1458,35 +1661,35 @@
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地3"
     },
     {
       "word": "螃蟹",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地3"
     },
     {
       "word": "鲤鱼",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地3"
     },
     {
       "word": "鲫鱼",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地3"
     },
     {
       "word": "鲨鱼",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地3"
     },
     {
       "word": "生物",
@@ -1724,35 +1927,42 @@
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地4"
     },
     {
       "word": "眨眼",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地4"
     },
     {
       "word": "眼眶",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地4"
     },
     {
       "word": "目瞪口呆",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地4"
     },
     {
       "word": "耳闻目睹",
       "pinyin": "",
       "grade": "三年级",
       "semester": "上册",
-      "unit": "语文园地"
+      "unit": "语文园地4"
+    },
+    {
+      "word": "瞅见",
+      "pinyin": "",
+      "grade": "三年级",
+      "semester": "上册",
+      "unit": "语文园地4"
     }
   ]
 }

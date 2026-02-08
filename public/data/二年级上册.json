@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "buildDate": "2026-02-07T14:18:14.628Z",
+  "buildDate": "2026-02-08T00:34:09.297Z",
   "gradeSemester": "二年级上册",
   "count": 372,
   "wordBank": [
@@ -96,7 +96,7 @@
       "unit": "阅读1"
     },
     {
-      "word": "宽",
+      "word": "宽带",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -110,7 +110,7 @@
       "unit": "阅读1"
     },
     {
-      "word": "成",
+      "word": "成功",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -215,7 +215,7 @@
       "unit": "阅读2"
     },
     {
-      "word": "连",
+      "word": "连线",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -306,7 +306,7 @@
       "unit": "阅读3"
     },
     {
-      "word": "轻",
+      "word": "轻松",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -383,21 +383,21 @@
       "unit": "阅读4"
     },
     {
-      "word": "提水",
+      "word": "提问",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读4"
     },
     {
-      "word": "吗",
+      "word": "好吗",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读4"
     },
     {
-      "word": "圆",
+      "word": "圆形",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -495,7 +495,7 @@
       "unit": "阅读5"
     },
     {
-      "word": "给",
+      "word": "给你",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -509,7 +509,7 @@
       "unit": "阅读5"
     },
     {
-      "word": "香",
+      "word": "香水",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -600,14 +600,14 @@
       "unit": "阅读6"
     },
     {
-      "word": "您",
+      "word": "您好",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读6"
     },
     {
-      "word": "很",
+      "word": "很好",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -621,7 +621,7 @@
       "unit": "阅读6"
     },
     {
-      "word": "张",
+      "word": "张开",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -663,7 +663,7 @@
       "unit": "阅读7"
     },
     {
-      "word": "照",
+      "word": "照相机",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -691,7 +691,7 @@
       "unit": "阅读7"
     },
     {
-      "word": "直",
+      "word": "直接",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -761,7 +761,7 @@
       "unit": "阅读8"
     },
     {
-      "word": "位",
+      "word": "位置",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -782,7 +782,7 @@
       "unit": "阅读8"
     },
     {
-      "word": "形",
+      "word": "形成",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -880,7 +880,7 @@
       "unit": "阅读9"
     },
     {
-      "word": "现",
+      "word": "现在",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1055,7 +1055,7 @@
       "unit": "阅读11"
     },
     {
-      "word": "呀",
+      "word": "哎呀",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1195,7 +1195,7 @@
       "unit": "阅读12"
     },
     {
-      "word": "第",
+      "word": "第一",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1279,28 +1279,28 @@
       "unit": "阅读13"
     },
     {
-      "word": "棵",
+      "word": "一棵",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读13"
     },
     {
-      "word": "次",
+      "word": "一次",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读13"
     },
     {
-      "word": "想",
+      "word": "想法",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读13"
     },
     {
-      "word": "吧",
+      "word": "好吧",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1363,14 +1363,14 @@
       "unit": "阅读14"
     },
     {
-      "word": "穿",
+      "word": "穿衣服",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读14"
     },
     {
-      "word": "视",
+      "word": "电视",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1447,7 +1447,7 @@
       "unit": "阅读15"
     },
     {
-      "word": "每",
+      "word": "每天",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1538,21 +1538,21 @@
       "unit": "阅读16"
     },
     {
-      "word": "串联",
+      "word": "串门",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读16"
     },
     {
-      "word": "裤",
+      "word": "裤子",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读16"
     },
     {
-      "word": "令",
+      "word": "口令",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1608,21 +1608,21 @@
       "unit": "阅读17"
     },
     {
-      "word": "反",
+      "word": "反对",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读17"
     },
     {
-      "word": "村",
+      "word": "村庄",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读17"
     },
     {
-      "word": "被",
+      "word": "被子",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1664,14 +1664,14 @@
       "unit": "阅读18"
     },
     {
-      "word": "独",
+      "word": "独自",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读18"
     },
     {
-      "word": "阴",
+      "word": "阴天",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -1692,7 +1692,7 @@
       "unit": "阅读18"
     },
     {
-      "word": "低",
+      "word": "低头",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2021,7 +2021,7 @@
       "unit": "阅读21"
     },
     {
-      "word": "接受",
+      "word": "接着",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2091,7 +2091,7 @@
       "unit": "阅读22"
     },
     {
-      "word": "吵",
+      "word": "吵架",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2112,7 +2112,7 @@
       "unit": "阅读22"
     },
     {
-      "word": "哭",
+      "word": "哭泣",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2203,14 +2203,14 @@
       "unit": "阅读23"
     },
     {
-      "word": "呢",
+      "word": "你呢",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "阅读23"
     },
     {
-      "word": "跳",
+      "word": "跳跃",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2252,7 +2252,7 @@
       "unit": "识字1"
     },
     {
-      "word": "块",
+      "word": "一块",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2315,7 +2315,7 @@
       "unit": "识字2"
     },
     {
-      "word": "之",
+      "word": "之中",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2469,7 +2469,7 @@
       "unit": "识字4"
     },
     {
-      "word": "初",
+      "word": "初步",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2483,7 +2483,7 @@
       "unit": "语文园地一"
     },
     {
-      "word": "夹子",
+      "word": "夹杂",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2539,14 +2539,14 @@
       "unit": "语文园地四"
     },
     {
-      "word": "丰",
+      "word": "丰富",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
       "unit": "语文园地四"
     },
     {
-      "word": "货车",
+      "word": "货物",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2581,7 +2581,7 @@
       "unit": "语文园地七"
     },
     {
-      "word": "宁可",
+      "word": "宁静",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
@@ -2595,7 +2595,7 @@
       "unit": "语文园地七"
     },
     {
-      "word": "大浪",
+      "word": "狼狗",
       "pinyin": "",
       "grade": "二年级",
       "semester": "上册",
