@@ -770,6 +770,7 @@ function MainApp() {
     const wordsToSave = !isTemporary && step === 2 && onlyWrong ? (() => {
       const wordIdsInWords = new Set(words.map(w => w.id));
       const allWords = [];
+      console.log('[save] onlyWrong=true, words count:', words.length, 'wordIdsInWords:', Array.from(wordIdsInWords));
       processedUnits.forEach(u => {
         if (selectedUnits.has(u.name)) {
           u.words.forEach(w => {
@@ -790,6 +791,7 @@ function MainApp() {
           });
         }
       });
+      console.log('[save] wordsToSave count:', allWords.length);
       return allWords;
     })() : words;
 
