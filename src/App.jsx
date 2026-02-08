@@ -765,30 +765,31 @@ function MainApp() {
     setSyncStatus('saving');
     const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
 
-    // 在终测模式下，需要保存"本次练习中出现的所有题目"
-    // 包括那些在仅错题模式下被筛选掉但实际练习过的题目
-    const wordsToSave = !isTemporary && step === 2 ? (() => {
+    // 在终测 + 仅错题模式下，需要保存"本次练习选中的所有题目"
+    // 包括那些被筛选掉的题目，确保未标记的题目自动算正确
+    const wordsToSave = !isTemporary && step === 2 && onlyWrong ? (() => {
       const wordIdsInWords = new Set(words.map(w => w.id));
       const allWords = [];
       processedUnits.forEach(u => {
         if (selectedUnits.has(u.name)) {
           u.words.forEach(w => {
-            const m = mastery[w.id];
-            // 找到今天已经练习过的题目（根据 temp_state 判断）
-            const hasPracticedToday = m?.temp && (m.temp.practice || m.temp.self || m.temp.final);
-            if (hasPracticedToday && !wordIdsInWords.has(w.id)) {
-              // 这个题目被练习过但不在 words 中（仅错题模式被筛选掉了）
+            const curW = words.find(cw => cw.id === w.id);
+            if (wordIdsInWords.has(w.id)) {
+              allWords.push(curW);
+            } else {
+              // 被筛选掉的题目，也加入保存列表（使用当前 words 中的标记）
               allWords.push({
                 ...w,
-                markPractice: m.temp.practice || 'white',
-                markSelf: m.temp.self || 'white',
-                markFinal: m.temp.final || 'white'
+                markPractice: curW?.markPractice || 'white',
+                markSelf: curW?.markSelf || 'white',
+                markFinal: curW?.markFinal || 'white',
+                isWeak: curW?.isWeak
               });
             }
           });
         }
       });
-      return [...words, ...allWords];
+      return allWords;
     })() : words;
 
     wordsToSave.forEach(w => {
