@@ -597,7 +597,6 @@ function MainApp() {
       } catch (e) { 
         console.error('[loadCloud] Exception:', e); 
       } finally { setIsLoading(false); } } loadCloud(); }, []);
-    } finally { setIsLoading(false); } } loadCloud(); }, []);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
   const toggleMode = () => { window.location.href = isDevMode ? window.location.origin : window.location.origin + '?dev=1'; };
