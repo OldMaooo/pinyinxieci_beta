@@ -579,35 +579,24 @@ function MainApp() {
   const progressRef = useRef(0);
 
   useEffect(() => { localStorage.setItem('pinyin_selected_units', JSON.stringify(Array.from(selectedUnits))); }, [selectedUnits]);
-  useEffect(() => { console.log('[loadCloud] Starting...'); async function loadCloud() { 
+  useEffect(() => { async function loadCloud() { 
       setIsLoading(true); 
-      console.log('[loadCloud] About to query Supabase...');
       try { 
         const result = await supabase.from('mastery_records').select('*').range(0, 9999);
-        console.log('[loadCloud] Supabase result:', result);
         const { data, error } = result;
-        console.log('[loadCloud] Data count:', data?.length, 'Error:', error); 
-      console.log('[loadCloud] Supabase query completed, data count:', data?.length, 'error:', error);
-      if (error) { console.error('[loadCloud] Supabase error:', error); }
-      if (data) { 
-        console.log('[loadCloud] Processing', data.length, 'records...');
-        const m = {}; 
-        let count = 0;
-        data.forEach(r => {
-          // 只处理 3up 记录
-          if (r.id.startsWith('3up-')) {
-            m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: r.consecutive_green || 0, last_practice_date: r.last_practice_date };
-            count++;
-          }
-        });
-        console.log('[loadCloud] Setting mastery state with', count, 'records');
-        setMastery(m); window.mastery = m; 
-        console.log('[loadCloud] Mastery state set. Sample:', Object.keys(m).slice(0, 3));
-      } else {
-        console.log('[loadCloud] No data returned from Supabase');
-      }
-    } catch (e) { 
-      console.error('[loadCloud] Exception:', e); 
+        if (error) { console.error('[loadCloud] Supabase error:', error); }
+        if (data) { 
+          const m = {}; 
+          data.forEach(r => {
+            if (r.id.startsWith('3up-')) {
+              m[r.id] = { history: r.history, temp: r.temp_state, lastUpdate: r.last_history_update_date, consecutive_green: r.consecutive_green || 0, last_practice_date: r.last_practice_date };
+            }
+          });
+          setMastery(m); window.mastery = m;
+        }
+      } catch (e) { 
+        console.error('[loadCloud] Exception:', e); 
+      } finally { setIsLoading(false); } } loadCloud(); }, []);
     } finally { setIsLoading(false); } } loadCloud(); }, []);
 
   const isDevMode = useMemo(() => new URLSearchParams(window.location.search).get('dev') === '1', []);
@@ -664,16 +653,9 @@ function MainApp() {
   }, [wordBank, selectedSemester, isDevMode]);
 
   const getStatus = (id, useTemp = false) => {
-    // 如果云端还在加载中，暂时返回 null（无状态），等加载完成后再显示
-    if (isLoading) {
-      console.log(`[getStatus] ${id} -> null (still loading)`);
-      return null;
-    }
+    if (isLoading) return null;
     const m = useTemp && isAdminMode ? tempMastery[id] : mastery[id];
-    if (!m || !m.history || m.history.length === 0) {
-      console.log(`[getStatus] ${id} -> NEW (no history)`);
-      return 'NEW';
-    }
+    if (!m || !m.history || m.history.length === 0) return 'NEW';
 
     const consecutive = m.consecutive_green || 0;
     const lastResult = m.history[m.history.length - 1];
@@ -686,19 +668,10 @@ function MainApp() {
 
     // 规则：曾经是红色下划线（history 中有 red）= 薄弱（红色下划线）
     // 即使今天答对了（lastResult = green），只要没连续5天，就还是薄弱
-    if (m.history.includes('red')) {
-      console.log(`[getStatus] ${id} -> WEAK (has red in history)`);
-      return 'WEAK';
-    }
+    if (m.history.includes('red')) return 'WEAK';
 
-    // 规则：没有红色历史，最后是绿色 = TESTED（绿色下划线）
-    // 表示已经测过且对了（绿色下划线）
-    if (lastResult === 'green') {
-      console.log(`[getStatus] ${id} -> TESTED (lastResult=green, consecutive=${consecutive})`);
-      return 'TESTED';
-    }
+    if (lastResult === 'green') return 'TESTED';
 
-    console.log(`[getStatus] ${id} -> NEW (no history)`);
     return 'NEW';
   };
 
