@@ -1031,10 +1031,15 @@ const calculateStats = () => {
           ) : (
             <>
               <label className="flex items-center gap-2 cursor-pointer select-none group" onClick={(e) => e.stopPropagation()}><div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all ${onlyWrong ? 'bg-black border-black shadow-md' : 'border-slate-300'}`}>{onlyWrong && <Check size={14} className="text-white" strokeWidth={4} />}</div><span className="text-sm font-black text-black">仅练错题</span><input type="checkbox" className="hidden" checked={onlyWrong} onChange={() => setOnlyWrong(!onlyWrong)} /></label>
-              <div className="flex flex-col items-end w-full max-w-sm">
-                {!isLoading && Object.keys(mastery).length > 0 && <span className="text-[10px] text-emerald-600 font-bold mb-1 flex items-center gap-1"><Cloud size={10}/> 云端就绪</span>}
-                <button onClick={start} disabled={selectedUnits.size === 0 || isLoading} className={`w-full text-white h-12 rounded-lg font-black text-xl shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 ${isDevMode ? 'bg-red-600' : 'bg-black'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                  {isLoading ? <><Loader2 className="animate-spin" size={20}/> 正在同步数据...</> : `开始练习 (${currentTotalCount})`}
+              <div className="flex gap-2">
+                <button disabled={modalConfig.type === 'FINISH_SELF_TEST'} onClick={() => setModalConfig({ isOpen: false })} className="flex-1 max-w-[12rem] h-10 rounded-lg font-bold text-slate-400 bg-slate-200 border border-slate-300 opacity-50 cursor-not-allowed">
+                  取消
+                </button>
+                <button className="flex-1 items-center gap-1 max-w-[12rem] h-10 rounded-lg font-bold text-black bg-white shadow-xl border border-slate-200">
+                  家长终测
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 16 8">
+                    <path d="M2 2h-2a1 2 5.5-5.5l-5.5-5.5m0l-1.2-.4-4.4-4.4M2 8a2 2.5-5.5z" stroke="currentColor" strokeWidth="4" fill="none" />
+                  </svg>
                 </button>
               </div>
             </>
