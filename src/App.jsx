@@ -731,18 +731,29 @@ function MainApp() {
     pool.forEach(w => {
         const m = mastery[w.id];
         const status = getStatus(w.id);
-        const isWeak = status === 'WEAK';  // 长期未掌握（history中有red）
+        const isWeak = status === 'WEAK';
 
-        // 每次进入练习时，方框都是空的，重新标记
         let wordData = {
           ...w,
           markPractice: 'white',
           markSelf: 'white',
           markFinal: 'white',
-          isWeak: isWeak  // 用于判断是否显示浅红色
+          isWeak: isWeak
         };
 
-        if (!onlyWrong || isWeak) {
+        let shouldInclude = true;
+        if (onlyWrong) {
+          const hasHist = m?.history?.includes('red');
+          if (step === 0) {
+            shouldInclude = hasHist || m?.temp?.practice === 'red';
+          } else if (step === 1) {
+            shouldInclude = hasHist || m?.temp?.practice === 'red' || m?.temp?.self === 'red';
+          } else {
+            shouldInclude = hasHist || m?.temp?.practice === 'red' || m?.temp?.self === 'red' || m?.temp?.final === 'red';
+          }
+        }
+
+        if (shouldInclude) {
           targetWords.push(wordData);
         }
     });
@@ -861,7 +872,7 @@ function MainApp() {
   };
 
   const updateWordsWithFilter = (enableFilter) => {
-    stopVoice(); setFilterWrong(enableFilter);
+    stopVoice(); setFilterWrong(enableFilter); setOnlyWrong(enableFilter);
     let pool = []; processedUnits.forEach(u => { if (selectedUnits.has(u.name)) pool = [...pool, ...u.words]; });
     let targetWords = [];
     pool.forEach(w => {
@@ -869,7 +880,6 @@ function MainApp() {
         const savedTemp = curW ? { practice: curW.markPractice, self: curW.markSelf, final: curW.markFinal } : (mastery[w.id]?.temp || {});
         const wordData = { ...w, markPractice: savedTemp.practice || 'white', markSelf: savedTemp.self || 'white', markFinal: savedTemp.final || 'white' };
         const hasHist = mastery[w.id]?.history?.includes('red');
-        // 设置 isWeak 字段，用于判断是否显示浅红色
         const isWeak = getStatus(w.id) === 'WEAK';
         wordData.isWeak = isWeak;
         let shouldShow = true;
@@ -877,10 +887,10 @@ function MainApp() {
             if (step === 0) shouldShow = wordData.markPractice === 'red' || hasHist;
             else if (step === 1) shouldShow = wordData.markPractice === 'red' || wordData.markSelf === 'red' || hasHist;
             else shouldShow = wordData.markPractice === 'red' || wordData.markSelf === 'red' || wordData.markFinal === 'red' || hasHist;
-        } else if (onlyWrong) shouldShow = hasHist;
+        }
         if (shouldShow) targetWords.push(wordData);
     });
-    if (targetWords.length === 0) { alert("无错题"); setFilterWrong(false); } else { setWords(targetWords); setActiveVoiceIndex(-1); }
+    if (targetWords.length === 0) { alert("无错题"); setFilterWrong(false); setOnlyWrong(false); } else { setWords(targetWords); setActiveVoiceIndex(-1); }
   };
 
   const restartWrong = () => {
