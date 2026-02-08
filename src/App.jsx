@@ -765,8 +765,33 @@ function MainApp() {
     setSyncStatus('saving');
     const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
 
-    // 仅错题模式下，只保存当前显示的题目（被筛选掉的自动算正确）
-    const wordsToSave = !isTemporary && step === 2 && onlyWrong ? words : words;
+    // 在终测 + 仅错题模式下，保存所有选中单元的题目
+    // 显示的题目用用户标记，没显示的自动算正确
+    const wordsToSave = !isTemporary && step === 2 && onlyWrong ? (() => {
+      const wordIdsInWords = new Set(words.map(w => w.id));
+      const allWords = [];
+      processedUnits.forEach(u => {
+        if (selectedUnits.has(u.name)) {
+          u.words.forEach(w => {
+            const curW = words.find(cw => cw.id === w.id);
+            if (wordIdsInWords.has(w.id)) {
+              // 显示的题目：用用户标记
+              allWords.push(curW);
+            } else {
+              // 没显示的题目：自动标记为正确
+              allWords.push({
+                ...w,
+                markPractice: 'green',
+                markSelf: 'green',
+                markFinal: 'green',
+                isWeak: curW?.isWeak || false
+              });
+            }
+          });
+        }
+      });
+      return allWords;
+    })() : words;
 
     wordsToSave.forEach(w => {
       let currentFinal = w.markFinal; if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
