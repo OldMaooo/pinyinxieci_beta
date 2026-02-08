@@ -734,36 +734,16 @@ function MainApp() {
     setSyncStatus('saving');
     const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
 
-    // 在终测 + 仅错题模式下，保存所有选中单元的题目
-    // 显示的题目用用户标记，没显示的自动算正确
-    const wordsToSave = !isTemporary && step === 2 && onlyWrong ? (() => {
-      const wordIdsInWords = new Set(words.map(w => w.id));
-      const allWords = [];
-      processedUnits.forEach(u => {
-        if (selectedUnits.has(u.name)) {
-          u.words.forEach(w => {
-            const curW = words.find(cw => cw.id === w.id);
-            if (wordIdsInWords.has(w.id)) {
-              // 显示的题目：用用户标记
-              allWords.push(curW);
-            } else {
-              // 没显示的题目：自动标记为正确
-              allWords.push({
-                ...w,
-                markPractice: 'green',
-                markSelf: 'green',
-                markFinal: 'green',
-                isWeak: curW?.isWeak || false
-              });
-            }
-          });
-        }
-      });
-      return allWords;
-    })() : words;
+    // 在终测 + 仅错题模式下，只保存用户标记过的题目
+    // 没标记的题目不保存 = 默认正确
+    const wordsToSave = (!isTemporary && step === 2 && onlyWrong)
+      ? words.filter(w => w.markFinal !== 'white')
+      : words;
 
     wordsToSave.forEach(w => {
-      let currentFinal = w.markFinal; if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
+      // 如果是终测，用户标记的白色自动变绿色
+      let currentFinal = w.markFinal;
+      if (!isTemporary && step === 2 && currentFinal === 'white') currentFinal = 'green';
       const currentTemp = { practice: w.markPractice, self: w.markSelf, final: currentFinal };
        const m = nextMastery[w.id] || mastery[w.id];
       let newHistory = [...(m.history || [])]; let newLastUpdate = m.lastUpdate; let newConsecutiveGreen = m.consecutive_green || 0; let newLastPracticeDate = m.last_practice_date;
