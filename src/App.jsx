@@ -802,6 +802,43 @@ function MainApp() {
 
   const stopVoice = () => { window.speechSynthesis.cancel(); setIsVoiceActive(false); setIsPaused(false); setActiveVoiceIndex(-1); setProgress(0); if (timerRef.current) clearInterval(timerRef.current); };
 
+  const saveSelfTest = async () => {
+    setSyncStatus('saving');
+    const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
+    words.forEach(w => {
+      const currentSelf = w.markSelf;
+      const currentTemp = { practice: w.markPractice, self: currentSelf, final: 'white' };
+      const m = nextMastery[w.id] || mastery[w.id];
+      let newHistory = [...(m.history || [])]; let newLastUpdate = m.lastUpdate; let newConsecutiveGreen = m.consecutive_green || 0; let newLastPracticeDate = m.last_practice_date;
+      
+      if (newLastPracticeDate !== todayStr) {
+        newHistory.push(currentSelf === 'red' ? 'red' : 'green');
+        if (newHistory.length > 10) newHistory.shift();
+        newLastUpdate = todayStr;
+        newLastPracticeDate = todayStr;
+        if (currentSelf === 'green') {
+          newConsecutiveGreen = (newConsecutiveGreen || 0) + 1;
+        } else {
+          newConsecutiveGreen = 0;
+        }
+      } else {
+        const lastIdx = newHistory.length - 1;
+        if (lastIdx >= 0 && currentSelf === 'red') {
+          newHistory[lastIdx] = 'red';
+          newConsecutiveGreen = 0;
+        }
+      }
+      nextMastery[w.id] = { history: newHistory, temp: currentTemp, lastUpdate: newLastUpdate, consecutive_green: newConsecutiveGreen, last_practice_date: newLastPracticeDate };
+      upserts.push({ id: w.id, history: newHistory, temp_state: currentTemp, last_history_update: newLastUpdate, consecutive_green: newConsecutiveGreen, last_practice_date: newLastPracticeDate, updated_at: new Date().toISOString() });
+    });
+    
+    setMastery(nextMastery); window.mastery = nextMastery;
+    if (upserts.length > 0) {
+      const { error } = await supabase.from('mastery_records').upsert(upserts);
+      if (error) setSyncStatus('error'); else setSyncStatus('idle');
+    }
+  };
+
   const handleTabChange = (idx) => {
     if (idx === 2 && step < 2) setModalConfig({ isOpen: true, type: 'TO_FINAL', title: "确认进入终测？", content: "确认进入终测吗？" });
     else {
@@ -851,7 +888,31 @@ function MainApp() {
     setTimeout(() => speak(0), 100);
   };
 
-  const calculateStats = () => {
+// 统计 Tab 2（基于 markSelf）
+const calculateStatsForTab2 = () => {
+  let allWords = [];
+  processedUnits.forEach(u => {
+    if (selectedUnits.has(u.name)) {
+      allWords = [...allWords, ...u.words];
+    }
+  });
+  const total = allWords.length;
+  let wrong = 0, mastered = 0;
+  const markedIds = new Set(words.filter(w => w.markSelf !== 'white').map(w => w.id));
+  allWords.forEach(w => {
+    if (markedIds.has(w.id)) {
+      const wData = words.find(cw => cw.id === w.id);
+      if (wData.markSelf === 'red') wrong++;
+      if (wData.markSelf === 'green') mastered++;
+    } else {
+      mastered++;
+    }
+  });
+  return { total, wrong, mastered, unassigned: 0 };
+};
+
+// 统计 Tab 3（基于 markFinal）
+const calculateStats = () => {
     // 统计全量题目（选中的单元里所有题目）
     let allWords = [];
     processedUnits.forEach(u => {
@@ -1045,7 +1106,7 @@ function MainApp() {
       <main className="flex-1 overflow-y-auto p-[36px] bg-slate-50 pt-[110px] pb-32"><div className="max-w-full grid grid-cols-4 gap-x-8 gap-y-0">{words.map((item, index) => <WordRow key={`${step}-${item.id}`} item={item} index={index} step={step} onUpdate={(id, type, val) => setWords(prev => prev.map(w => w.id === id ? { ...w, [type]: val } : w))} setHintWord={setHintWord} showAnswer={showAnswers} activeIndex={activeVoiceIndex} progress={progress} isVoiceActive={isVoiceActive} onStartVoice={speak} isShuffling={isShuffling} onShowStroke={(w) => showStrokeOrder && setStrokeTarget(w)} onShowAnswer={handleShowAnswer} status={getStatus(item.id)} />)}</div>{hintWord && (<div className="fixed inset-0 z-[500] bg-black/40 flex items-center justify-center p-10 pointer-events-none animate-in fade-in"><div className="bg-white p-12 px-20 w-fit rounded-lg shadow-2xl flex items-center justify-center animate-in zoom-in-90 border-8 border-slate-100"><span className="text-[12rem] font-black font-kaiti text-black leading-none">{hintWord}</span></div></div>)}</main>
       {step >= 1 && (step === 2 ? (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_STATS', title: "本次练习统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>) : step === 1 ? (<div className={`fixed left-0 w-full flex justify-center z-[300] transition-all duration-500 pointer-events-none ${isVoiceActive && !isDictationFinished ? 'bottom-24' : 'bottom-4'}`}><button onClick={() => setModalConfig({ isOpen: true, type: 'FINISH_SELF_TEST', title: "本次自测统计", content: "" })} className="px-12 py-4 rounded-lg font-black text-white shadow-2xl pointer-events-auto bg-emerald-600">存档并结束 <Save size={20} className="inline ml-2"/></button></div>) : null)}
       {answerCardVisible && <AnswerCard word={answerCardWord} onClose={handleAnswerCardClose} onAutoNext={handleAnswerCardAutoNext} />}
-      <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} isLoading={isModalLoading} onConfirm={async () => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setWords(prev => prev.map(w => (!mastery[w.id]?.history?.length && (w.markPractice==='red' || w.markSelf==='red')) ? {...w, markFinal:'red'} : w)); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { setIsModalLoading(true); await save(); setIsModalLoading(false); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_SELF_TEST') { setIsModalLoading(true); await save(); setIsModalLoading(false); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'ENTER_FINAL_FROM_SELF') { setStep(2); setWords(prev => prev.map(w => (!mastery[w.id]?.history?.length && (w.markPractice==='red' || w.markSelf==='red' || w.markFinal==='red')) ? {...w, markFinal:'red'} : w)); setModalConfig({ isOpen: false }); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' || modalConfig.type === 'FINISH_SELF_TEST' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{calculateStats().total}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{calculateStats().wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{calculateStats().mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div>{modalConfig.type === 'FINISH_SELF_TEST' && (<button onClick={() => setModalConfig({ isOpen: true, type: 'ENTER_FINAL_FROM_SELF', title: "进入家长终测", content: "" })} className="w-full mt-4 px-6 py-3 rounded-lg bg-black text-white font-bold">进入家长终测</button>)}</div>) : modalConfig.content} />
+      <Modal isOpen={modalConfig.isOpen} onClose={() => setModalConfig({ isOpen: false })} isLoading={isModalLoading} onConfirm={async () => { if (modalConfig.type === 'TO_FINAL') { stopVoice(); setStep(2); setWords(prev => prev.map(w => (!mastery[w.id]?.history?.length && (w.markPractice==='red' || w.markSelf==='red')) ? {...w, markFinal:'red'} : w)); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_STATS') { setIsModalLoading(true); await saveSelfTest(); setIsModalLoading(false); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'FINISH_SELF_TEST') { setIsModalLoading(true); await saveSelfTest(); setIsModalLoading(false); setModalConfig({ isOpen: false }); } else if (modalConfig.type === 'ENTER_FINAL_FROM_SELF') { setStep(2); setWords(prev => prev.map(w => (!mastery[w.id]?.history?.length && (w.markPractice==='red' || w.markSelf==='red' || w.markFinal==='red')) ? {...w, markFinal:'red'} : w)); setModalConfig({ isOpen: false }); } }} title={modalConfig.title} content={modalConfig.type === 'FINISH_STATS' || modalConfig.type === 'FINISH_SELF_TEST' ? (<div className="flex flex-col gap-4 py-4 text-left"><div className="flex justify-between border-b pb-2"><span className="text-slate-400 font-bold">词组总数</span><span className="font-mono font-black text-lg text-black">{(modalConfig.type === 'FINISH_STATS' ? calculateStats() : calculateStatsForTab2()).total}</span></div><div className="flex justify-between border-b pb-2"><span className="text-red-500 font-bold">错题 (需复习)</span><span className="font-mono font-black text-lg text-red-500">{(modalConfig.type === 'FINISH_STATS' ? calculateStats() : calculateStatsForTab2()).wrong}</span></div><div className="flex justify-between border-b pb-2"><span className="text-emerald-600 font-bold">已掌握</span><span className="font-mono font-black text-lg text-emerald-600">{(modalConfig.type === 'FINISH_STATS' ? calculateStats() : calculateStatsForTab2()).mastered}</span></div><div className="flex justify-between"><span className="text-slate-400 font-bold">未标记</span><span className="font-mono font-black text-lg text-slate-300">0</span></div>{modalConfig.type === 'FINISH_SELF_TEST' && (<button onClick={() => setModalConfig({ isOpen: true, type: 'ENTER_FINAL_FROM_SELF', title: "进入家长终测", content: "" })} className="w-full mt-4 px-6 py-3 rounded-lg bg-black text-white font-bold">进入家长终测</button>)}</div>) : modalConfig.content} />
     </div>
   );
 }
