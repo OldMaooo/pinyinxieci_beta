@@ -610,18 +610,26 @@ function MainApp() {
 
   const cycleStatus = (id) => {
     const current = getStatus(id, true);
-    let next;
-    if (current === 'NEW') next = ['red'];
-    else if (current === 'WEAK') next = ['green', 'green', 'green'];
-    else next = [];
-    setTempMastery(prev => ({ ...prev, [id]: { history: next } }));
+    let history = [];
+    let consecutive_green = 0;
+    if (current === 'NEW') {
+      history = ['red'];
+      consecutive_green = 0;
+    } else if (current === 'WEAK') {
+      history = ['green', 'green', 'green'];
+      consecutive_green = 10;
+    } else {
+      history = [];
+      consecutive_green = 0;
+    }
+    setTempMastery(prev => ({ ...prev, [id]: { history, consecutive_green } }));
   };
 
   const saveAdminChanges = async () => {
     const upserts = [];
     Object.keys(tempMastery).forEach(id => {
       if (JSON.stringify(mastery[id]) !== JSON.stringify(tempMastery[id])) {
-        upserts.push({ id, history: tempMastery[id].history, last_status: tempMastery[id].history[0] || 'white', updated_at: new Date().toISOString() });
+        upserts.push({ id, history: tempMastery[id].history, consecutive_green: tempMastery[id].consecutive_green || 0, last_status: tempMastery[id].history[0] || 'white', updated_at: new Date().toISOString() });
       }
     });
     if (upserts.length > 0) await supabase.from('mastery_records').upsert(upserts);
@@ -989,7 +997,7 @@ const calculateStats = () => {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[80px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.12.0' : 'Cloud V3.12.0'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.13.0' : 'Cloud V3.13.0'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
