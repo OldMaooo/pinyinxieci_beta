@@ -305,7 +305,7 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
           <div className="h-full bg-blue-600" style={{ width: `${wordProgress}%` }} />
         </div>
       </div>
-      <div className="flex flex-col items-center justify-center flex-1 w-full pointer-events-auto px-4">
+      <div className="flex flex-col items-center justify-start flex-1 w-full pointer-events-auto px-4 pt-[10%]">
         <div
           ref={wordElementRef}
           className={`font-kaiti font-black transition-colors cursor-pointer ${
@@ -684,16 +684,24 @@ function MainApp() {
 
   const termStats = useMemo(() => {
     let totalWords = 0;
-    let learnedWords = 0;
+    let masteredWords = 0;
+    let weakWords = 0;
+    let pendingWords = 0;
     processedUnits.forEach(unit => {
       unit.words.forEach(word => {
         totalWords++;
         const status = getStatus(word.id, false);
-        if (status === 'MASTERED' || status === 'TESTED') learnedWords++;
+        if (status === 'MASTERED') {
+          masteredWords++;
+        } else if (status === 'WEAK') {
+          weakWords++;
+        } else {
+          pendingWords++;
+        }
       });
     });
-    const percentage = totalWords > 0 ? ((learnedWords / totalWords) * 100).toFixed(1) : 0;
-    return { totalWords, learnedWords, percentage };
+    const masteredPercentage = totalWords > 0 ? ((masteredWords / totalWords) * 100).toFixed(1) : 0;
+    return { totalWords, masteredWords, weakWords, pendingWords, masteredPercentage };
   }, [processedUnits, mastery]);
 
   const currentTotalCount = useMemo(() => {
@@ -999,19 +1007,17 @@ const calculateStats = () => {
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
             <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.13.0' : 'Cloud V3.13.0'}</span>
           </div>
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
-              <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
+            <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
+              <span>{termStats.masteredWords}/{termStats.totalWords} {termStats.masteredPercentage}%</span>
               <div className="relative w-6 h-6">
                 <svg viewBox="0 0 36 36" className="w-full h-full">
-                  <defs>
-                    <linearGradient id="pieGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#10b981" />
-                      <stop offset="100%" stopColor="#10b981" />
-                    </linearGradient>
-                  </defs>
                   <circle cx="18" cy="18" r="16" fill="none" stroke="#e2e8f0" strokeWidth="4" />
-                  <circle cx="18" cy="18" r="16" fill="none" stroke="url(#pieGradient)" strokeWidth="4"
-                    strokeDasharray={`${(termStats.percentage / 100) * 100.53} 100.53`}
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#ef4444" strokeWidth="4"
+                    strokeDasharray={`${(termStats.weakWords / termStats.totalWords) * 100.53} 100.53`}
+                    transform="rotate(-90 18 18)" />
+                  <circle cx="18" cy="18" r="16" fill="none" stroke="#10b981" strokeWidth="4"
+                    strokeDasharray={`${(termStats.masteredWords / termStats.totalWords) * 100.53} 100.53`}
+                    strokeDashoffset={-((termStats.weakWords / termStats.totalWords) * 100.53)}
                     transform="rotate(-90 18 18)" />
                 </svg>
               </div>
