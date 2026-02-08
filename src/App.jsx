@@ -660,10 +660,7 @@ function MainApp() {
     const lastResult = m.history[m.history.length - 1];
     
     // 规则：连续 >=5 天答对 = 掌握（绿色下划线）
-    if (consecutive >= 5) {
-      console.log(`[getStatus] ${id} -> MASTERED (consecutive=${consecutive}, history=${JSON.stringify(m.history)})`);
-      return 'MASTERED';
-    }
+    if (consecutive >= 5) return 'MASTERED';
 
     // 规则：曾经是红色下划线（history 中有 red）= 薄弱（红色下划线）
     // 即使今天答对了（lastResult = green），只要没连续5天，就还是薄弱
