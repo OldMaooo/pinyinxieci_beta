@@ -473,8 +473,8 @@ const WordRow = ({ item, index, step, onUpdate, setHintWord, showAnswer, isVoice
       </div>
       <div className="flex justify-center items-center gap-2 mt-2 w-full">
         <span className="text-[10px] font-mono text-slate-300 italic">{index + 1}</span>
-        <div onClick={(e) => handleBoxClick(e, 'markPractice')} className={`w-8 h-8 border border-black rounded-sm transition-colors ${item.markPractice === 'red' ? 'bg-red-500 border-red-600 shadow-inner' : 'bg-white'}`} />
-        {step >= 1 && <div onClick={(e) => handleBoxClick(e, 'markSelf')} className={`w-8 h-8 border border-black rounded-sm transition-colors ${item.markSelf === 'red' ? 'bg-red-500 border-red-600 shadow-inner' : 'bg-white'}`} />}
+        <div onClick={(e) => handleBoxClick(e, 'markPractice')} className={`w-8 h-8 border border-black rounded-sm transition-colors ${item.markPractice === 'red' ? (step >= 1 ? 'bg-red-200 border-red-300' : 'bg-red-500 border-red-600 shadow-inner') : 'bg-white'}`} />
+        {step >= 1 && <div onClick={(e) => handleBoxClick(e, 'markSelf')} className={`w-8 h-8 border border-black rounded-sm transition-colors ${item.markSelf === 'red' ? (step >= 2 ? 'bg-red-200 border-red-300' : 'bg-red-500 border-red-600 shadow-inner') : 'bg-white'}`} />}
         {step >= 2 && <div onClick={(e) => handleBoxClick(e, 'markFinal')} className={`w-8 h-8 border-2 border-black rounded-sm cursor-pointer flex items-center justify-center transition-colors ml-1 ${item.markFinal === 'green' ? 'bg-emerald-500 border-emerald-600' : item.markFinal === 'red' ? 'bg-red-500 border-red-600 shadow-inner' : 'bg-white'}`}>{item.markFinal === 'green' && <Check className="text-white w-5 h-5" strokeWidth={4} />}{item.markFinal === 'red' && <X className="text-white w-5 h-5" strokeWidth={4} />}</div>}
       </div>
       {isActive && <div className="absolute bottom-0 left-0 w-full h-[4px] bg-slate-100"><div className="h-full bg-blue-600 transition-all duration-100 ease-linear" style={{ width: `${progress}%` }} /></div>}
