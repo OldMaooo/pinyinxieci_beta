@@ -625,7 +625,10 @@ function MainApp() {
       }
     });
     if (upserts.length > 0) await supabase.from('mastery_records').upsert(upserts);
-    setMastery(tempMastery); window.mastery = tempMastery; setIsAdminMode(false);
+    const newMastery = { ...mastery, ...tempMastery };
+    setMastery(newMastery);
+    window.mastery = newMastery;
+    setIsAdminMode(false);
   };
 
   // 动态加载词库（根据选择的学期动态生成单元数据）
@@ -986,7 +989,7 @@ const calculateStats = () => {
           <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[80px] h-full z-50 cursor-default" />
           <div className="flex items-center gap-3">
             <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
-            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.11.0' : 'Cloud V3.11.0'}</span>
+            <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.12.0' : 'Cloud V3.12.0'}</span>
           </div>
           <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
               <span>{termStats.learnedWords}/{termStats.totalWords} {termStats.percentage}%</span>
