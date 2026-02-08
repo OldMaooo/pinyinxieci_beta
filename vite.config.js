@@ -9,7 +9,7 @@ export default defineConfig({
     {
       name: 'local-storage-api',
       configureServer(server) {
-        // 增加一个简单的 API 接口来读写本地文件
+        // 增垡加一个简单的 API 接口来读写本地文件
         server.middlewares.use((req, res, next) => {
           // 处理保存请求
           if (req.url === '/api/save-mastery' && req.method === 'POST') {
@@ -32,7 +32,7 @@ export default defineConfig({
             });
             return;
           }
-
+          
           // 处理读取请求
           if (req.url === '/api/load-mastery' && req.method === 'GET') {
             const filePath = path.resolve(__dirname, 'storage', 'mastery.json');
@@ -45,7 +45,7 @@ export default defineConfig({
             }
             return;
           }
-
+          
           next();
         });
       }
@@ -53,7 +53,6 @@ export default defineConfig({
   ],
   server: {
     host: '0.0.0.0',
-    port: 3009,
-    strictPort: true,
+    port: 3008,
   }
 })
