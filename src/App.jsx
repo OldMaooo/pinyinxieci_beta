@@ -852,12 +852,27 @@ function MainApp() {
   };
 
   const calculateStats = () => {
-    const total = words.length;
+    // 统计全量题目（选中的单元里所有题目）
+    let allWords = [];
+    processedUnits.forEach(u => {
+      if (selectedUnits.has(u.name)) {
+        allWords = [...allWords, ...u.words];
+      }
+    });
+    const total = allWords.length;
     let wrong = 0, mastered = 0;
-    words.forEach(w => {
-      const status = w.markFinal === 'white' ? 'green' : w.markFinal;
-      if (status === 'red') wrong++;
-      if (status === 'green') mastered++;
+    // 标记过的用标记，没标记的默认绿色
+    const markedIds = new Set(words.filter(w => w.markFinal !== 'white').map(w => w.id));
+    allWords.forEach(w => {
+      if (markedIds.has(w.id)) {
+        // 用户标记过的
+        const wData = words.find(cw => cw.id === w.id);
+        if (wData.markFinal === 'red') wrong++;
+        if (wData.markFinal === 'green') mastered++;
+      } else {
+        // 没标记的默认正确
+        mastered++;
+      }
     });
     return { total, wrong, mastered, unassigned: 0 };
   };
