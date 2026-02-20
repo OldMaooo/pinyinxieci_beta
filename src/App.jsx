@@ -413,7 +413,11 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
             onClick={(e) => {
               e.stopPropagation();
               handleInteraction();
-              // 调用 toggleWrongMark 函数（已实现持久化和双模式同步）
+              if (isPinyinMode && !showChinese) {
+                setShowChinese(true);
+                setIsPausedForViewingAnswer(true);
+                setIsPlaying(false);
+              }
               toggleWrongMark(currentWord.id);
             }}
             className={`absolute bottom-24 left-4 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
@@ -573,6 +577,9 @@ function MainApp() {
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [adminClickCount, setAdminClickCount] = useState(0);
   const adminTimerRef = useRef(null);
+  const lastSelectedUnitIndex = useRef(null);
+  const shiftClickStartIndex = useRef(null);
+  const [isDraggingUnits, setIsDraggingUnits] = useState(false);
   const [tempMastery, setTempMastery] = useState({});
 
   const timerRef = useRef(null);
@@ -600,6 +607,13 @@ function MainApp() {
   const toggleMode = () => { window.location.href = isDevMode ? window.location.origin : window.location.origin + '?dev=1'; };
 
   const handleAdminTrigger = () => {
+    setAdminClickCount(prev => prev + 1);
+    if (adminTimerRef.current) clearTimeout(adminTimerRef.current);
+    adminTimerRef.current = setTimeout(() => setAdminClickCount(0), 3000);
+    if (adminClickCount >= 2) { setIsAdminMode(true); setTempMastery(JSON.parse(JSON.stringify(mastery))); setAdminClickCount(0); }
+  };
+  
+  const handleTitleClick = () => {
     setAdminClickCount(prev => prev + 1);
     if (adminTimerRef.current) clearTimeout(adminTimerRef.current);
     adminTimerRef.current = setTimeout(() => setAdminClickCount(0), 3000);
@@ -1010,10 +1024,9 @@ const calculateStats = () => {
       <div className="h-screen flex flex-col bg-white font-sans text-black overflow-hidden relative">
         {isDevMode && <div className="fixed top-0 left-0 w-full h-1 bg-red-600 animate-pulse z-[1000]" />}
         {isAdminMode && <div className="fixed top-0 left-0 w-full h-8 bg-purple-600 z-[1000] flex items-center justify-center text-white text-xs font-bold shadow-lg animate-in slide-in-from-top">🔧 数据修正模式：点击词组调整状态</div>}
-        <header className="max-w-5xl w-full mx-auto px-8 py-2 flex justify-between items-baseline shrink-0 border-b border-slate-100 relative">
-          <div onClick={handleAdminTrigger} className="absolute top-0 right-0 w-[80px] h-full z-50 cursor-default" />
+        <header className="max-w-5xl w-full mx-auto px-8 py-2 flex justify-between items-baseline relative">
           <div className="flex items-center gap-3">
-            <h1 className="text-3xl font-black tracking-tighter text-black uppercase">听写练习</h1>
+            <h1 onClick={handleTitleClick} className="text-3xl font-black tracking-tighter text-black uppercase cursor-pointer active:scale-95 transition-transform">听写练习</h1>
             <span onClick={toggleMode} className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 border rounded-lg italic cursor-pointer active:scale-95 transition-all ${isDevMode ? 'text-red-600 border-red-100 bg-red-50' : 'text-emerald-600 border-emerald-100 bg-emerald-50'}`}>{isDevMode ? 'TEST DATA MODE V3.13.0' : 'Cloud V3.13.0'}</span>
           </div>
             <div className="flex items-center gap-2 text-xs font-bold text-slate-400">
@@ -1047,15 +1060,17 @@ const calculateStats = () => {
               </select>
             </div>
         </header>
-        <main className={`flex-1 overflow-y-auto px-8 pb-24 ${isAdminMode ? 'pt-8' : ''}`}><div className="max-w-5xl mx-auto">{processedUnits.map((unit) => { const isSelected = selectedUnits.has(unit.name); return (<div key={unit.name} onClick={() => { if(!isAdminMode) { const n = new Set(selectedUnits); if(n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); } }} className="flex items-baseline gap-6 py-3 border-b border-slate-100 group transition-colors hover:bg-slate-50/50 cursor-pointer"><div className={`w-5 h-5 rounded-sm shrink-0 border-2 flex items-center justify-center transition-all mt-1 ${isSelected ? 'bg-black border-black shadow-md' : 'border-slate-200'}`}>{isSelected && <Check size={14} className="text-white" strokeWidth={4} />}</div><div className="font-black text-lg text-black shrink-0 min-w-[6.5rem] tracking-tighter">{unit.name}</div><div className="flex flex-wrap gap-x-1 gap-y-0">{unit.words.map(w => { const st = getStatus(w.id, true); return (<div key={w.id} className="relative group/word"><span onClick={(e) => { e.stopPropagation(); if (isAdminMode) cycleStatus(w.id); }} style={{ fontSize: '22px' }} className={`font-kaiti px-1.5 transition-colors ${isAdminMode ? 'cursor-pointer hover:bg-slate-100' : ''} ${st === 'WEAK' ? 'text-black font-bold' : st === 'MASTERED' ? 'text-emerald-600 font-bold' : st === 'TESTED' ? 'text-black' : 'text-black'}`}>{w.word}</span>{st === 'WEAK' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-red-500 rounded-full" />}{st === 'TESTED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-500 rounded-full" />}{st === 'MASTERED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-600 rounded-full" />}</div>);})}</div></div>);})}</div></main>
+        <main onMouseDown={() => !isAdminMode && setIsDraggingUnits(true)} onMouseUp={() => setIsDraggingUnits(false)} className={`flex-1 overflow-y-auto px-8 pb-24 ${isAdminMode ? 'pt-8' : ''}`}><div className="max-w-5xl mx-auto">{processedUnits.map((unit, idx) => { const isSelected = selectedUnits.has(unit.name); return (<div key={unit.name} onMouseDown={(e) => { if (!isAdminMode && e.buttons === 1) { if (e.shiftKey) { if (shiftClickStartIndex.current === null) { shiftClickStartIndex.current = { idx, isSelected }; } else { const startInfo = shiftClickStartIndex.current; const start = Math.min(startInfo.idx, idx); const end = Math.max(startInfo.idx, idx); const n = new Set(selectedUnits); const shouldSelect = !startInfo.isSelected; for (let i = start; i <= end; i++) { if (shouldSelect) n.add(processedUnits[i].name); else n.delete(processedUnits[i].name); } setSelectedUnits(n); shiftClickStartIndex.current = null; } } else { const n = new Set(selectedUnits); if (n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); shiftClickStartIndex.current = null; } } }} onMouseEnter={(e) => { if (isDraggingUnits && !isAdminMode) { const n = new Set(selectedUnits); if (n.has(unit.name)) n.delete(unit.name); else n.add(unit.name); setSelectedUnits(n); } }} className="flex items-baseline gap-6 py-3 border-b border-slate-100 group transition-colors hover:bg-slate-50/50 cursor-pointer"><div className={`w-5 h-5 rounded-sm shrink-0 border-2 flex items-center justify-center transition-all mt-1 ${isSelected ? 'bg-black border-black shadow-md' : 'border-slate-200'}`}>{isSelected && <Check size={14} className="text-white" strokeWidth={4} />}</div><div className="font-black text-lg text-black shrink-0 min-w-[6.5rem] tracking-tighter">{unit.name}</div><div className="flex flex-wrap gap-x-1 gap-y-0">{unit.words.map(w => { const st = getStatus(w.id, true); return (<div key={w.id} className="relative group/word"><span onClick={(e) => { e.stopPropagation(); if (isAdminMode) cycleStatus(w.id); }} style={{ fontSize: '22px' }} className={`font-kaiti px-1.5 transition-colors ${isAdminMode ? 'cursor-pointer hover:bg-slate-100' : ''} ${st === 'WEAK' ? 'text-black font-bold' : st === 'MASTERED' ? 'text-emerald-600 font-bold' : st === 'TESTED' ? 'text-black' : 'text-black'}`}>{w.word}</span>{st === 'WEAK' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-red-500 rounded-full" />}{st === 'TESTED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-500 rounded-full" />}{st === 'MASTERED' && <div className="absolute bottom-0 left-1 right-1 h-0.5 bg-emerald-600 rounded-full" />}</div>);})}</div></div>);})}</div></main>
         <div className="fixed bottom-0 left-0 w-full p-2 bg-white/95 backdrop-blur-xl border-t z-30 flex justify-center items-center gap-4 shadow-2xl">
           {isAdminMode ? (
             <>
+              <button onClick={() => { const newTemp = { ...tempMastery }; processedUnits.filter(u => selectedUnits.has(u.name)).forEach(u => { u.words.forEach(w => { const st = getStatus(w.id, true); if (st !== 'WEAK') { newTemp[w.id] = { history: ['green', 'green', 'green', 'green', 'green'], consecutive_green: 5 }; } }); }); setTempMastery(newTemp); }} className="flex-1 max-w-[12rem] h-10 rounded-lg font-bold text-emerald-600 bg-emerald-50">标记其他掌握</button>
               <button onClick={() => { setIsAdminMode(false); setTempMastery({}); }} className="flex-1 max-w-[12rem] h-10 rounded-lg font-bold text-slate-500 bg-slate-100">取消修改</button>
               <button onClick={saveAdminChanges} className="flex-1 max-w-[12rem] h-10 rounded-lg font-bold text-white bg-purple-600 shadow-lg">确认保存修正</button>
             </>
           ) : (
             <>
+              <label className="flex items-center gap-2 cursor-pointer select-none group" onClick={(e) => { e.stopPropagation(); const allSelected = processedUnits.every(u => selectedUnits.has(u.name)); if (allSelected) { setSelectedUnits(new Set()); } else { setSelectedUnits(new Set(processedUnits.map(u => u.name))); } }}><div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all ${processedUnits.every(u => selectedUnits.has(u.name)) ? 'bg-black border-black shadow-md' : 'border-slate-300'}`}>{processedUnits.every(u => selectedUnits.has(u.name)) && <Check size={14} className="text-white" strokeWidth={4} />}</div><span className="text-sm font-black text-black">全选</span></label>
               <label className="flex items-center gap-2 cursor-pointer select-none group" onClick={(e) => e.stopPropagation()}><div className={`w-5 h-5 rounded-sm border-2 flex items-center justify-center transition-all ${onlyWrong ? 'bg-black border-black shadow-md' : 'border-slate-300'}`}>{onlyWrong && <Check size={14} className="text-white" strokeWidth={4} />}</div><span className="text-sm font-black text-black">仅练错题</span><input type="checkbox" className="hidden" checked={onlyWrong} onChange={() => setOnlyWrong(!onlyWrong)} /></label>
               <div className="flex flex-col items-end w-full max-w-sm">
                 <button onClick={start} disabled={selectedUnits.size === 0 || isLoading} className={`w-full text-white h-12 rounded-lg font-black text-xl shadow-2xl active:scale-95 transition-all flex items-center justify-center gap-2 ${isDevMode ? 'bg-red-600' : 'bg-black'} ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}>
