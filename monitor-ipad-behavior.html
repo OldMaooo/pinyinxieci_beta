@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>iPad 行为监控</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --line: #e2e8f0;
+      --text: #0f172a;
+      --muted: #475569;
+      --ok: #166534;
+      --warn: #92400e;
+      --danger: #991b1b;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 14px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--text);
+      background: var(--bg);
+    }
+    .wrap { max-width: 1200px; margin: 0 auto; display: grid; gap: 10px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
+    .row:last-child { margin-bottom: 0; }
+    .label { font-size: 12px; color: var(--muted); min-width: 90px; font-weight: 700; }
+    input { border: 1px solid var(--line); border-radius: 8px; padding: 8px; font-size: 14px; width: min(320px, 100%); }
+    button { border: 0; border-radius: 8px; background: #0f172a; color: #fff; padding: 8px 12px; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .status { font-size: 12px; font-weight: 700; border-radius: 999px; padding: 4px 8px; }
+    .ok { background: #dcfce7; color: var(--ok); }
+    .warn { background: #fef3c7; color: var(--warn); }
+    .error { background: #fee2e2; color: var(--danger); }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit,minmax(170px,1fr)); gap: 8px; }
+    .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 10px; background: #f8fafc; }
+    .kpi .t { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .kpi .n { margin-top: 3px; font-size: 26px; font-weight: 800; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media (max-width: 920px) { .split { grid-template-columns: 1fr; } }
+    .list { max-height: 360px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; padding: 8px; background: #f8fafc; }
+    .item { border-bottom: 1px solid #e2e8f0; padding: 6px 0; font-size: 12px; }
+    .item:last-child { border-bottom: none; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1 style="margin:0 0 10px 0;font-size:22px;">iPad 行为监控服务</h1>
+      <div class="row">
+        <span class="label">Profile</span>
+        <input id="profile" value="ipad-remote-default" />
+      </div>
+      <div class="row">
+        <span class="label">Session</span>
+        <input id="session" placeholder="可选：锁定某一次会话" />
+      </div>
+      <div class="row">
+        <span class="label">Window(ms)</span>
+        <input id="windowMs" value="400" />
+      </div>
+      <div class="row">
+        <button id="reload">刷新</button>
+        <span id="status" class="status warn">未加载</span>
+      </div>
+      <div class="row">
+        <span class="label">Match</span>
+        <span id="matchMeta" class="mono">-</span>
+      </div>
+      <div class="row">
+        <span class="label">Latest UA</span>
+        <span id="uaHint" class="status warn">未检测</span>
+      </div>
+      <div class="row">
+        <span id="latestUa" class="mono">-</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="kpis">
+        <div class="kpi"><div class="t">遥控信号</div><div id="sigCount" class="n">0</div></div>
+        <div class="kpi"><div class="t">闪卡动作</div><div id="actCount" class="n">0</div></div>
+        <div class="kpi"><div class="t">匹配成功</div><div id="matchCount" class="n">0</div></div>
+        <div class="kpi"><div class="t">信号无动作</div><div id="unmatchedCount" class="n">0</div></div>
+        <div class="kpi"><div class="t">动作不一致</div><div id="mismatchCount" class="n">0</div></div>
+        <div class="kpi"><div class="t">孤立动作</div><div id="orphanCount" class="n">0</div></div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h2 style="margin:0 0 8px 0;font-size:18px;">不一致原因</h2>
+        <div id="reasons" class="list mono"></div>
+      </div>
+      <div class="card">
+        <h2 style="margin:0 0 8px 0;font-size:18px;">最近遥控信号</h2>
+        <div id="signals" class="list mono"></div>
+      </div>
+    </div>
+
+    <div class="split">
+      <div class="card">
+        <h2 style="margin:0 0 8px 0;font-size:18px;">最近闪卡动作</h2>
+        <div id="actions" class="list mono"></div>
+      </div>
+      <div class="card">
+        <h2 style="margin:0 0 8px 0;font-size:18px;">不匹配明细</h2>
+        <div id="details" class="list mono"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const statusEl = document.getElementById('status');
+    const sigCountEl = document.getElementById('sigCount');
+    const actCountEl = document.getElementById('actCount');
+    const matchCountEl = document.getElementById('matchCount');
+    const unmatchedCountEl = document.getElementById('unmatchedCount');
+    const mismatchCountEl = document.getElementById('mismatchCount');
+    const orphanCountEl = document.getElementById('orphanCount');
+
+    const reasonsEl = document.getElementById('reasons');
+    const signalsEl = document.getElementById('signals');
+    const actionsEl = document.getElementById('actions');
+    const detailsEl = document.getElementById('details');
+    const windowMsEl = document.getElementById('windowMs');
+    const matchMetaEl = document.getElementById('matchMeta');
+    const latestUaEl = document.getElementById('latestUa');
+    const uaHintEl = document.getElementById('uaHint');
+
+    let timer = null;
+
+    function setStatus(type, text) {
+      statusEl.className = `status ${type}`;
+      statusEl.textContent = text;
+    }
+
+    function renderList(el, rows, formatter) {
+      el.innerHTML = '';
+      if (!rows || rows.length === 0) {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.textContent = '暂无数据';
+        el.appendChild(div);
+        return;
+      }
+      for (const row of rows) {
+        const div = document.createElement('div');
+        div.className = 'item';
+        div.innerHTML = formatter(row);
+        el.appendChild(div);
+      }
+    }
+
+    async function loadReport() {
+      const profile = document.getElementById('profile').value.trim();
+      const session = document.getElementById('session').value.trim();
+      const windowMsRaw = Number(windowMsEl.value || 400);
+      const windowMs = Number.isFinite(windowMsRaw) ? Math.max(50, Math.min(5000, Math.floor(windowMsRaw))) : 400;
+      const params = new URLSearchParams();
+      if (profile) params.set('profile_id', profile);
+      if (session) params.set('session_id', session);
+      params.set('window_ms', String(windowMs));
+
+      try {
+        const resp = await fetch(`/api/monitor/report?${params.toString()}`);
+        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+        const data = await resp.json();
+        const summary = data.summary || {};
+        const latestSignal = (data.latest_signals || []).slice(-1)[0] || null;
+        const latestUa = latestSignal?.user_agent || '未知';
+        const isMobileUa = /iPad|iPhone|Mobile/i.test(latestUa);
+
+        sigCountEl.textContent = String(summary.signal_count || 0);
+        actCountEl.textContent = String(summary.action_count || 0);
+        matchCountEl.textContent = String(summary.matched_count || 0);
+        unmatchedCountEl.textContent = String(summary.unmatched_signal_count || 0);
+        mismatchCountEl.textContent = String(summary.mismatched_signal_count || 0);
+        orphanCountEl.textContent = String(summary.orphan_shortcut_action_count || 0);
+        matchMetaEl.textContent = `${data.matching_mode || '-'} / window=${data.window_ms_used ?? '-'}`;
+        latestUaEl.textContent = latestUa;
+        uaHintEl.className = `status ${isMobileUa ? 'ok' : 'warn'}`;
+        uaHintEl.textContent = isMobileUa ? '检测到移动设备 UA' : '当前不是 iPad/iPhone UA';
+
+        const reasons = data.reasons || {};
+        renderList(reasonsEl, Object.entries(reasons), ([k, v]) => `${k}: ${v}`);
+
+        renderList(signalsEl, data.latest_signals || [], (s) => {
+          return `#${s.id} ${s.signal_type} key=${s.key} expected=${s.expected_action || '-'} note=${s.note || ''}`;
+        });
+
+        renderList(actionsEl, data.latest_actions || [], (a) => {
+          return `#${a.id} action=${a.action || '-'} source=${a.source || '-'} word=${a.word || '-'} idx=${a.active_index ?? '-'}`;
+        });
+
+        const detailRows = [
+          ...(data.unmatched_signals || []).map((r) => ({ type: 'unmatched_signal', ...r })),
+          ...(data.mismatched_signals || []).map((r) => ({ type: 'mismatched_signal', ...r })),
+          ...(data.orphan_shortcut_actions || []).map((r) => ({ type: 'orphan_action', ...r })),
+        ];
+        renderList(detailsEl, detailRows, (r) => `${r.type} ${JSON.stringify(r)}`);
+
+        setStatus('ok', `已更新 ${new Date().toLocaleTimeString()}`);
+      } catch (error) {
+        setStatus('error', `加载失败: ${error.message}`);
+      }
+    }
+
+    document.getElementById('reload').addEventListener('click', loadReport);
+
+    loadReport();
+    timer = setInterval(loadReport, 1000);
+  </script>
+</body>
+</html>

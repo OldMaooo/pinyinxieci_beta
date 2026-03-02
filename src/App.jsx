@@ -13,6 +13,7 @@ const SEMESTERS = ["一年级上册", "一年级下册", "二年级上册", "二
 
 // 默认学期（从localStorage读取，如果没有则默认为三年级上册）
 const DEFAULT_SEMESTER = localStorage.getItem('pinyin_selected_semester') || '三年级上册';
+const ARROW_DOWN_DOUBLE_WINDOW_MS = 300;
 
 // 动态加载词库
 async function loadWordBank(grade, semester) {
@@ -164,26 +165,111 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
   const fadeRef = useRef(null);
   const wordElementRef = useRef(null);
   const wordStartTimeRef = useRef(null);
+  const arrowDownSingleTimerRef = useRef(null);
+  const arrowDownPressedRef = useRef(false);
+  const lastArrowDownUpTsRef = useRef(0);
+  const shortcutActionsRef = useRef({
+    goNext: null,
+    goPrev: null,
+    togglePlay: null,
+    handleMarkWrong: null,
+  });
+  const monitorSessionIdRef = useRef(`flashmon-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`);
+  const monitorProfileId = useMemo(() => localStorage.getItem('pinyin_remote_profile_id') || 'ipad-remote-default', []);
   const [wordProgress, setWordProgress] = useState(0);
-  const [isPinyinMode, setIsPinyinMode] = useState(false);
+  const [isPinyinMode, setIsPinyinMode] = useState(true);
   const [markedWrong, setMarkedWrong] = useState(new Set());
   const [showChinese, setShowChinese] = useState(false);
+  const [isShortcutHelpOpen, setIsShortcutHelpOpen] = useState(false);
+  const lastAutoSpeakKeyRef = useRef('');
+  const lastAutoSpeakAtRef = useRef(0);
+  const speakTimeoutRef = useRef(null);
+  const firstSpeakRequestedRef = useRef(false);
+  const firstSpeakStartedRef = useRef(false);
+  const firstSpeakNeedsRetryRef = useRef(false);
 
   const currentWord = words[index];
   const currentStatus = currentWord ? getStatus(currentWord.id) : 'NEW';
   const isWeakWord = currentStatus === 'WEAK';
 
+  const postMonitor = (path, payload) => {
+    fetch(path, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    }).catch(() => {
+      // Monitoring should not block core flashcard interactions.
+    });
+  };
+
+  const logSignal = (event, expectedAction, note = '') => {
+    postMonitor('/api/monitor/signal', {
+      profile_id: monitorProfileId,
+      session_id: monitorSessionIdRef.current,
+      signal_type: event.type,
+      key: event.key || '',
+      code: event.code || '',
+      repeat_key: !!event.repeat,
+      expected_action: expectedAction || null,
+      note,
+      page_context: 'flashcard',
+      user_agent: navigator.userAgent,
+      captured_at: new Date().toISOString(),
+    });
+  };
+
+  const logAction = (action, source, extra = {}) => {
+    postMonitor('/api/monitor/action', {
+      profile_id: monitorProfileId,
+      session_id: monitorSessionIdRef.current,
+      action,
+      source,
+      page_context: 'flashcard',
+      active_index: index,
+      word_id: currentWord?.id || null,
+      word: currentWord?.word || null,
+      ...extra,
+      executed_at: new Date().toISOString(),
+    });
+  };
+
+  const shortcutHelpItems = [
+    'ArrowDown 单击: 下一题',
+    'ArrowDown 双击(300ms): 不会',
+    'ArrowUp: 暂停/播放',
+    'Tab: 上一题',
+  ];
+
   useEffect(() => { localStorage.setItem('pinyin_flash_dark', isDarkMode); }, [isDarkMode]);
 
-  const speak = (text) => {
+  const speak = (text, options = {}) => {
     if (!soundOn || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
-    setTimeout(() => {
-        const u = new SpeechSynthesisUtterance(text);
-        u.lang = 'zh-CN'; u.rate = 0.8; u.volume = volume;
-        const premiumVoice = window.speechSynthesis.getVoices().find(v => v.name.includes('Yue') || v.name.includes('月'));
-        if (premiumVoice) u.voice = premiumVoice;
-        window.speechSynthesis.speak(u);
+    if (speakTimeoutRef.current) {
+      clearTimeout(speakTimeoutRef.current);
+      speakTimeoutRef.current = null;
+    }
+    const runSpeak = () => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'zh-CN'; u.rate = 0.8; u.volume = volume;
+      const premiumVoice = window.speechSynthesis.getVoices().find(v => v.name.includes('Yue') || v.name.includes('月'));
+      if (premiumVoice) u.voice = premiumVoice;
+      if (options.isFirstAuto) {
+        u.onstart = () => {
+          firstSpeakStartedRef.current = true;
+          firstSpeakNeedsRetryRef.current = false;
+        };
+      }
+      window.speechSynthesis.speak(u);
+    };
+    // 首词自动播报走立即执行，避免 StrictMode 下定时器被清理导致首词丢失。
+    if (options.isFirstAuto) {
+      runSpeak();
+      return;
+    }
+    speakTimeoutRef.current = setTimeout(() => {
+      runSpeak();
+      speakTimeoutRef.current = null;
     }, 10);
   };
 
@@ -197,15 +283,61 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
     const loadVoices = () => { window.speechSynthesis.getVoices(); };
     window.speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
-    return () => { window.speechSynthesis.onvoiceschanged = null; };
+    return () => {
+      window.speechSynthesis.onvoiceschanged = null;
+      if (speakTimeoutRef.current) {
+        clearTimeout(speakTimeoutRef.current);
+        speakTimeoutRef.current = null;
+      }
+    };
   }, []);
 
   useEffect(() => {
-    speak(currentWord.word);
+    const autoSpeakKey = `${currentWord?.id || ''}|${index}`;
+    const now = Date.now();
+    const isFirstSpeakPendingStart =
+      index === 0 &&
+      firstSpeakRequestedRef.current &&
+      !firstSpeakStartedRef.current;
+    if (
+      lastAutoSpeakKeyRef.current === autoSpeakKey &&
+      now - lastAutoSpeakAtRef.current < 300 &&
+      !isFirstSpeakPendingStart
+    ) {
+      return;
+    }
+    lastAutoSpeakKeyRef.current = autoSpeakKey;
+    lastAutoSpeakAtRef.current = now;
+    const isFirstAuto = index === 0 && !firstSpeakStartedRef.current;
+    if (index === 0 && !firstSpeakRequestedRef.current) {
+      firstSpeakRequestedRef.current = true;
+      firstSpeakNeedsRetryRef.current = true;
+    }
+    speak(currentWord.word, { isFirstAuto });
+  }, [index, currentWord?.id]);
+
+  useEffect(() => {
     if (isPinyinMode) {
       setShowChinese(false);
     }
-  }, [index, isPinyinMode]);
+  }, [isPinyinMode]);
+
+  useEffect(() => {
+    const retryFirstSpeak = () => {
+      if (!firstSpeakNeedsRetryRef.current) return;
+      if (firstSpeakStartedRef.current) return;
+      if (index !== 0) return;
+      firstSpeakNeedsRetryRef.current = false;
+      speak(currentWord.word, { isFirstAuto: true });
+    };
+
+    window.addEventListener('pointerdown', retryFirstSpeak, true);
+    window.addEventListener('keydown', retryFirstSpeak, true);
+    return () => {
+      window.removeEventListener('pointerdown', retryFirstSpeak, true);
+      window.removeEventListener('keydown', retryFirstSpeak, true);
+    };
+  }, [index, currentWord?.word, soundOn, volume]);
   useEffect(() => { if (isPlaying) { timerRef.current = setInterval(() => { setIndex(prev => (prev + 1) % words.length); }, speed); } return () => clearInterval(timerRef.current); }, [index, isPlaying, speed, words.length]);
 
   useEffect(() => {
@@ -251,16 +383,138 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
     };
   }, [currentWord.word, currentWord.pinyin, isDarkMode, isPinyinMode, showChinese]);
 
-  const next = (e) => {
-    e.stopPropagation();
+  const goNext = (source = 'ui') => {
+    logAction('flash_next', source);
     if (isPausedForViewingAnswer) {
       setIsPausedForViewingAnswer(false);
       setIsPlaying(true);
     }
-    setIndex((index + 1) % words.length);
+    setIndex(prev => (prev + 1) % words.length);
     handleInteraction();
   };
-  const prev = (e) => { e.stopPropagation(); setIndex((index - 1 + words.length) % words.length); handleInteraction(); };
+
+  const goPrev = (source = 'ui') => {
+    logAction('flash_prev', source);
+    setIndex(prev => (prev - 1 + words.length) % words.length);
+    handleInteraction();
+  };
+
+  const togglePlay = (source = 'ui') => {
+    logAction('flash_toggle_play', source, { is_playing_before: isPlaying });
+    setIsPlaying(prev => !prev);
+    handleInteraction();
+  };
+
+  const handleMarkWrong = (source = 'ui') => {
+    if (!currentWord) return;
+    logAction('flash_mark_wrong', source);
+    handleInteraction();
+    if (isPinyinMode && !showChinese) {
+      setShowChinese(true);
+      setIsPausedForViewingAnswer(true);
+      setIsPlaying(false);
+    }
+    toggleWrongMark(currentWord.id);
+  };
+
+  useEffect(() => {
+    shortcutActionsRef.current = { goNext, goPrev, togglePlay, handleMarkWrong };
+  }, [goNext, goPrev, togglePlay, handleMarkWrong]);
+
+  useEffect(() => {
+    const clearArrowDownSingleTimer = () => {
+      if (arrowDownSingleTimerRef.current) {
+        clearTimeout(arrowDownSingleTimerRef.current);
+        arrowDownSingleTimerRef.current = null;
+      }
+    };
+
+    const onShortcut = (event) => {
+      if (event.defaultPrevented) return;
+      const actions = shortcutActionsRef.current;
+
+      if (event.key === 'ArrowDown' && event.type === 'keydown') {
+        logSignal(event, null, 'arrow_down_keydown');
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.repeat) return;
+        if (arrowDownPressedRef.current) return;
+        arrowDownPressedRef.current = true;
+        return;
+      }
+
+      if (event.key === 'ArrowDown' && event.type === 'keyup') {
+        logSignal(event, 'flash_next_or_mark_wrong', 'arrow_down_keyup');
+        event.preventDefault();
+        event.stopPropagation();
+        if (!arrowDownPressedRef.current) return;
+        arrowDownPressedRef.current = false;
+
+        const now = Date.now();
+        const delta = now - lastArrowDownUpTsRef.current;
+        if (lastArrowDownUpTsRef.current > 0 && delta <= ARROW_DOWN_DOUBLE_WINDOW_MS) {
+          clearArrowDownSingleTimer();
+          lastArrowDownUpTsRef.current = 0;
+          if (actions?.handleMarkWrong) {
+            actions.handleMarkWrong('shortcut_arrowdown_double');
+          }
+          return;
+        }
+
+        lastArrowDownUpTsRef.current = now;
+        clearArrowDownSingleTimer();
+        arrowDownSingleTimerRef.current = setTimeout(() => {
+          arrowDownSingleTimerRef.current = null;
+          lastArrowDownUpTsRef.current = 0;
+          const latestActions = shortcutActionsRef.current;
+          if (latestActions?.goNext) {
+            latestActions.goNext('shortcut_arrowdown_single');
+          }
+        }, ARROW_DOWN_DOUBLE_WINDOW_MS);
+        return;
+      }
+
+      if (event.key === 'ArrowUp' && event.type === 'keydown') {
+        logSignal(event, 'flash_toggle_play', 'arrow_up_keydown');
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.repeat) return;
+        if (actions?.togglePlay) {
+          actions.togglePlay('shortcut_arrowup');
+        }
+        return;
+      }
+
+      if (event.key === 'Tab' && event.type === 'keydown') {
+        logSignal(event, 'flash_prev', 'tab_keydown');
+        event.preventDefault();
+        event.stopPropagation();
+        if (event.repeat) return;
+        clearArrowDownSingleTimer();
+        lastArrowDownUpTsRef.current = 0;
+        arrowDownPressedRef.current = false;
+        if (actions?.goPrev) {
+          actions.goPrev('shortcut_tab_prev');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', onShortcut, true);
+    window.addEventListener('keyup', onShortcut, true);
+    return () => {
+      clearArrowDownSingleTimer();
+      arrowDownPressedRef.current = false;
+      lastArrowDownUpTsRef.current = 0;
+      window.removeEventListener('keydown', onShortcut, true);
+      window.removeEventListener('keyup', onShortcut, true);
+    };
+  }, []);
+
+  const next = (e) => {
+    e.stopPropagation();
+    goNext();
+  };
+  const prev = (e) => { e.stopPropagation(); goPrev(); };
 
   const toggleWrongMark = async (wordId) => {
     const isWrong = markedWrong.has(wordId);
@@ -294,11 +548,11 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
   };
   
   return (
-    <div
-      className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`}
-      onClick={handleInteraction}
-      onDoubleClick={() => setIsPlaying(!isPlaying)}
-    >
+      <div
+        className={`fixed inset-0 z-[2000] flex flex-col items-center justify-center overflow-hidden transition-colors duration-500 ${isDarkMode ? 'bg-black' : 'bg-slate-100'}`}
+        onClick={handleInteraction}
+        onDoubleClick={() => togglePlay('gesture_double_click')}
+      >
       <div className="absolute top-0 left-0 w-full p-4 flex flex-col items-center gap-1 z-[3000]">
         <div className={`font-mono font-black text-xl ${isDarkMode ? 'text-white/80' : 'text-slate-600'}`}>{index + 1} / {words.length}</div>
         <div className={`h-[4px] w-[200px] rounded-full overflow-hidden ${isDarkMode ? 'bg-white/30' : 'bg-slate-300'}`}>
@@ -374,7 +628,7 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
               <input type="range" min="3000" max="20000" step="500" value={speed} onChange={e => setSpeed(Number(e.target.value))} className="w-24 h-1.5 bg-white/20 rounded-lg appearance-none cursor-pointer accent-white" />
               <span className="text-white font-mono font-black text-sm w-8 text-right">{speed/1000}s</span>
             </div>
-            <button onClick={() => setIsPlaying(!isPlaying)} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-2xl active:scale-95 transition-transform">{isPlaying ? <Pause size={40} fill="black"/> : <Play size={40} fill="black" className="ml-1"/>}</button>
+            <button onClick={() => togglePlay('ui_center_play_pause')} className="w-20 h-20 rounded-full bg-white text-black flex items-center justify-center shadow-2xl active:scale-95 transition-transform">{isPlaying ? <Pause size={40} fill="black"/> : <Play size={40} fill="black" className="ml-1"/>}</button>
             <button onClick={() => setSoundOn(!soundOn)} className={`p-4 rounded-full transition-colors bg-black/20 backdrop-blur-md ${soundOn ? 'text-white' : 'text-white/30'}`}>{soundOn ? <Volume2 size={24}/> : <VolumeX size={24}/>}</button>
             <button onClick={() => setShowThumbnails(!showThumbnails)} className={`p-4 rounded-full transition-colors bg-black/20 backdrop-blur-md ${showThumbnails ? 'text-white' : 'text-white/50'}`}><Grid size={24}/></button>
             <button
@@ -400,8 +654,7 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setIsPlaying(!isPlaying);
-              handleInteraction();
+              togglePlay('ui_left_fan_play_pause');
             }}
             className="absolute bottom-4 left-4 w-16 h-16 rounded-full bg-white text-black shadow-2xl flex items-center justify-center active:scale-95 transition-transform"
           >
@@ -412,13 +665,7 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              handleInteraction();
-              if (isPinyinMode && !showChinese) {
-                setShowChinese(true);
-                setIsPausedForViewingAnswer(true);
-                setIsPlaying(false);
-              }
-              toggleWrongMark(currentWord.id);
+              handleMarkWrong('ui_left_fan_mark_wrong');
             }}
             className={`absolute bottom-24 left-4 w-16 h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
               markedWrong.has(currentWord.id)
@@ -435,12 +682,7 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              if (isPausedForViewingAnswer) {
-                setIsPausedForViewingAnswer(false);
-                setIsPlaying(true);
-              }
-              setIndex((index + 1) % words.length);
-              handleInteraction();
+              goNext('ui_left_fan_next');
             }}
             className={`absolute bottom-4 left-24 w-[200px] h-16 rounded-full flex items-center justify-center shadow-2xl active:scale-95 transition-transform ${
               isDarkMode
@@ -452,6 +694,52 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
           </button>
         </div>
       </div>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsShortcutHelpOpen(true);
+        }}
+        className={`fixed bottom-6 right-6 z-[2150] w-8 h-8 rounded-full backdrop-blur shadow-lg flex items-center justify-center font-black text-sm ${isDarkMode ? 'bg-white/10 text-white' : 'bg-black/5 text-black'}`}
+        aria-label="快捷键说明"
+        title="快捷键说明"
+      >
+        i
+      </button>
+      {isShortcutHelpOpen && (
+        <div
+          className="fixed inset-0 z-[2600] bg-black/50 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsShortcutHelpOpen(false);
+          }}
+        >
+          <div
+            className={`w-full max-w-sm rounded-2xl p-5 shadow-2xl ${isDarkMode ? 'bg-slate-900 text-white' : 'bg-white text-black'}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="text-base font-black">快捷键映射</div>
+              <button
+                onClick={() => setIsShortcutHelpOpen(false)}
+                className={`p-1 rounded-md ${isDarkMode ? 'text-slate-300 hover:bg-white/10' : 'text-slate-500 hover:bg-slate-100'}`}
+                aria-label="关闭快捷键说明"
+              >
+                <X size={16} />
+              </button>
+            </div>
+            <div className="space-y-2">
+              {shortcutHelpItems.map((item) => (
+                <div
+                  key={item}
+                  className={`text-sm font-medium rounded-lg px-3 py-2 ${isDarkMode ? 'bg-white/5' : 'bg-slate-50'}`}
+                >
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
@@ -541,6 +829,27 @@ function MainApp() {
       newState[tabIndex] = !newState[tabIndex];
       return newState;
     });
+  };
+
+  const primeSpeechSynthesis = () => {
+    try {
+      if (!window.speechSynthesis) return;
+      window.speechSynthesis.cancel();
+      const unlockUtterance = new SpeechSynthesisUtterance(' ');
+      unlockUtterance.volume = 0;
+      unlockUtterance.rate = 1;
+      window.speechSynthesis.speak(unlockUtterance);
+    } catch (e) {
+      console.warn('[MainApp] primeSpeechSynthesis failed:', e);
+    }
+  };
+
+  const handleFlashCardToggle = (tabIndex) => {
+    const willOpen = !isFlashCardView[tabIndex];
+    if (willOpen) {
+      primeSpeechSynthesis();
+    }
+    toggleFlashCardView(tabIndex);
   };
 
   // 获取当前tab对应的标记字段名
@@ -838,24 +1147,26 @@ function MainApp() {
     const upserts = []; const nextMastery = { ...mastery }; const todayStr = new Date().toISOString().split('T')[0];
     words.forEach(w => {
       const currentResult = step === 2 ? w.markFinal : w.markSelf;
-      const currentTemp = { practice: w.markPractice, self: w.markSelf, final: w.markFinal };
-      console.log(`Saving ${w.id}: step=${step}, result=${currentResult}, temp=`, currentTemp);
+      // 未标记的默认为已掌握（green）
+      const resultForSave = currentResult === 'white' ? 'green' : currentResult;
+      const currentTemp = { practice: w.markPractice === 'white' ? 'green' : w.markPractice, self: w.markSelf === 'white' ? 'green' : w.markSelf, final: w.markFinal === 'white' ? 'green' : w.markFinal };
+      console.log(`Saving ${w.id}: step=${step}, result=${currentResult} -> ${resultForSave}, temp=`, currentTemp);
       const m = nextMastery[w.id] || mastery[w.id] || { history: [], consecutive_green: 0, last_practice_date: null };
       let newHistory = [...(m.history || [])]; let newLastUpdate = m.lastUpdate; let newConsecutiveGreen = m.consecutive_green || 0; let newLastPracticeDate = m.last_practice_date;
       
       if (newLastPracticeDate !== todayStr) {
-        newHistory.push(currentResult === 'red' ? 'red' : 'green');
+        newHistory.push(resultForSave === 'red' ? 'red' : 'green');
         if (newHistory.length > 10) newHistory.shift();
         newLastUpdate = todayStr;
         newLastPracticeDate = todayStr;
-        if (currentResult === 'green') {
+        if (resultForSave === 'green') {
           newConsecutiveGreen = (newConsecutiveGreen || 0) + 1;
         } else {
           newConsecutiveGreen = 0;
         }
       } else {
         const lastIdx = newHistory.length - 1;
-        if (lastIdx >= 0 && currentResult === 'red') {
+        if (lastIdx >= 0 && resultForSave === 'red') {
           newHistory[lastIdx] = 'red';
           newConsecutiveGreen = 0;
         }
@@ -1096,7 +1407,7 @@ const calculateStats = () => {
             <LogOut size={14}/> 退出
           </button>
           <div className="flex items-center gap-2">
-            <button onClick={() => toggleFlashCardView(step)} className={`p-2 rounded-lg transition-all ${isFlashCardView[step] ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-black hover:bg-slate-50'}`}><Monitor size={18}/></button>
+            <button onClick={() => handleFlashCardToggle(step)} className={`p-2 rounded-lg transition-all ${isFlashCardView[step] ? 'bg-blue-100 text-blue-600' : 'text-slate-400 hover:text-black hover:bg-slate-50'}`}><Monitor size={18}/></button>
             <button onClick={() => { stopVoice(); setIsShuffling(true); setTimeout(() => { setWords(prev => [...prev].sort(() => Math.random() - 0.5)); setIsShuffling(false); }, 300); }} className="p-2 text-slate-400 hover:text-black hover:bg-slate-50 rounded-lg transition-all"><RefreshCw size={18}/></button>
             <button onClick={() => setShowAnswers(!showAnswers)} className={`flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-black transition-all ${showAnswers ? 'bg-slate-50 text-black' : 'text-slate-400 hover:text-black'} ${step >= 1 ? 'hidden' : ''}`}>
               {showAnswers ? <EyeOff size={18}/> : <Eye size={18}/>} 看答案
