@@ -950,6 +950,8 @@ function MainApp() {
   const lastSelectedUnitIndex = useRef(null);
   const shiftClickStartIndex = useRef(null);
   const [tempMastery, setTempMastery] = useState({});
+  const [showDevModeToast, setShowDevModeToast] = useState(false);
+  const devModeToastTimerRef = useRef(null);
 
   const timerRef = useRef(null);
   const progressRef = useRef(0);
@@ -999,6 +1001,31 @@ function MainApp() {
     setQueryDevParam(null);
     alert('线上禁用测试数据模式，已切回正式模式。');
   }, [queryDevParam, canUseDevDataMode, isDevMode]);
+
+  useEffect(() => {
+    if (devModeToastTimerRef.current) {
+      clearTimeout(devModeToastTimerRef.current);
+      devModeToastTimerRef.current = null;
+    }
+
+    if (!isDevMode) {
+      setShowDevModeToast(false);
+      return;
+    }
+
+    setShowDevModeToast(true);
+    devModeToastTimerRef.current = setTimeout(() => {
+      setShowDevModeToast(false);
+      devModeToastTimerRef.current = null;
+    }, 2800);
+
+    return () => {
+      if (devModeToastTimerRef.current) {
+        clearTimeout(devModeToastTimerRef.current);
+        devModeToastTimerRef.current = null;
+      }
+    };
+  }, [isDevMode]);
 
   // 动态加载词库（根据选择的学期动态生成单元数据）
   const processedUnits = useMemo(() => {
@@ -1947,7 +1974,7 @@ const calculateStats = () => {
 
   const syncStatusNode = (
     <div className="fixed top-3 right-4 z-[3500]">
-      {isDevMode && (
+      {isDevMode && showDevModeToast && (
         <div className="mb-2 px-3 py-1.5 rounded-lg text-xs font-black bg-amber-50 text-amber-700 border border-amber-200 shadow">
           TEST DATA MODE（写入 -test 命名空间）
         </div>
