@@ -419,6 +419,10 @@ const FlashCardView = ({ words, onClose, onSyncMarks, getStatus }) => {
     return () => clearInterval(progressInterval);
   }, [index, speed, isPlaying]);
 
+  useEffect(() => {
+    setShowChinese(false);
+  }, [index]);
+
   const handleInteraction = () => { setShowControls(true); if (fadeRef.current) clearTimeout(fadeRef.current); if (!showThumbnails) { fadeRef.current = setTimeout(() => setShowControls(false), 6000); } };
   useEffect(() => { handleInteraction(); }, []);
 
@@ -949,13 +953,22 @@ function MainApp() {
 
   const timerRef = useRef(null);
   const progressRef = useRef(0);
-  const queryDevParam = useMemo(() => new URLSearchParams(window.location.search).get('dev'), []);
+  const [queryDevParam, setQueryDevParam] = useState(() => new URLSearchParams(window.location.search).get('dev'));
   const allowDevDataMode = import.meta.env.VITE_ALLOW_DEV_DATA_MODE === '1';
   const canUseDevDataMode = import.meta.env.DEV || allowDevDataMode;
   const isDeployedEnv = !canUseDevDataMode;
   const requestedMode = useMemo(() => resolveMode(queryDevParam), [queryDevParam]);
   const isDevMode = canUseDevDataMode && requestedMode === DRAFT_NAMESPACE_DEV;
   const idNamespace = isDevMode ? DRAFT_NAMESPACE_DEV : DRAFT_NAMESPACE_PROD;
+
+  useEffect(() => {
+    const syncDevParamFromUrl = () => {
+      setQueryDevParam(new URLSearchParams(window.location.search).get('dev'));
+    };
+    window.addEventListener('popstate', syncDevParamFromUrl);
+    return () => window.removeEventListener('popstate', syncDevParamFromUrl);
+  }, []);
+
   const toggleMode = () => {
     if (!canUseDevDataMode) return;
     const nextMode = isDevMode ? DRAFT_NAMESPACE_PROD : DRAFT_NAMESPACE_DEV;
@@ -966,7 +979,9 @@ function MainApp() {
     } else {
       url.searchParams.delete('dev');
     }
-    window.location.href = url.toString();
+    const nextUrl = `${url.pathname}${url.search}${url.hash}`;
+    window.history.replaceState({}, '', nextUrl);
+    setQueryDevParam(url.searchParams.get('dev'));
   };
 
   useEffect(() => {
@@ -981,6 +996,7 @@ function MainApp() {
     url.searchParams.delete('dev');
     const nextUrl = `${url.pathname}${url.search}${url.hash}`;
     window.history.replaceState({}, '', nextUrl);
+    setQueryDevParam(null);
     alert('线上禁用测试数据模式，已切回正式模式。');
   }, [queryDevParam, canUseDevDataMode, isDevMode]);
 
